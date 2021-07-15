@@ -635,10 +635,10 @@ const window_clear = async function (userID) {
 const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
   try {
     const query = `insert into menu(userID, img, title, price, ex) values ('${userID}','${img}','${menu_title}',${menu_price},'${menu_ex}' )`;
-    console.log("###", query);
+    // console.log("###", query);
     const result = await pool.query(query);
     const queryResult = result[0][0];
-    // console.log("img insert", queryResult);
+    console.log("img insert", queryResult);
     return true;
   } catch (e) {
     console.log("Error in menu_add\n", e);
@@ -647,20 +647,28 @@ const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
 };
 
 //매장 관리 - 메뉴 설정 - 메뉴 조회
-// const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
-//   try {
-//     const query = `select * from menu where userID = '${userID}'`;
-//     console.log("###", query);
-//     const result = await pool.query(query);
+const menu_select = async function (userID) {
+  menu_list = [];
+  try {
+    const query = `SELECT img,title,price,ex FROM menu WHERE userID = '${userID}'`;
+    // console.log(query);
+    const result = await pool.query(query);
 
-//     const queryResult = result[0][0];
-//     // console.log("img insert", queryResult);
-//     return true;
-//   } catch (e) {
-//     console.log("Error in menu_add\n", e);
-//     return false;
-//   }
-// };
+    for (var i = 0; i < result[0].length; i++) {
+      var img = result[0][i].img;
+      var title = result[0][i].title;
+      var price = result[0][i].price;
+      var ex = result[0][i].ex;
+
+      var menu_select = { img, title, price, ex };
+      menu_list.push(menu_select);
+    }
+    return menu_list;
+  } catch (e) {
+    console.log("Error in menu_list\n", e);
+    return false;
+  }
+};
 
 //매장 관리 - 메뉴 설정 - 메뉴 삭제
 const menu_delete = async function (userID, menu_title) {
@@ -718,5 +726,6 @@ module.exports = {
 
   // 매장관리 - 메뉴설정
   menu_add, //메뉴 추가
+  menu_select, //메뉴 조회
   menu_delete, //메뉴 삭제
 };

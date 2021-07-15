@@ -314,18 +314,38 @@ router.get("/menusetting", (req, res) => {
 
 router.post("/menusetting", (req, res) => {
   const { cookie, img_base64, menu_title, menu_price, menu_ex } = req.body;
-  // console.log("title", menu_price);
   var img = img_base64.substring(22); //data:image/png;base64, 빼기
+
+  const userID = await db.cookieToID(cookie);
+  var menu_add = await db.menu_add(
+    userID,
+    img,
+    menu_title,
+    menu_price,
+    menu_ex
+  );
+  var menu_list = await db.menu_select(userID);
+
+  if (menu_add == true) {
+    res.json({ code: 1, menu: menu_list });
+  } else if (menu_add == false && menu_list != null) {
+    res.json({ code: 0 });
+  }
+
+  // console.log(req.body);
+  // console.log(end);
+  // res.send("success");
+});
+
+//매장 관리 - 메뉴 설정- 메뉴 조회
+router.post("/menusetting_select", (req, res) => {
+  const { cookie } = req.body;
 
   db.cookieToID(cookie).then(function (result) {
     var userID = result; //coookie에서 userID가져옴
 
-    db.menu_add(userID, img, menu_title, menu_price, menu_ex).then(function () {
-      if (result == true) {
-        res.json({ code: 1, message: "menu insert seccess" });
-      } else {
-        res.json({ code: 0, message: "menu insert fail" });
-      }
+    db.menu_select(userID).then(function (select) {
+      res.json({ menu: select });
     });
   });
 

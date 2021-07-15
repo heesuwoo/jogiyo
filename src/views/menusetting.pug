@@ -73,7 +73,7 @@
                 <h5>삭제</h5>
             </td>
         </tr>
-        <tr> <!-- 2번째 줄 -->
+        <tr id="menu_insert"> <!-- 2번째 줄 -->
             //- <td rowspan="3" id="menu_td">
             //-     <img src = "" id="menu_img">
             //- </td>
@@ -106,40 +106,57 @@
             //- console.log("가격: ",price.value)
             const reader = new FileReader();    //1
 
-            reader.onload = () => { //3
-            var strImg = reader.result;
-            var menu_title = title.value;
-            var menu_price = price.value;
-            var menu_ex = ex.value;
-            //- console.log("title.pug", menu_title)
+            if(file != null && title != null && price != null && ex != null){
 
-            const payload = {
-                cookie : getCookie("id"),
-                img_base64: strImg,
-                menu_title: menu_title,
-                menu_price : menu_price,
-                menu_ex: menu_ex,
+                reader.onload = () => { //3
+                var strImg = reader.result;
+                var menu_title = title.value;
+                var menu_price = price.value;
+                var menu_ex = ex.value;
+                //- console.log("title.pug", menu_title)
+
+                const payload = {
+                    cookie : getCookie("id"),
+                    img_base64: strImg,
+                    menu_title: menu_title,
+                    menu_price : menu_price,
+                    menu_ex: menu_ex,
+                };
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.onload = () => {    //4
+                    const result = JSON.parse(xhr.responseText)
+                    if (result.code == 1) {
+                    // 끝
+                        console.log(result.menu);
+                        alert("메뉴가 등록되었습니다.")
+                        //- add_menu(result.menu);
+                    }else{
+                        alert("메뉴 등록 error")
+                    }
+                };
+
+                xhr.open("POST", "/menusetting");
+                xhr.setRequestHeader('Content-Type', 'application/json')
+                xhr.send(JSON.stringify(payload));
             };
 
-            const xhr = new XMLHttpRequest();
+                reader.readAsDataURL(file.files[0]);   //2
+            } else{
+                alert("사진 첨부와 빈칸을 모두 입력해주세요.")
+            }
+        }
 
-            xhr.onload = () => {    //4
-                const result = JSON.parse(xhr.responseText)
-                if (result.code == 1) {
-                // 끝
-                    alert("메뉴가 등록되었습니다.")
-                    movePage('menusetting')
-                }else{
-                    alert("메뉴 등록 error")
-                }
-            };
+        function add_menu(list){
 
-            xhr.open("POST", "/menusetting");
-            xhr.setRequestHeader('Content-Type', 'application/json')
-            xhr.send(JSON.stringify(payload));
-            };
-
-            reader.readAsDataURL(file.files[0]);   //2
+            var menu = document.querySelector("#menu_insert");
+            var inner1 = `<td rowspan="3" id="menu_td"> <img src = "" id="menu_img" /> </td>`
+            var inner2 = `<td id="menu_td"> </td>`
+            var inner3 = `<td id="menu_td"> </td>`
+            var inner4 = `<td id="menu_td"> </td>`
+            var inner5 = `<td rowspan="3"> <button type="button" id="add" class="btn btn-danger form-control" onclick="delete_menu()">제거 </button> </td>`
+            menu.innerHTML = inner1 + inner2 + inner3 + inner4 + inner5
         }
 	
     //- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- 애니메이션 담당할 자바스크립트. jquery를 특정한 홈페이지에서 가져오게함 -->
