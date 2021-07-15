@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="back">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name = "viewport" content = "width=device-width", initial-scale = "1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
+        <link rel="stylesheet" href="/css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+        <link rel="stylesheet" href="/css/jquery-ui.min.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+
+        <title>조기요 - 사장님 사이트</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/drop_menu.js"></script>
+
+    </head>
+    <body class="back">
+        <nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
+            <div class = "navbar-header">	<!-- 헤더(로고 영역) -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
+                    <span class = "icon-bar"></span>	<!-- 네비게이션 목록 작대기 -->
+                    <span class = "icon-bar"></span>	
+                    <span class = "icon-bar"></span>
+                </button> 
+                <a class = "navbar-brand" href="main"> 조기요-사장님 사이트 </a> <!-- brand: 로고 -->
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class ="nav navbar-nav">	<!-- 리스트 -->
+                    <li><a href="javascript:movePage('main')">메인 페이지</a></li>
+                    <li><a href="javascript:movePage('orders')">주문접수</a></li>
+                    <li class="active"><a href="javascript:movePage('management')">매장관리</a></li>	<!-- ## -->
+                </ul>
+                <ul class ="nav navbar-nav navbar-right">	<!-- 오른쪽 리스트 -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 접속하기 <span class="caret"></span></a> <!-- #: 현재 가르치고 있는 링크가 없다. caret: 하나의 아이콘 같은 것-->
+                        <ul class= "dropdown-menu">
+                            //- 로그인 여부 확인 후 드롭다운
+                        </ul>
+                    </li>	
+                </ul>
+            </div>
+        </nav>
+        
+    <h3 class="">좌석 배치도 수정</h3>
+    <input type="button" value="테이블 추가" id="add_table_id" class ="btn btn-primary btn-lg table_add" onclick = "make_table()" >
+    <input type="button" value="창문 추가" id="add_window_id" class ="btn btn-primary btn-lg window_add" onclick ="make_window()">
+    <input type="button" value="저장" id="add_window_id" class ="btn btn-primary btn-lg save_button" onclick ="save()">
+    <input type="button" value="모두 삭제" id="add_window_id" class ="btn btn-primary btn-lg all_dele_button" onclick ="all_dele()">
+    <div class="box_border" id="box"> </div>
+
+    script.
+        const container = document.querySelector('#box');
+
+        var t = 0;
+        var w = 0;
+        var tables = []
+        var windows = []
+        var window_save = []
+        var table_save = []
+
+        //- 테이블 생성
+        function make_table(){
+            var table = document.createElement('div');
+            var t_id = 'table_' + t;
+            for(var i = 0; i < tables.length; i++) {
+                if(tables[i] === t_id)  {
+                    //- console.log("tables ", i, ":", tables[i], "t_id: ", t_id);
+                    t++;
+                    var t_id = 'table_' + t;
+                }
+            }
+            tables.push(t_id);  //tables 배열에 저장
+            table.id = t_id;
+            table.style.position="absolute";
+            table.style.left = '137%';
+            table.style.top = '12%';
+            table.style.width="10%";
+            table.style.height="14%";
+            table.style.backgroundColor="#f2cfa5";
+            table.style.border="1px solid black";
+            tables = tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            
+            //좌석 번호 입력하는 폼과 저장버튼
+            table.innerHTML =
+                `<form action ='' accept-charset='utf-8' name='table_num' method='get'> <input type='button' value='X' onclick='dele_table("${t_id}")'> <p> ${t_id} </p>`;
+            //- document.body.appendChild(table);
+            container.appendChild(table);  //container에 table를 속하게 만들기(자식 요소로 만듦)
+
+            //console.log("sort: ", tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));}));
+            
+            $(table).draggable({containment : '#box', cursor: "move"});
+            t++;
+        }
+
+        //- 창문 생성
+        function make_window(){
+            var window = document.createElement('div');
+            var w_id = 'window_' + w;
+            for(var i = 0; i < windows.length; i++) {
+                if(windows[i] === w_id)  {
+                    //console.log("windows ", i, ":", windows[i], "w_id: ", w_id);
+                    w++;
+                    var w_id = 'window_' + w;
+                }
+            }
+            windows.push(w_id);
+            window.id = w_id;
+            window.style.position="absolute";
+            window.style.left = '113%';
+            window.style.top = '12%';
+            window.style.width="10%";
+            window.style.height="5%";
+            window.style.backgroundColor="#fdfa87";
+            window.style.border="1px solid black";
+            windows = windows.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            //좌석 번호 입력하는 폼과 저장버튼
+            window.innerHTML =
+                `<form action ='' accept-charset='utf-8' name='window_num' method='get'> <input type='button' value='X' onclick='dele_window("${w_id}")'> <p> ${w_id} </p>`;
+            //- document.body.appendChild(window);
+            container.appendChild(window);  //container에 window를 속하게 만들기(자식 요소로 만듦)
+
+            //- console.log("sort: ", windows.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));}));
+            
+            $(window).draggable({containment : '#box', cursor: "move"});
+            w++;
+            //- console.log("window배열", windows);
+        }
+
+        //- 테이블 삭제
+        function dele_table(t_id){
+            //- console.log("삭제:", t_id);
+            //- console.log("t:", t);
+            
+            var t_target = document.querySelector('#'+t_id);   //문자열로 받아온 wid에 해당하는 객체를 받아옴.
+            container.removeChild(t_target);  //부모요소(container)에서 자식요소(target)를 제거함(html 요소에서 제거).
+
+            //제거시 id를 하나씩 빼줘야함.
+            for(var i = 0; i < tables.length; i++) {
+                tables = tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+                if(tables[i] === t_id)  {
+                    tables.splice(i, 1);
+                    t = --i;
+                    if(t < 0){
+                        t = 0;
+                    }
+                    //- console.log("t--후 t:", t);
+                }   //배열에서 해당 요소 삭제
+            }
+        }
+
+        //- 창문 삭제
+        function dele_window(w_id){
+            //- console.log("삭제:", w_id);
+            
+            var w_target = document.querySelector('#'+w_id);   //문자열로 받아온 wid에 해당하는 객체를 받아옴.
+            container.removeChild(w_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+
+            //제거시 id를 하나씩 빼줘야함.
+            for(var i = 0; i < windows.length; i++) {
+                windows = windows.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+                if(windows[i] === w_id)  {
+                    windows.splice(i, 1);
+                    w = --i;
+                    if(w < 0){
+                        w = 0;
+                    }
+                }   //배열에서 해당 요소 삭제
+            }
+        }
+
+        //- 저장
+        function save() {
+            
+            //- console.log("저장 후 window: ", windows);
+            //- console.log("저장 후 table: ", tables);
+            
+            window_save = []
+            table_save = []
+
+            const containerWidth = container.clientWidth //컨테이너 박스의 x좌표를 가져옴
+            const containerHeight = container.clientHeight //컨테이너 박스의 y좌표를 가져옴
+            
+            const doms_window = windows.map(w => {
+                return document.querySelector('#'+ w)
+            })
+            const doms_table = tables.map(t => {
+                return document.querySelector('#'+ t)
+            })
+            
+            for(var i = 0; i < windows.length; i++){
+                const win = doms_window[i] //win의 정보를 가져옴
+                window_save.push([win.offsetLeft/containerWidth, win.offsetTop/containerHeight])
+            }
+
+            for(var j = 0; j < tables.length; j++){
+                const tab = doms_table[j] //tab의 정보를 가져옴
+                table_save.push([tab.offsetLeft/containerWidth, tab.offsetTop/containerHeight])
+            }
+            
+            //router로 전송
+            const reqBody = {
+                cookie : getCookie("id"),
+                window_save : window_save,
+                table_save: table_save
+                }
+                
+            const xhr = new XMLHttpRequest()
+            xhr.onload = () => {
+                const result = JSON.parse(xhr.responseText)
+                if(result.code == 1 || result.code == 0){
+                    alert("성공적으로 저장되었습니다.");
+                }
+            }
+            xhr.open('POST', '/seating')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.send(JSON.stringify(reqBody))
+
+
+            //- const a = doms_window[0] //a의 정보를 가져옴
+            //- const containerWidth = container.clientWidth //컨테이너 박스의 x좌표를 가져옴
+            //- console.log(a.offsetLeft, containerWidth, a.offsetLeft/containerWidth)
+            //- console.log(a.offsetTop, containerHeight, a.offsetTop/containerHeight)
+            //- console.log(doms_window);
+
+            //- console.log("window_save: ",window_save);
+            //- console.log("table_save: "table.save  }
+        }
+        
+
+        //- 모든 요소 삭제
+        function all_dele() {
+
+            windows = windows.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            tables = tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+
+            //- console.log("모두 삭제 전 정렬 window: ", windows);
+            //- console.log("모두 삭제 전 정렬 table: ", tables);
+
+            for(var i = 0; i <= windows.length; i++){
+                var w_target = document.querySelector('#window_' + i);   //문자열로 받아온 wid에 해당하는 객체를 받아옴.
+                if(w_target != null){
+                    container.removeChild(w_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+                }
+            }
+
+            for(var j = 0; j <= tables.length; j++){
+                var t_target = document.querySelector('#table_' + j);   //문자열로 받아온 wid에 해당하는 객체를 받아옴.
+                if(t_target != null){
+                    console.log(t_target.id)
+                    container.removeChild(t_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+                }
+            }
+            w=0;
+            t=0;
+            window_save.splice(0,windows.length);
+            table_save.splice(0,tables.length);
+            windows.splice(0,windows.length);
+            tables.splice(0,tables.length);
+
+            //router로 전송
+            const reqBody = {
+                cookie : getCookie("id")
+                }
+                
+            const xhr = new XMLHttpRequest()
+            xhr.onload = () => {
+                const result = JSON.parse(xhr.responseText)
+                if(result.code == 1){
+                    alert("모두 삭제되었습니다.");
+                    movePage('seating')
+                }
+                else{
+                    alert("error");
+                    movePage('management')
+                }
+            }
+            xhr.open('POST', '/location_clear')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.send(JSON.stringify(reqBody))
+
+            //- console.log("삭제 후 배열: ",windows);
+        }
+
+        drop_menu();    //쿠키 삭제 함수 포함
+
+    </body>
+</html>

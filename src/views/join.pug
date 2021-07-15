@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name = "viewport" content = "width=device-width", initial-scale = "1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
+<link rel="stylesheet" href="css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+<title>조기요 - 사장님 사이트</title>
+</head>
+<body>	
+	<nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
+		<div class = "navbar-header">	<!-- 헤더(로고 영역) -->
+			<button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
+				<span class = "icon-bar"></span>	<!-- 네비게이션 목록 작대기 -->
+				<span class = "icon-bar"></span>	
+				<span class = "icon-bar"></span>
+			</button> 
+			<a class = "navbar-brand" href="main.jsp"> 조기요-사장님 사이트 </a> <!-- brand: 로고 -->
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class ="nav navbar-nav">	<!-- 리스트 -->
+				<li><a href="javascript:movePage('main')">메인 페이지</a></li>
+				<li><a href="javascript:movePage('orders')">주문접수</a></li>
+				<li><a href="javascript:movePage('management')">매장관리</a></li>	<!-- ## -->
+			</ul>
+			<ul class ="nav navbar-nav navbar-right">	<!-- 오른쪽 리스트 -->
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 접속하기 <span class="caret"></span></a> <!-- #: 현재 가르치고 있는 링크가 없다. caret: 하나의 아이콘 같은 것-->
+					<ul class= "dropdown-menu">	
+						<li><a href="login"> 로그인 </a></li>	<!-- 하나의 원소를 넣어줌. active: 현재 선택이 되어있다. -->
+						<li class="active"><a href="join"> 회원가입 </a></li>
+					</ul>
+				</li>	
+			</ul>
+		</div>
+	</nav>
+	<!-- 회원가입 양식 -->
+	<div class="container">	<!-- 컨테이너로 감쌈 -->
+		<div class="col-lg-4"></div>	
+		<div class="col-lg-4">	<!-- 회원가입 양식 -->
+			<div class ="jumbotron" style="padding-top: 20px;">
+				<form method="post" onsubmit="join(event)">	<!-- post:회원가입이나 로그인 등 정보를 숨겨서 보낼때 사용하는 메소드// loginAction 페이지로 로그인 정보를 보내주겠다. -->
+					<h3 style="text-align:center;">회원가입 화면</h3>
+					<div class="form-group">
+						<input type="text" class="form-control in" placeholder="아이디" name="userID" maxlength="20">	<!-- name: 매개변수// 아이디 관련 코드 -->
+					</div>
+					<div class="form-group">
+						<input type="password" class="form-control in" placeholder="비밀번호" name="userPassword" maxlength="20">	<!-- 비밀번호 관련 코드 -->
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control in" placeholder="이름" name="userName" maxlength="20">	<!-- name: 매개변수// 이름 관련 코드 -->
+					</div>
+					<div class="form-group">
+						<input type="email" class="form-control in" placeholder="이메일" name="userEmail" maxlength="50">	<!-- name: 매개변수// 이메일 관련 코드 -->
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control in" placeholder="가게 이름" name="r_name" maxlength="30">	<!-- name: 매개변수// 가게이름 관련 코드 -->
+					</div>
+					
+					<input type="submit" class="btn btn-primary form-control" value="회원가입">
+				</form>
+			</div>
+		</div>
+		<div class="col-lg-4"></div>
+	</div>
+
+	script.
+	
+		function join(e) {
+			e.preventDefault() 
+			//- 버튼 클릭후 페이지 이동을 방지해주는 코드
+			const inputs = document.querySelectorAll('.in')
+			//- console.log(inputs[0].value);
+			//- console.log(inputs[1].value);
+
+			var id = inputs[0].value;
+			var pw = inputs[1].value;
+			var name = inputs[2].value;
+			var email = inputs[3].value;
+			var r_name = inputs[4].value;
+
+			console.log(id.length);
+
+			if(id.length != 0 && pw.length != 0 && name.length != 0 && email.length != 0 && r_name.length != 0) {
+				
+				const reqBody = {
+					id: inputs[0].value,
+					pw: inputs[1].value,
+					name: inputs[2].value,
+					email: inputs[3].value,
+					r_name: inputs[4].value
+				}
+
+				const xhr = new XMLHttpRequest()
+
+				xhr.onload = () => {
+					const result = JSON.parse(xhr.responseText)	//router에서 실행한 결과값 받아옴
+					
+					console.log('JoinResult:::\n', result.code)
+
+					if(result.code === 0){	//회원가입 성공
+					alert ("회원가입 되었습니다. 로그인을 진행해주세요!");
+						location.href = "/login";
+
+					}else if(result.code === 1){	//db.join_check 에러
+						console.log("join_check error");
+
+					}else if(result.code === -1){	//중복
+						alert ("아이디나 이메일이나 가게 이름이 이미 존재합니다.");
+						//- location.herf = history.back();
+
+					}else if(result.code === -2){	//db.join 에러
+						console.log("join insert error");
+					}
+				}
+				
+				xhr.open('POST', '/join')	//비동기 방식으로 요청을 보냄
+				xhr.setRequestHeader('Content-Type', 'application/json')
+
+				xhr.send(JSON.stringify(reqBody))
+			}
+			else{
+				alert ("빈칸이 있습니다. 회원가입 정보를 모두 채워주세요.");
+			}
+		}
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- 애니메이션 담당할 자바스크립트. jquery를 특정한 홈페이지에서 가져오게함 -->
+	<script src="js/bootstrap.min.js"></script>	<!-- 부트스트랩에서 기본적으로 제공해주는 자바스크립트 파일 -->
+</body>
+</html>

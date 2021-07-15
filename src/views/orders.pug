@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name = "viewport" content = "width=device-width", initial-scale = "1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
+<link rel="stylesheet" href="css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+<script type="text/javascript" src="/js/drop_menu.js"></script>
+//- <META HTTP-EQUIV="refresh" CONTENT="15">
+<title>조기요 - 사장님 사이트</title>
+</head>
+//- <body onload="refresh()">
+body
+	//- (onload=`refresh(${JSON.stringify(list)})`)
+	<nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
+		<div class = "navbar-header">	<!-- 헤더(로고 영역) -->
+			<button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
+				<span class = "icon-bar"></span>	<!-- 네비게이션 목록 작대기 -->
+				<span class = "icon-bar"></span>	
+				<span class = "icon-bar"></span>
+			</button> 
+			<a class = "navbar-brand" href="main"> 조기요-사장님 사이트 </a> <!-- brand: 로고 -->
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class ="nav navbar-nav">	<!-- 리스트 -->
+				<li><a href="javascript:movePage('main')">메인 페이지</a></li>
+				<li class="active"><a href="javascript:movePage('orders')">주문접수</a></li>	<!-- 현재 접속한 페이지가 주문접수 페이지이라는 것을 알려줌 -->
+				<li><a href="javascript:movePage('management')">매장관리</a></li>	<!-- ## -->
+			</ul>
+			<ul class ="nav navbar-nav navbar-right">	<!-- 오른쪽 리스트 -->
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 접속하기 <span class="caret"></span></a> <!-- #: 현재 가르치고 있는 링크가 없다. caret: 하나의 아이콘 같은 것-->
+				<ul class= "dropdown-menu">
+					//- 로그인 여부 확인 후 드롭다운
+				</ul>
+			</li>	
+			</ul>
+		</div>	
+	</nav>
+	<div class="container">
+		<div class="row">
+			<table class="table table-striped" style="text-align: center; border: 1px solid #dddddd">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
+				<thead>	<!-- 테이블의 제목부분(가장 윗줄) -->
+					<tr>	<!-- 테이블의 하나의 행(한 줄) -->
+						<th style="background-color: #eeeeee; text-align: center;">접수번호</th>
+						<th style="background-color: #eeeeee; text-align: center;">메뉴</th>
+						<th style="background-color: #eeeeee; text-align: center;">예약 인원</th>
+						<th style="background-color: #eeeeee; text-align: center;">테이블 번호</th>
+
+						<th style="background-color: #eeeeee; text-align: center;">접수/취소</th>
+					</tr>
+				</thead>
+				<tbody class="order-list">
+				</tbody>
+			</table>
+		</div>
+	</div>	
+								//- <!-- 모달 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">주문 취소 사유 선택</h4>
+				</div>
+								      
+				<div class="modal-body" text-align = "center" id="acc_reason">
+					<div id="modal_div">
+				</div>
+								      
+			</div>
+		</div>
+	</div>	
+						
+	script.
+		let lastOrder = 0
+		let lastOrder_2 = 0
+		let a = 0
+		let list_num = {};
+		var container = document.querySelector(".order-list");
+
+			var timer = setInterval(() => {
+
+				const xhr = new XMLHttpRequest()
+				var cookie = getCookie();
+				//- console.log(cookie)
+
+				xhr.onload = () => {
+					const result = JSON.parse(xhr.responseText)	//문자나 배열을 받아올때
+					const arrList = result.list //주문 목록 데이터베이스에서 받아오기
+					if (!arrList.length) return;
+
+					try {
+					var len = arrList.length-1
+					
+					lastOrder = arrList[arrList.length-1][0]	//주문목록의 마지막 접수번호
+					console.log("lastOrder: ", lastOrder)
+
+					if(lastOrder < lastOrder_2){
+						lastOrder = lastOrder_2
+						console.log("lastOrder 업데이트")
+					}
+					//- console.log(typeof lastOrder)
+					// JSON.parse("[1, '삼겹살', 4]")
+					//- console.log('lastOrder:',lastOrder)
+					
+					//- console.log(arrList[0][1])
+
+					for(var i=0; i < arrList.length; i++){
+						//- console.log(arrList.length)
+						var add = document.createElement('tr');
+						var num = arrList[i][0] //접수번호
+						var menu = arrList[i][1] //메뉴
+						var per = arrList[i][2] //예약 인원
+						var table_num = arrList[i][3] //테이블 번호
+						var acceCan = arrList[i][4] //접수or취소
+
+
+						var btn_id = 'order_btn' + a;
+						var add_id = 'id' + a;
+						add.id = 'id'+ a;
+						var add_html1 = `<td>${num}</td>`
+						var add_html2 = `<td>${menu}</td>`
+						var add_html3 = `<td>${per}</td>`
+						var add_html4 = `<td>${table_num}</td>`
+						var add_html5 = `<td>`
+
+						if(acceCan == 1){
+							var add_html6 = `<form id="${btn_id}"><h4 style="text-align:center;">접수가 완료된 항목입니다.`
+							var add_html7 = `</h4>`
+						}else{
+							var add_html6 = `<form id="${btn_id}"><a type="submit" class="btn btn-warning btn-lg sub_button" onclick="submit('${add_id}', this)">수락</a>`
+							var add_html7 = `<a type="button" class="btn btn-danger btn-lg cancle_button" data-toggle="modal" data-target="#myModal" onclick="order_cancle('${add_id}','${btn_id}')">취소</a>`							
+						}
+
+						var add_html8 = `</form></td>` 
+						add.innerHTML = add_html1 + add_html2 + add_html3 + add_html4 + add_html5 + add_html6 + add_html7 + add_html8
+						
+						list_num[add_id] = num //객체에 id id:접수번호 로 저장
+						
+						//- console.log("list_num:", list_num)
+						container.appendChild(add);
+						a++
+						lastOrder_2 = lastOrder
+						console.log("lastOrder_2: ", lastOrder_2)
+					}
+					}
+					catch(e) {
+						console.log('#error ', e.message, arrList, arrList[arrList.length-1][0])
+					}
+				}
+				//- console.log(`lastOrder: "${lastOrder}"`);
+				xhr.open('get', `/ordersData?id=${cookie}&last=${lastOrder}`)	//서버에서 데이터만 받아오기
+				xhr.send()
+			
+			}, 1000*1)
+
+
+		//주문 취소 사유 버튼
+		function order_cancle(tr_id1, btn_id){
+			var form_id = btn_id
+			console.log('order_cancel:: ', tr_id1)
+			var modal = document.querySelector("#acc_reason");
+			var reason = document.querySelector('#modal_div');
+			reason.class = "btn btn-secondary dropdown-toggle";
+			var button_1 = `<a type="submit" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" id="modal_reason" style = "width:100%" onclick = "cancle_order('${tr_id1}',1, '${form_id}')">재료소진</a>`
+			var button_2 = `<a type="submit" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style = "width:100%" onclick = "cancle_order('${tr_id1}',2, '${form_id}')">좌석부족</a>`
+			var button_3 = `<a type="submit" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style = "width:100%" onclick = "cancle_order('${tr_id1}',3, '${form_id}')">기타</a>`
+			reason.innerHTML = button_1 + button_2 + button_3
+		}
+
+		//주문 취소 버튼 클릭시 - 데이터 전송
+		function cancle_order(tr_id2, num,form_id,a){
+
+			console.log('cancel_order:: ', tr_id2)
+
+			var tr = tr_id2
+			var form = form_id
+			console.log("##",tr, form)
+
+			const reqBody = {
+				cookie : getCookie("id"),
+				acc_num : list_num[tr_id2],
+				reason_num : num
+			}
+
+			const xhr = new XMLHttpRequest()
+			xhr.onload = () => {
+				const result = JSON.parse(xhr.responseText)
+				if(result.code == 1){
+					cancle_button_change(tr, form);
+					alert("주문이 취소되었습니다.")
+				}else{
+					alert("주문 취소에 오류가 생겼습니다.")
+				}
+			}
+			xhr.open('post','/orders_acc')
+			xhr.setRequestHeader('Content-Type', 'application/json')
+			xhr.send(JSON.stringify(reqBody))
+		}
+
+		//- 취소한 행 삭제
+		function cancle_button_change(tr_id, form_id){
+			console.log(form_id)
+			var tr_tag = document.querySelector(`#${tr_id}`);	//해당tr
+			var tbody_tag = tr_tag.parentNode //tbody
+
+			tbody_tag.removeChild(tr_tag)	//tbody - 해당tr
+		}
+
+
+		//접수 수락 버튼 클릭시 - 데이터 전송
+		function submit(clicked_id, target){
+			//- console.log(target.parentNode)
+
+			const reqBody = {
+				cookie : getCookie("id"),
+				submit_num : list_num[clicked_id]
+			}
+
+			const xhr = new XMLHttpRequest()
+			xhr.onload = () => {
+				const result = JSON.parse(xhr.responseText)
+				if(result.code == 1){
+					alert("주문이 접수되었습니다.")
+					submit_button_change(clicked_id, target);
+				}else{
+					alert("주문 접수에 오류가 생겼습니다.")
+				}
+			}
+			xhr.open('post','/orders_submit')
+			xhr.setRequestHeader('Content-Type', 'application/json')
+			xhr.send(JSON.stringify(reqBody))
+			//- location.reload();
+		}
+
+
+		//접수 수락 완료시 버튼 바꿈
+		function submit_button_change(clicked_id, target){
+			var td_tag = target.parentNode.parentNode //수락, 취소 버튼 form 의 부모인 td
+			var form_tag = target.parentNode //수락, 취소 버튼 form
+			//- console.log(parent_tag)
+			var new_btn = document.createElement('form')
+			new_btn.innerHTML = `<h4 style="text-align:center;">접수가 완료된 항목입니다.</h4>`
+
+			td_tag.removeChild(form_tag);	//td에서 form 태그 삭제
+			td_tag.appendChild(new_btn);	//td에 form 글씨 추가
+		};
+
+
+		drop_menu();	//쿠키 삭제 함수 포함
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> <!-- 애니메이션 담당할 자바스크립트. jquery를 특정한 홈페이지에서 가져오게함 -->
+	<script src="/js/bootstrap.min.js"></script>	<!-- 부트스트랩에서 기본적으로 제공해주는 자바스크립트 파일 -->
+</body>
+</html>
