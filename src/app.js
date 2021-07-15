@@ -35,7 +35,7 @@ const app = express();
 //   })
 // );
 
-app.set("port", process.env.PORT || 8081);
+app.set("port", process.env.PORT || 8081); //process.env.PORT 없으면 8081포트로
 
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));

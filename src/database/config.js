@@ -7,16 +7,20 @@ module.exports = mysql.createPool({
   // database: process.env.DB_DNAME,
   // port: process.env.DB_PORT,
 
-  // user: "root",
-  // host: "localhost",
-  // password: "1234",
-  // database: "project",
-  // port: "3306",
+  user: "root",
+  host: "localhost",
+  password: "1234",
+  database: "project",
+  port: "3306",
 
-  user: "b90ecf2d9ecce0",
-  host: "us-cdbr-east-04.cleardb.com",
-  password: "42a8f899",
-  database: "heroku_d4642c56bf8158e",
+  //heroku db
+  //mysql -u b90ecf2d9ecce0 -h us-cdbr-east-04.cleardb.com -p heroku_d4642c56bf8158e
+  //비밀번호: 42a8f899
+
+  // user: "b90ecf2d9ecce0",
+  // host: "us-cdbr-east-04.cleardb.com",
+  // password: "42a8f899",
+  // database: "heroku_d4642c56bf8158e",
 });
 
 // user: b90ecf2d9ecce0
