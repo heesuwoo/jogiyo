@@ -647,20 +647,20 @@ const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
 };
 
 //매장 관리 - 메뉴 설정 - 메뉴 조회
-const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
-  try {
-    const query = `select * from menu where userID = '${userID}'`;
-    console.log("###", query);
-    const result = await pool.query(query);
+// const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
+//   try {
+//     const query = `select * from menu where userID = '${userID}'`;
+//     console.log("###", query);
+//     const result = await pool.query(query);
 
-    const queryResult = result[0][0];
-    // console.log("img insert", queryResult);
-    return true;
-  } catch (e) {
-    console.log("Error in menu_add\n", e);
-    return false;
-  }
-};
+//     const queryResult = result[0][0];
+//     // console.log("img insert", queryResult);
+//     return true;
+//   } catch (e) {
+//     console.log("Error in menu_add\n", e);
+//     return false;
+//   }
+// };
 
 //매장 관리 - 메뉴 설정 - 메뉴 삭제
 const menu_delete = async function (userID, menu_title) {
