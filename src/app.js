@@ -35,6 +35,8 @@ const app = express();
 //   })
 // );
 
+app.set("port", process.env.PORT || 8081);
+
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
@@ -68,6 +70,6 @@ app.use((err, req, res, next) => {
 //   res.sendFile(path.join(__dirname, "html", "about.html"));
 // });
 
-app.listen(8081, () => {
+app.listen(app.get("port"), () => {
   console.log("Express App on port 8081!");
 });
