@@ -312,9 +312,14 @@ router.get("/menusetting", (req, res) => {
   res.render("menusetting", { arr1: [{ a: 1, b: 2 }, "abcd"] });
 });
 
-router.post("/menusetting", (req, res) => {
+router.post("/menusetting", async (req, res) => {
   const { cookie, img_base64, menu_title, menu_price, menu_ex } = req.body;
+  // console.log(img_base64);
   var img = img_base64.substring(22); //data:image/png;base64, 빼기
+
+  // var matches = img_base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+
+  // console.log("#####", matches);
 
   const userID = await db.cookieToID(cookie);
   var menu_add = await db.menu_add(
@@ -331,10 +336,6 @@ router.post("/menusetting", (req, res) => {
   } else if (menu_add == false && menu_list != null) {
     res.json({ code: 0 });
   }
-
-  // console.log(req.body);
-  // console.log(end);
-  // res.send("success");
 });
 
 //매장 관리 - 메뉴 설정- 메뉴 조회
@@ -345,13 +346,25 @@ router.post("/menusetting_select", (req, res) => {
     var userID = result; //coookie에서 userID가져옴
 
     db.menu_select(userID).then(function (select) {
+      // var a = select.menu[0].img.data.toString("base64");
       res.json({ menu: select });
     });
   });
+});
 
-  // console.log(req.body);
-  // console.log(end);
-  // res.send("success");
+//매장 관리 - 메뉴 설정- 메뉴 삭제
+router.post("/menusetting_delete", async (req, res) => {
+  const { cookie, title } = req.body;
+  // console.log("router: ", title);
+  const userID = await db.cookieToID(cookie);
+  // const delete_check = db.menu_delete(userID, title);
+  db.menu_delete(userID, title).then(function (delete_check) {
+    if (delete_check == true) {
+      res.json({ code: 1 });
+    } else {
+      res.json({ code: 0 });
+    }
+  });
 });
 
 // router.get("/getTime", (req, res) => {

@@ -637,8 +637,8 @@ const menu_add = async function (userID, img, menu_title, menu_price, menu_ex) {
     const query = `insert into menu(userID, img, title, price, ex) values ('${userID}','${img}','${menu_title}',${menu_price},'${menu_ex}' )`;
     // console.log("###", query);
     const result = await pool.query(query);
-    const queryResult = result[0][0];
-    console.log("img insert", queryResult);
+    // const queryResult = result[0][0];
+    // console.log("img insert", queryResult);
     return true;
   } catch (e) {
     console.log("Error in menu_add\n", e);
@@ -655,7 +655,8 @@ const menu_select = async function (userID) {
     const result = await pool.query(query);
 
     for (var i = 0; i < result[0].length; i++) {
-      var img = result[0][i].img;
+      const buffer = Buffer.from(result[0][i].img, "base64");
+      var img = buffer.toString();
       var title = result[0][i].title;
       var price = result[0][i].price;
       var ex = result[0][i].ex;
@@ -665,21 +666,21 @@ const menu_select = async function (userID) {
     }
     return menu_list;
   } catch (e) {
-    console.log("Error in menu_list\n", e);
+    console.log("Error in menu_select\n", e);
     return false;
   }
 };
 
 //매장 관리 - 메뉴 설정 - 메뉴 삭제
-const menu_delete = async function (userID, menu_title) {
+const menu_delete = async function (userID, title) {
   try {
-    const query = `delete from menu where userID = '${userID}' and title = '${menu_title}'`;
+    const query = `delete from menu where userID = '${userID}' and title = '${title}'`;
     // console.log(query);
     const result = await pool.query(query);
-    const queryResult = result[0][0];
-    // console.log("delete: ", queryResult);
+
+    return true;
   } catch (e) {
-    console.log("Error in window_clear\n", e);
+    console.log("Error in menu_delete\n", e);
     return false;
   }
 };
