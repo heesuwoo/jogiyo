@@ -80,21 +80,25 @@
 
             var table_list = result.table;
             var window_list = result.window;
-            console.log(result.table)
+            var menu_list = []
+            //- console.log(menu_title)
             table_draw(table_list);
             window_draw(window_list);
             
-
-
-            //- console.log(result.table)
+            for(var i=0; i<result.menu.length; i++ ){
+                var menu_title = result.menu[i].title
+                menu_list.push(menu_title)
+            }
+            menu(menu_list)
+            console.log(menu_list)
+            
         }
 
         xhr.open('POST', '/main')
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send(JSON.stringify(reqBody))
-
-
-
+        
+        //테이블 불러오기
         function table_draw(table_list){
             
             for(var i = 0; i < table_list.length; i++){
@@ -124,7 +128,8 @@
                 container.appendChild(table);
             }
         }
-
+        
+        //창문 불러오기
         function window_draw(window_list){
             const container = document.querySelector('#box');
             const containerWidth = container.clientWidth //컨테이너 박스의 x좌표를 가져옴
@@ -153,6 +158,11 @@
 
                 container.appendChild(window);
             }
+        }
+
+        function menu(menu_list){
+            const pos_position = document.querySelector(".pos")
+            
         }
 
         drop_menu();

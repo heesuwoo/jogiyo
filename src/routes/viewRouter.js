@@ -74,11 +74,13 @@ router.post("/main", async (req, res, next) => {
   const { cookie } = req.body;
   const userID = await db.cookieToID(cookie);
 
-  var table = await db.table_select(userID);
-  var window = await db.window_select(userID);
+  var table = await db.table_select(userID); //테이블 위치
+  var window = await db.window_select(userID); //창문 위치
+
+  var select = await db.menu_select(userID); //menu
 
   // console.log(window);
-  res.json({ table: table, window: window });
+  res.json({ table: table, window: window, menu: select });
 });
 
 // 주문접수
@@ -142,6 +144,20 @@ router.post("/orders_acc", (req, res) => {
     });
   });
   // console.log(req.body);
+});
+
+//매장 관리 - 영업 시간, 휴무일 조회
+router.post("/business", async (req, res) => {
+  const { cookie } = req.body;
+  const userID = await db.cookieToID(cookie);
+
+  var hours = await db.business_hours_select_check(userID);
+
+  if (hours != 0) {
+    res.json({ code: 1, message: hours }); //설정된 영업시간이 있을때
+  } else {
+    res.json({ code: 0 }); //설정된 영업시간이 없을때
+  }
 });
 
 // 매장관리 - 영업 임시 중지 - 남은 시간 조회
@@ -218,7 +234,7 @@ router.post("/management", (req, res, next) => {
 });
 
 //매장 관리 - 영업 시간 설정
-router.post("/management2", (req, res, next) => {
+router.post("/business_hours_set", (req, res, next) => {
   const {
     cookie,
     m_s_h,

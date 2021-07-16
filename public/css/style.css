@@ -116,7 +116,7 @@ a:active {
   grid-template-areas: "table_seat pos";
   align-content: stretch;
   text-align: center;
-  border: 5px solid green;
+  /* border: 5px solid green; */
 }
 
 .box_border2 {
@@ -134,17 +134,17 @@ a:active {
 .pos {
   grid-area: pos;
   position: relative;
-  left: 32%;
+  left: 30%;
   border: 5px solid red;
   display: inline-block;
+  /* margin-right: 5%; */
   height: 90%;
   width: 65%;
-  border-radius: 7px;
+  /* border-radius: 7px; */
   text-align: center;
   /* table css */
-
   display: grid;
-  gap: 5px;
+  gap: 1px;
   grid-template-areas:
     "menu1 menu2 menu3"
     "menu4 menu5 menu6"
@@ -159,7 +159,7 @@ a:active {
   margin-left: 10%;
   grid-area: menu1;
   width: 90%;
-  height: 20px;
+  height: 60%;
 }
 
 .menu2 {
@@ -168,7 +168,7 @@ a:active {
   margin-left: 10%;
   grid-area: menu2;
   width: 90%;
-  height: 20px;
+  height: 60%;
 }
 
 .menu3 {
@@ -177,5 +177,32 @@ a:active {
   margin-left: 10%;
   grid-area: menu3;
   width: 90%;
-  height: 20px;
+  height: 60%;
+}
+
+.menu4 {
+  border: solid 1px black;
+  margin-left: 10%;
+  margin-top: -50%;
+  grid-area: menu4;
+  width: 90%;
+  height: 60%;
+}
+
+.menu5 {
+  border: solid 1px black;
+  margin-left: 10%;
+  margin-top: -50%;
+  grid-area: menu5;
+  width: 90%;
+  height: 60%;
+}
+
+.menu6 {
+  border: solid 1px black;
+  margin-left: 10%;
+  margin-top: -50%;
+  grid-area: menu6;
+  width: 90%;
+  height: 60%;
 }

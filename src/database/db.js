@@ -373,7 +373,28 @@ const business_stop_delete = async function (userID) {
 
 /*5. 매장관리 - 영업시간 설정*/
 
-//매장 관리 - 영업시간 설정 (영업 시간 조회)
+//매장 관리 - 영업시간 설정 - 영업 시간 조회
+const business_hours_select_check = async function (userID) {
+  try {
+    const query = `SELECT * FROM business_hours WHERE userID = '${userID}'`;
+    // console.log(query);
+    const result = await pool.query(query);
+    const queryResult = result[0][0];
+    // console.log("####", queryResult);
+    if (queryResult == undefined) {
+      //해당 가게의 데이터가 없다면
+      return 0;
+    } else {
+      //해당가게의 데이터가 이미 있으면
+      return queryResult;
+    }
+  } catch (e) {
+    console.log("Error in business_stop_select\n", e);
+    return false;
+  }
+};
+
+//매장 관리 - 영업시간 설정 (삽입이나 업데이트 위한 영업 시간 조회)
 const business_hours_select = async function (
   userID,
   m_s_h,
@@ -710,7 +731,8 @@ module.exports = {
   business_stop_delete, //임시 중지 데이터 삭제 시간이 흐른 후 삭제
 
   // 매장관리 - 영업 시간 설정
-  business_hours_select, //영업 시간 조회
+  business_hours_select_check, //영업 시간 조회 - 표시
+  business_hours_select, //영업 시간 조회 - 삽입/업데이트
   business_hours_insert, //영업 시간 삽입
   business_hours_update, //영업 시간 업데이트
 
