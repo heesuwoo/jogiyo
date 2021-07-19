@@ -1,0 +1,80 @@
+.container {
+  /* margin-right: 10%; */
+  width: 80%;
+  /* border: solid 1px red; */
+}
+
+/* .pad1 {
+  border: solid 1px blue;
+}
+.pad2 {
+  border: solid 1px orangered;
+}
+.pad3 {
+  border: solid 1px green;
+} */
+
+/* entire container, keeps perspective */
+.card-container {
+  perspective: 800px;
+  margin-bottom: 30px;
+  /* border: solid 1px red; */
+}
+
+/* hide back of pane during swap */
+.front {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.14);
+}
+
+/*        Style       */
+
+.card {
+  background: none repeat scroll 0 0 #ffffff;
+  border-radius: 80px; /*메뉴 테두리 */
+  color: #444444;
+  /* border: solid 2px #444444; */
+}
+.card-container,
+.front {
+  top: 10%;
+  width: 100%;
+  height: 420px;
+  border-radius: 20px;
+  border: solid 2px #444444;
+}
+.card .cover img {
+  width: 100%;
+}
+.card .user {
+  border-radius: 50%;
+  display: block;
+  height: 120px;
+  margin: -55px auto 0;
+  overflow: hidden;
+  width: 120px;
+}
+.card .user .img-circle {
+  background: none repeat scroll 0 0 #ffffff;
+  border: 4px solid red;
+  width: 100%;
+}
+
+.card .content {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+  padding: 10px 20px 20px;
+}
+.card .content .main {
+  min-height: 230px;
+}
+.card .name {
+  font-size: 22px;
+  line-height: 28px;
+  margin: 10px 0 0;
+  text-align: center;
+  text-transform: capitalize;
+}

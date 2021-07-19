@@ -1,0 +1,89 @@
+/* management.pug css */
+.button {
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+a:link {
+  color: black;
+  text-decoration: none;
+}
+a:visited {
+  color: black;
+  text-decoration: none;
+}
+a:hover {
+  color: black;
+  text-decoration: none;
+}
+a:active {
+  color: black;
+  text-decoration: none;
+}
+.button_modal {
+  width: 49%;
+}
+.modal_table {
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
+  border: 1px solid #dddddd;
+}
+.text_center {
+  text-align: center;
+}
+.text_left {
+  text-align: left;
+}
+.button_60 {
+  width: 60%;
+}
+.button_62 {
+  width: 62%;
+}
+.modal_style {
+  max-width: 100%;
+  width: auto;
+  display: table;
+}
+
+/* seating.pug css */
+.back {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.table_add {
+  position: absolute;
+  top: 10%;
+  left: 90%;
+}
+.window_add {
+  position: absolute;
+  top: 10%;
+  left: 75%;
+}
+.css_test img {
+  cursor: move;
+  width: 100px;
+  position: relative;
+}
+.box_border {
+  position: relative;
+  left: 1%;
+  border: 5px solid gray;
+  display: inline-block;
+  height: 90%;
+  width: 65%;
+  border-radius: 7px;
+  text-align: center;
+}
+.save_button {
+  position: absolute;
+  top: 90%;
+  left: 90%;
+}
+.all_dele_button {
+  position: absolute;
+  top: 90%;
+  left: 75%;
+}

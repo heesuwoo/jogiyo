@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width" initial-scale="1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
+<link rel="stylesheet" href="/css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+<link rel="stylesheet" href="/css/modal.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+<script type="text/javascript" src="/js/drop_menu.js"></script>
+<script type="text/javascript" src="/js/management_js.js"></script>
+
+
+//- <script src="../js/bootstrap.min.js"></script>
+//- <script src="/js/jquery-3.6.0.min.js"></script>
+//- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<title>조기요 - 사장님 사이트</title>
+
+	style.
+		.button {
+		cursor: pointer;
+		-webkit-transition-duration: 0.4s; /* Safari */
+		transition-duration: 0.4s;
+		}
+		a:link {
+		color : black;
+		text-decoration: none;
+		}
+		a:visited {
+		color : black;
+		text-decoration: none;
+		}
+		a:hover {
+		color : black;
+		text-decoration: none;
+		}
+		a:active {
+		color : black;
+		text-decoration: none;
+		}
+
+</head>
+	<body onload="startTimer(#{remain})">
+	<nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
+		<div class = "navbar-header">	<!-- 헤더(로고 영역) -->
+			<button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
+				<span class = "icon-bar"></span>	<!-- 네비게이션 목록 작대기 -->
+				<span class = "icon-bar"></span>	
+				<span class = "icon-bar"></span>
+			</button> 
+			<a class = "navbar-brand" href="main"> 조기요-사장님 사이트 </a> <!-- brand: 로고 -->
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class ="nav navbar-nav">	<!-- 리스트 -->
+				<li><a href="javascript:movePage('main')">메인 페이지</a></li>
+				<li><a href="javascript:movePage('orders')">주문접수</a></li>
+				<li class="active"><a href="javascript:movePage('management')">매장관리</a></li>	<!-- ## -->
+			</ul>
+			<ul class ="nav navbar-nav navbar-right">	<!-- 오른쪽 리스트 -->
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 접속하기 <span class="caret"></span></a> <!-- #: 현재 가르치고 있는 링크가 없다. caret: 하나의 아이콘 같은 것-->
+					<ul class= "dropdown-menu">
+					</ul>
+				</li>	
+			</ul>
+		</div>
+	</nav>
+			
+//- <!-- 카드 시작 -->
+<div class="row" id="modal_main">
+
+	//- <!-- 카드: 영업 임시 중지 -->
+	<div class="col-md-6 border">
+		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#stop">
+			<div class="card-body">
+				<p class="lead">영업 임시 중지</p>
+			</div>
+		</div>
+	</div>
+		//- <!-- 모달 -->
+		<div class="modal fade" id="stop" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">영업 임시 중지</h4>
+			</div>
+					
+			<div class="modal-body" align="center">
+				<h3>영업을 잠시 중지할 시간을 설정해주세요.</h3>
+					<div class = "dropdown">
+						<form method="POST" class="btn btn-secondary dropdown-toggle" id="stop_option" onsubmit="tem_stop(event)">
+							<select name="stoptime" aria-labelledby="stop_option" id="s1" class ="form-control tem_stop_option">
+								<option value=30>30분</option>
+								<option value=60>60분</option>
+								<option value=90>90분</option>
+							</select>
+							
+							<input type="submit" class="btn btn-warning btn-lg margin-top" style ="width:49%;" value="저장">
+							<input type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:49%;" value="취소">
+						
+						</form>
+					</div>
+			</div>
+			</div>
+			</div>
+		</div>
+  	
+	//- <!--카드: 영업 시간 설정-->
+	<div class="col-md-6 border">
+		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hour">
+			<div class="card-body">
+				<p class="lead">영업 시간 설정</p>
+			</div>
+		</div>
+	</div>     		
+		//-<!-- 모달 -->
+		<div class="modal fade" id="hour" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" >영업 시간 설정</h4>
+			</div>		
+			<form method="POST" class="btn btn-secondary dropdown-toggle" onsubmit="business_hours_setting(event)">
+			<div class="modal-body">
+				<div class="row justify-content-center">
+					<table data-toggle = "table" class="table table-striped table-responsive" style="text-align: center; margin-left: 10%; margin-right: 10%; border: 1px solid #dddddd">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
+					
+						<tr>	<!-- 테이블의 하나의 행(한 줄) -->
+							<td style="text-align: center;">월~금</td>
+							<td style="text-align: center;">
+								<div class = "dropdown">
+										<select name="mfhs" aria-labelledby="MFHS" class ="form-control mfhs">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									
+								</div>
+								| 시
+							</td>
+								
+							<td style="text-align: center;">
+								<div class = "dropdown">
+						
+										<select name="mfms" aria-labelledby="MFMS" class ="form-control mfms">
+											<option value="00">00</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="30">30</option>
+											<option value="40">40</option>
+											<option value="50">50</option>
+										</select>
+							
+								</div>
+								| 분
+							</td>
+												
+							<td style="text-align: center;">부터</td>
+														
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="mfhf" aria-labelledby="MFHF" class ="form-control mfhf">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									
+								</div>
+								| 시
+							</td>
+														
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="mfmf" aria-labelledby="MFMF" class ="form-control mfmf">
+											<option value="00">00</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="30">30</option>
+											<option value="40">40</option>
+											<option value="50">50</option>
+										</select>
+									
+								</div>
+								| 분
+							</td>
+														
+							<td style="text-align: center;">까지</td>
+						</tr>
+											
+											
+						<tr>	<!-- 테이블의 하나의 행(한 줄) -->
+							<td style="text-align: center;">토</td>
+														
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="shs" aria-labelledby="SHS" class ="form-control shs">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									
+								</div>
+								| 시
+							</td>
+								
+							<td style="text-align: center;">
+								<div class = "dropdown">
+								
+										<select name="sms" aria-labelledby="SMS" class ="form-control sms">
+											<option value="00">00</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="30">30</option>
+											<option value="40">40</option>
+											<option value="50">50</option>
+										</select>
+									
+								</div>
+								| 분
+							</td>
+												
+							<td style="text-align: center;">부터</td>
+														
+							<td style="text-align: center;">
+								<div class = "dropdown">
+								
+										<select name="shf" aria-labelledby="SHF" class ="form-control shf">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+								
+								</div>
+								| 시
+							</td>
+												
+												
+							<td style="text-align: center;">
+								<div class = "dropdown">
+							
+										<select name="smf" aria-labelledby="SMF" class ="form-control smf">
+											<option value="00">00</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="30">30</option>
+											<option value="40">40</option>
+											<option value="50">50</option>
+										</select>
+									
+								</div>
+								| 분
+							</td>
+												
+							<td style="text-align: center;">까지</td>
+						</tr>
+						
+											
+						<tr>	<!-- 테이블의 하나의 행(한 줄) -->
+							<td style="text-align: center;">일</td>
+														
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="suhs" aria-labelledby="SuHS" class ="form-control suhs">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									
+								</div>
+								| 시
+							</td>
+										
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="sums" aria-labelledby="SuMS" class ="form-control sums">
+											<option value="00">00</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="30">30</option>
+											<option value="40">40</option>
+											<option value="50">50</option>
+										</select>
+									
+								</div>
+								| 분
+							</td>
+														
+							<td style="text-align: center;">부터</td>
+														
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="suhf" aria-labelledby="SuHF" class ="form-control suhf">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+										</select>
+									
+								</div>
+								| 시
+							</td>
+												
+												
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="sumf" aria-labelledby="SuMF" class ="form-control sumf">
+											<option value="00">00</option>
+											<option value="10">10</option>
+											<option value="20">20</option>
+											<option value="30">30</option>
+											<option value="40">40</option>
+											<option value="50">50</option>
+										</select>
+									
+								</div>
+								| 분
+							</td>
+												
+							<td style="text-align: center;">까지</td>
+						</tr>
+					
+					</table>
+				</div>					   
+				</div>	
+					<input type="submit" class="btn btn-warning btn-lg margin-top" style ="width:60%;" value="저장">
+					<input type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:62%;" value="취소">
+				</form>
+				</div>
+			</div>	<!--modal-body -->
+			</div>	<!--modal-content -->
+			</div>	<!--modal-dialog -->
+		</div>	<!--modal-fade-->
+  		
+  		
+	//-<!-- 카드: 휴무일 설정 -->
+	<div class="col-md-6 border">
+		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#holiday">
+			<div class="card-body">
+				<p class="lead">휴무일 설정</p>
+			</div>
+		</div>
+	</div>     	
+		//-<!-- 모달 -->
+		<div class="modal fade" id="holiday" tabindex="-1" role="dialog" aria-hiddrn="true" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog" role="document" style="max-width: 100%; width: auto; display: table;">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">휴무일 설정</h4>
+			</div>	<!--modal-header -->	
+			
+			<div class="modal-body card" style="text-align: center;">
+				<div class="row">
+					<table data-toggle="table" class="table table-striped table-responsive" style="margin-left: 10%; margin-right: 10%; border: 1px solid #dddddd" data-height="299">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
+						<tr>	<!-- 테이블의 1번째줄 -->
+							<td rowspan="3" style="text-align: center;">정기 휴무</td>
+							<td style="text-align: center;">매주</td>
+							<td style="text-align: center;">
+								<div class = "dropdown">
+
+										<select name="s_week" id="s_week" class ="form-control">
+											<option selected>선택</option>
+											<option value="첫째">첫째</option>
+											<option value="둘째">둘째</option>
+											<option value="셋째">셋째</option>
+											<option value="넷째">넷째</option>
+											<option value="다섯째">다섯째</option>
+										</select>
+									
+								</div>
+								| 주
+							</td>
+								
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									
+										<select name="s_day" id="s_day" aria-labelledby="dropdownMenuButton14" class ="form-control">
+											<option selected>선택</option>
+											<option value="월">월</option>
+											<option value="화">화</option>
+											<option value="수">수</option>
+											<option value="목">목</option>
+											<option value="금">금</option>
+											<option value="토">토</option>
+											<option value="일">일</option>
+										</select>
+									
+								</div>
+								| 요일
+							</td>
+												
+							<td colspan="2" style="text-align: center;">
+								<button type="button" id="add" class="btn btn-primary form-control" onclick="everyWeek()">추가 </button>
+							</td>
+						</tr>	<!-- 1번째줄 끝-->
+											
+						<tr> <!-- 2번째줄 -->
+												
+							<td style="text-align: center;">매월</td>
+							<td colspan="2" style="text-align: center;">
+								<div class = "dropdown">
+
+										<select id="m_day" name="m_day" aria-labelledby="dropdownMenuButton15" class ="form-control">
+											<option selected>선택</option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+											<option value="25">25</option>
+											<option value="26">26</option>
+											<option value="27">27</option>
+											<option value="28">28</option>
+											<option value="29">29</option>
+											<option value="30">30</option>
+											<option value="31">31</option>
+										</select>
+									
+								</div>
+								| 일
+							</td>
+							<td colspan="2" style="text-align: center;">
+								<button type="button" id="add" class="btn btn-primary form-control" onclick="everyMonth()">추가 </button>
+							</td>
+						</tr>	<!-- 2번째줄 끝-->
+											
+						<tr>	<!-- 3번째줄 -->
+							<td style="text-align: center;">매년</td>
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									<form class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton16">
+										<select name="y_month" id="y_month" aria-labelledby="dropdownMenuButton16" class ="form-control">
+											<option selected>선택</option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+										</select>
+									</form>
+								</div>
+								| 월
+							</td>
+												
+							<td style="text-align: center;">
+								<div class = "dropdown">
+									<form class="btn btn-secondary dropdown-toggle" id="dropdownMenuButton17">
+										<select name="y_day" id="y_day" aria-labelledby="dropdownMenuButton17" class ="form-control">
+											<option selected>선택</option>
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+											<option value="11">11</option>
+											<option value="12">12</option>
+											<option value="13">13</option>
+											<option value="14">14</option>
+											<option value="15">15</option>
+											<option value="16">16</option>
+											<option value="17">17</option>
+											<option value="18">18</option>
+											<option value="19">19</option>
+											<option value="20">20</option>
+											<option value="21">21</option>
+											<option value="22">22</option>
+											<option value="23">23</option>
+											<option value="24">24</option>
+											<option value="25">25</option>
+											<option value="26">26</option>
+											<option value="27">27</option>
+											<option value="28">28</option>
+											<option value="29">29</option>
+											<option value="30">30</option>
+											<option value="31">31</option>
+										</select>
+									</form>
+								</div>
+								| 일
+							</td>
+												
+							<td colspan="2" style="text-align: center;">
+								<button type="button" id="add" class="btn btn-primary form-control" onclick="everyYear()">추가 </button>
+							</td>
+						</tr>	<!-- 3번째 줄 끝-->
+											
+											
+						<tr>	<!-- 4번째 줄 -->
+							<td rowspan="2" style="text-align: center;">임시 휴무</td>
+												
+							<td style="text-align: center;">
+								<input type="text" placeholder="년" id="tem_year_start" class="form-control text-uppercase">
+							</td>
+												
+							<td style="text-align: center;">
+								<input type="text" placeholder="월" id="tem_month_start" class="form-control">
+							</td>
+												
+							<td style="text-align: center;">
+								<input type="text" placeholder="일" id="tem_day_start" class="form-control">
+							</td>
+												
+							<td style="text-align: center;">
+													
+							</td>
+						</tr>	<!-- 4번째 줄 끝-->
+											
+											
+												
+						<tr>	<!-- 5번째 줄 -->
+							<td style="text-align: center;">~</td>
+												
+							<td style="text-align: center;">
+								<input type="text" placeholder="년" id="tem_year_finish" class="form-control">
+							</td>
+												
+							<td style="text-align: center;">
+								<input type="text" placeholder="월" id="tem_month_finish" class="form-control">
+							</td>
+												
+							<td style="text-align: center;">
+								<input type="text" placeholder="일" id="tem_day_finish" class="form-control">
+							</td>
+												
+							<td rowspan="2" style="text-align: center;">
+								<button type="button" id="add" class="btn btn-primary form-control" onclick="temporary_holiday()">추가 </button>
+							</td>	<!-- 5번째 줄 끝-->
+						</tr>	
+					</table>
+				</div>
+					<div>
+						<p style="text-align: left;">정기휴무 : </p>
+							<div id="reg_in" style="text-align: left;">
+							</div>				
+						<br>
+						<p style="text-align: left;">임시휴무: </p>
+							<div id="tem_in" style="text-align: left;">
+							</div>			
+					</div>
+			</div> <!--modal-body -->
+
+			<div class="modal-footer" align="center">
+				<button type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:49%;">저장</button>
+				<button type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:49%;">취소</button>
+			</div>	<!--modal-footer -->
+
+			</div>	<!--modal-content-->
+			</div>	<!--modal-dialog-->
+		</div>	<!--modal-fade-->
+
+	//- <!-- 카드: 좌석 배치도 변경-->
+	<div class="col-md-6 border">
+		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#seat" onclick="movePage('seating');">
+			<div class="card-body">
+				<p class="lead">좌석 배치도 변경</p>
+			</div>
+		</div>
+	</div>
+  	
+	//- <!-- 카드: 메뉴 설정-->
+	<div class="col-md-6 border">
+		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" onclick="movePage('test');">
+			<div class="card-body">
+				<p class="lead">메뉴 설정</p>
+			</div>
+		</div>
+	</div>
+
+</div>	<!--카드 row-->
+
+
+//- 세팅된 정보들 알림창
+<div class="container">
+	<div class="row">
+		<div class="col-sm-10 col-sm-offset-1">
+			<div class="col-md-4 col-sm-6">
+				<div class="card1">
+					<div class="content">
+						<div class="main">
+							<h3 class="name">설정된 임시 중지 시간</h3>
+							<div class="table-responsive">
+								<table class = "table">
+								<tbody>
+									<tr>
+										<td class="text-center"> 남은 시간 </td>
+									</tr>
+									<tr>
+										<td id='remainTd' class="text-center"> #{remain}분</td>
+									</tr>
+								</tbody>
+								</table>
+							//- <p class="text-center">"Lamborghini Mercy <br>Your chick she so thirsty <br>I'm in that two seat Lambo"</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			//- <!--<div class="col-sm-1"></div> -->
+			<div class="col-md-4 col-sm-6">
+				<div class="card1">
+					<div class="content">
+						<div class="main">
+							<h3 class="name">설정된 영업 시간</h3>
+							<div class="table-responsive">
+								<table class = "table">
+								<tbody>
+									<tr>
+										<td> 월~금 </td>
+										<td> 년 월 일 </td>
+									</tr>	
+									<tr>
+										<td> 토 </td>
+										<td> 년 월 일 </td>
+									</tr>	
+									<tr>
+										<td> 일 </td>
+										<td> 년 월 일 </td>
+									</tr>
+									<tr>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+								</table>
+							//- <p class="text-center">"Lamborghini Mercy <br>Your chick she so thirsty <br>I'm in that two seat Lambo"</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			//- <!--<div class="col-sm-1"></div> -->
+			<div class="col-md-4 col-sm-6">
+				<div class="card1">
+					<div class="content">
+						<div class="main">
+							<h3 class="name">설정된 휴무일</h3>
+							<div class="table-responsive">
+								<table class = "table">
+								<tbody>
+									<tr>
+										<td> 정기 휴무 </td>
+										<td> 년 월 일 </td>
+									</tr>	
+									<tr>
+										<td> 임시 휴무 </td>
+										<td> 년 월 일 </td>
+									</tr>
+									<tr>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+								</table>
+							</div>	
+							//- <p class="text-center">"I'm the new Sinatra, and since I made it here I can make it anywhere, yeah, they love me everywhere"</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+script.
+	//- 영업 임시 중지
+	function tem_stop(e) {	
+			e.preventDefault() //버튼 클릭후 페이지 이동을 방지해주는 코드
+
+			const s = document.querySelector('.tem_stop_option')
+
+			var tem_stop_time= s.selectedOptions[0].value;
+
+			console.log(tem_stop_time);
+
+			const reqBody = {
+				cookie : getCookie("id"),
+				tem_stop_time: s.selectedOptions[0].value
+			}
+
+			const xhr = new XMLHttpRequest()
+
+			xhr.onload = () => {
+				const result = JSON.parse(xhr.responseText)
+					if(result.code == -1){
+						alert("영업 임시 중지가 이미 실행중입니다.");
+						movePage('management')
+						//- location.href = "management";
+					} else if(result.code == 0){
+						alert("설정했던 일시정지 시간이 아직 다 지나지 않았습니다.\n 지난 후 다시 설정해 주세요.");
+						movePage('management')
+						//- location.href = "management";
+					} else if(result.code == 1){
+						//- console.log("consloe: ",result.message);
+						alert("임시 중지가 시작되었습니다.");
+						movePage('management')
+						//- location.href = "management";
+						
+					} else{
+						console.log("임시중지 error");
+					}
+				}
+			xhr.open('POST', '/management')
+			xhr.setRequestHeader('Content-Type', 'application/json')
+			xhr.send(JSON.stringify(reqBody))
+		}
+		
+		drop_menu();
+
+		
+		//임시 중지 시간 타이머
+		function startTimer(remainTime) {	//#{remain}
+			//- console.log('remain:: ', typeof remainTime)
+			let rem = remainTime
+			const r = document.querySelector('#remainTd')
+
+			if(rem == 0){
+				r.innerText = `설정된 시간이 없습니다.`
+			}else{
+				var timer = setInterval(() => {
+
+					const xhr = new XMLHttpRequest()
+
+					xhr.open('get', '/management')
+					
+					console.log("###",rem)
+
+					if (rem == 0) {
+						clearInterval(timer)
+					}
+					r.innerText = `${rem--}분`
+				}, 1000*60)
+			}
+		}
+
+	
+<script type="text/javascript" src="/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</body>
+</html>
