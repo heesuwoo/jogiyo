@@ -839,10 +839,9 @@ script.
 		const result = JSON.parse(xhr.responseText)
 
 		if(result.code == 0){
-
-			M_to_F.innerHTML = "영업시간을 설정해주세요.";
-			Sat.innerHTML = "영업시간을 설정해주세요.";
-			Sun.innerHTML = "영업시간을 설정해주세요.";
+			M_to_F.innerHTML = "설정된 영업 시간이 없습니다.";
+			Sat.innerHTML = "설정된 영업 시간이 없습니다.";
+			Sun.innerHTML = "설정된 영업 시간이 없습니다.";
 		}else{
 			const hours = result.message
 			const M_f_show = hours.m_s_h + "시 " + hours.m_s_m + "분   ~ " + hours.m_f_h +"시 "+hours.m_f_m + "분"

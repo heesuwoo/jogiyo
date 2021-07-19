@@ -118,14 +118,12 @@ function business_hours_setting(e) {
 
   xhr.onload = () => {
     const result = JSON.parse(xhr.responseText);
-    console.log("result: ", result.area);
-    if (result.area == "setting") {
-      if (result.code == 2) {
-        alert("영업 시간이 설정되었습니다.");
-        movePage("seating");
-      } else {
-        alert("영업 시간 설정 error.");
-      }
+    console.log("result: ", result.code);
+    if (result.code == 2) {
+      alert("영업 시간이 설정되었습니다.");
+      movePage("management");
+    } else {
+      alert("영업 시간 설정 error.");
     }
   };
 

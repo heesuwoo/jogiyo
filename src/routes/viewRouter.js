@@ -270,6 +270,7 @@ router.post("/business_hours_set", (req, res, next) => {
       su_f_h,
       su_f_m
     ).then(function (setting) {
+      // console.log("setting: ", setting)
       if (setting == true) {
         res.json({ code: 2, message: "hours success" });
       } else {
