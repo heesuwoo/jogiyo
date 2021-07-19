@@ -287,3 +287,7 @@ function remove_tem(id) {
   var target = document.querySelector("#" + id); //문자열로 받아온 wid에 해당하는 객체를 받아옴.
   tem_in.removeChild(target); //부모요소(reg_in)에서 자식요소(target)를 제거함(html 요소에서 제거).
 }
+
+function holiday_save(){
+  
+}
