@@ -280,6 +280,20 @@ router.post("/business_hours_set", (req, res, next) => {
   });
 });
 
+//매장 관리 - 휴무일 설정
+router.post("/management_holiday", async (req, res) => {
+  const { cookie, reg_item, tem_item } = req.body;
+
+  const userID = await db.cookieToID(cookie);
+  // const save = await db.business_holiday(userID, reg_item, tem_item);
+
+  // if(save == true){
+  //   res.json({code: 1, message: "holiday save success"});
+  // }else{
+  //   res.json({code: 0, message: "holiday save failed"})
+  // }
+});
+
 // 좌석배치도
 router.get("/seating", (req, res, next) => {
   res.render("seating");

@@ -517,6 +517,23 @@ const business_hours_update = async function (
   }
 };
 
+/*6. 매장관리 - 휴무일 설정*/
+
+//매장 관리 - 휴무일 설정 (저장)
+const business_holiday = async function (userID, reg_item, tem_item) {
+  try {
+    // console.log("####reg_item", reg_item)
+    const query = `insert into holiday (userID, regulary, temporary) VALUES ('${userID}','${reg_item}', '${tem_item}')`;
+    //console.log(query);
+    const result = await pool.query(query);
+    // console.log("성공");
+    return true;
+  } catch (e) {
+    console.log("Error in business_holiday\n", e);
+    return false;
+  }
+};
+
 // const testDate = async () => {
 //   try {
 //     const query = `select finishDate from datetesttable`;
@@ -534,8 +551,6 @@ const business_hours_update = async function (
 //     return false;
 //   }
 // };
-
-/*6. 매장관리 - 휴무일 설정*/
 
 /*7. 매장관리 - 좌석 배치도 변경*/
 
@@ -737,6 +752,7 @@ module.exports = {
   business_hours_update, //영업 시간 업데이트
 
   // 매장관리 - 휴무일 설정
+  business_holiday, //휴무일 저장
 
   // 매장관리 - 좌석배치도 변경
   table_location, //테이블 조회

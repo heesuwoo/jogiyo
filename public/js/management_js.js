@@ -136,24 +136,49 @@ function business_hours_setting(e) {
 function holiday_setting(e) {
   e.preventDefault(); //버튼 클릭후 페이지 이동을 방지해주는 코드
 
-  const reg = document.querySelector("#reg_p");
-  const tem = document.querySelector("#tem_p");
+  var reg_list = []
+  var tem_list = []
+  const reg = document.querySelector("#reg_in");
+  const tem = document.querySelector("#tem_in");
+  const reg_child = reg.childNodes
+  const tem_child = tem.childNodes
 
-  console.log("reg: ", reg);
 
-  // var tem_stop_time = s.selectedOptions[0].value;
+  for(i=1; i<reg_child.length; i++){
+    const reg_in_p = reg.childNodes[i].innerText;
+    console.log("&&", reg.childNodes[i])
+    reg_list.push(reg_in_p);
+  }
+  var reg_item = reg_list.join(', ');
+  // console.log("####reg_item", reg_item)
+
+  for(j=1; j<tem_child.length; j++){
+    const tem_in_p = tem.childNodes[i];
+    console.log("@@", tem_in_p)
+    tem_list.push(tem_in_p);
+  }
+
+  var tem_item = tem_list.join(', ');
 
   const reqBody = {
     cookie: getCookie("id"),
-    // tem_stop_time: s.selectedOptions[0].value,
+    reg_item: reg_item,
+    tem_item: tem_item,
   };
 
   const xhr = new XMLHttpRequest();
 
   xhr.onload = () => {
     const result = JSON.parse(xhr.responseText);
+    console.log("holiday: ", result.code)
+    if(result.code == 1){
+      alert("휴무일이 설정되었습니다.");
+    }else{
+      alert("오류가 났습니다.");
+    }
   };
-  xhr.open("POST", "/management");
+
+  xhr.open("POST", "/management_holiday");
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.send(JSON.stringify(reqBody));
 }
@@ -289,5 +314,10 @@ function remove_tem(id) {
 }
 
 function holiday_save(){
-  
+  // var reg = document.querySelector("#reg_in");
+  // var tem = document.querySelector("#tem_in");
+
+  // var reg_p = document.querySelector("#reg_p")
+
+  // console.log("#####reg",reg_p)
 }
