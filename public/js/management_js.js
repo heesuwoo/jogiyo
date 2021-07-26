@@ -146,19 +146,24 @@ function holiday_setting(e) {
 
   for(i=1; i<reg_child.length; i++){
     const reg_in_p = reg.childNodes[i].innerText;
-    console.log("&&", reg.childNodes[i])
+    // console.log("&&", reg.childNodes[i])
     reg_list.push(reg_in_p);
+
+    for(j=1; j<tem_child.length; j++){
+      const tem_in_p = tem.childNodes[i].innerText;
+      // console.log("@@", tem_in_p)
+      tem_list.push(tem_in_p);
+    }
   }
   var reg_item = reg_list.join(', ');
-  // console.log("####reg_item", reg_item)
-
-  for(j=1; j<tem_child.length; j++){
-    const tem_in_p = tem.childNodes[i];
-    console.log("@@", tem_in_p)
-    tem_list.push(tem_in_p);
-  }
-
   var tem_item = tem_list.join(', ');
+
+  // for(j=1; j<tem_child.length; j++){
+  //   const tem_in_p = tem.childNodes[i].innerText;
+  //   // console.log("@@", tem_in_p)
+  //   tem_list.push(tem_in_p);
+  // }
+  // var tem_item = tem_list.join(', ');
 
   const reqBody = {
     cookie: getCookie("id"),
@@ -173,8 +178,9 @@ function holiday_setting(e) {
     console.log("holiday: ", result.code)
     if(result.code == 1){
       alert("휴무일이 설정되었습니다.");
+      movePage("management");
     }else{
-      alert("오류가 났습니다.");
+      alert("휴무일 설정 error");
     }
   };
 
@@ -311,13 +317,4 @@ function remove_tem(id) {
   // console.log(id);
   var target = document.querySelector("#" + id); //문자열로 받아온 wid에 해당하는 객체를 받아옴.
   tem_in.removeChild(target); //부모요소(reg_in)에서 자식요소(target)를 제거함(html 요소에서 제거).
-}
-
-function holiday_save(){
-  // var reg = document.querySelector("#reg_in");
-  // var tem = document.querySelector("#tem_in");
-
-  // var reg_p = document.querySelector("#reg_p")
-
-  // console.log("#####reg",reg_p)
 }

@@ -78,7 +78,6 @@ router.post("/main", async (req, res, next) => {
   var window = await db.window_select(userID); //창문 위치
 
   var select = await db.menu_select(userID); //menu
-
   // console.log(window);
   res.json({ table: table, window: window, menu: select });
 });
@@ -152,11 +151,17 @@ router.post("/business", async (req, res) => {
   const userID = await db.cookieToID(cookie);
 
   var hours = await db.business_hours_select_check(userID);
-
+  var holiday = await db.business_holiday_select(userID);
   if (hours != 0) {
-    res.json({ code: 1, message: hours }); //설정된 영업시간이 있을때
-  } else {
-    res.json({ code: 0 }); //설정된 영업시간이 없을때
+    if(holiday != 0){
+      res.json({ code: 1, hours: hours, holiday: holiday }); //영업시간과 휴무일이 설정되어 있을때
+    } else{
+      res.json({ code: 2, hours: hours}); //영업시간만 설정되어 있을때
+    }
+  } else if(hours == 0 && holiday != 0){
+    res.json({ code: 3, holiday: holiday}); //휴무일만 설정되어 있을때
+  } else if(hours == 0 && holiday == 0){
+    res.json({ code: 0}); //설정된게 없을때
   }
 });
 
@@ -212,7 +217,7 @@ router.post("/management", (req, res, next) => {
   db.cookieToID(cookie).then(function (result) {
     var userID = result; //coookie에서 userID가져옴
 
-    //일시 정지
+    //영업 일시 정지
     db.business_stop_select(userID, tem_stop_time).then(function (db_result) {
       console.log(db_result);
       if (db_result == -1) {
@@ -285,13 +290,13 @@ router.post("/management_holiday", async (req, res) => {
   const { cookie, reg_item, tem_item } = req.body;
 
   const userID = await db.cookieToID(cookie);
-  // const save = await db.business_holiday(userID, reg_item, tem_item);
+  const save = await db.business_holiday(userID, reg_item, tem_item);
 
-  // if(save == true){
-  //   res.json({code: 1, message: "holiday save success"});
-  // }else{
-  //   res.json({code: 0, message: "holiday save failed"})
-  // }
+  if(save == true){
+    res.json({code: 1, message: "holiday save success"});
+  }else{
+    res.json({code: 0, message: "holiday save failed"})
+  }
 });
 
 // 좌석배치도
