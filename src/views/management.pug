@@ -802,10 +802,6 @@
 										<td> 임시 휴무 </td>
 										<td id = "tem_show"></td>
 									</tr>
-									<tr>
-										<td></td>
-										<td></td>
-									</tr>
 								</tbody>
 								</table>
 							</div>	
@@ -838,13 +834,14 @@ script.
 
 	xhr.onload = () => {
 		const result = JSON.parse(xhr.responseText)
-
+		console.log("영업 시간, 휴무일 코드: ", result.code)
 		if(result.code == 0){
 			M_to_F.innerHTML = "설정된 영업 시간이 없습니다.";
 			Sat.innerHTML = "설정된 영업 시간이 없습니다.";
 			Sun.innerHTML = "설정된 영업 시간이 없습니다.";
 			reg_show.innerHTML = "설정된 정기 휴무일이 없습니다.";
 			tem_show.innerHTML = "설정된 임시 휴무일이 없습니다.";
+			console.log("코드 0")
 		}else if(result.code == 1){	//영업시간 & 휴무일 둘다 설정되어있을때
 			const hours = result.hours
 			const M_f_show = hours.m_s_h + "시 " + hours.m_s_m + "분   ~ " + hours.m_f_h +"시 "+hours.m_f_m + "분"
@@ -867,10 +864,18 @@ script.
 			M_to_F.innerHTML = M_f_show
 			Sat.innerHTML = Sat_show
 			Sun.innerHTML = Sun_show
+
+			reg_show.innerHTML = "설정된 정기 휴무일이 없습니다.";
+			tem_show.innerHTML = "설정된 임시 휴무일이 없습니다.";			
+
 		}else if(result.code == 3){	//휴무일만 설정되어 있을때
 			const re = result.holiday
 			reg_show.innerHTML = re.regulary
 			tem_show.innerHTML = re.temporary
+
+			M_to_F.innerHTML = "설정된 영업 시간이 없습니다.";
+			Sat.innerHTML = "설정된 영업 시간이 없습니다.";
+			Sun.innerHTML = "설정된 영업 시간이 없습니다.";
 		}
 	}
 

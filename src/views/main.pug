@@ -47,24 +47,8 @@
         
         //- 포스 기능
         <div class="pos">
-            <div class = "menu1">
-            </div>
-            <div class = "menu2">
-            </div>
-            <div class = "menu3">
-            </div>
-            <div class = "menu4">
-            </div>
-            <div class = "menu5">
-            </div>
-            <div class = "menu6">
-            </div>
-            <div class = "menu7">
-            </div>
-            <div class = "menu8">
-            </div>
-            <div class = "menu9">
-            </div>
+            <div class="content">
+            </div>    
         </div>
     </div>    
 
@@ -90,7 +74,7 @@
                 menu_list.push(menu_title)
             }
             menu(menu_list)
-            console.log("menu_list: ", menu_list[0])
+            console.log("menu_list: ", menu_list)
             
         }
 
@@ -98,6 +82,26 @@
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send(JSON.stringify(reqBody))
         
+
+
+        //메뉴 불러오기 메뉴 title 넘겨받음
+        function menu(menu_list){
+            const pos_position = document.querySelector(".content")
+
+            //- console.log("menu_list.length: ", menu_list.length)
+            for(var j = 0; j < menu_list.length; j++){
+
+                var menu_item = document.createElement('div');  //item div생성
+                var menu_id = 'menu_' + j;  //menu id 동적생성
+                menu_item.id = menu_id; //munu id 부여
+                menu_item.className = 'item';
+
+                menu_item.innerHTML = `<h4 style = 'text-align: center; margin-top: 50%'> ${menu_list[j]} </h4>`;
+                pos_position.appendChild(menu_item);
+            }
+        }
+
+
         //테이블 불러오기
         function table_draw(table_list){
             
@@ -158,11 +162,6 @@
 
                 container.appendChild(window);
             }
-        }
-
-        function menu(menu_list){
-            const pos_position = document.querySelector(".pos")
-            
         }
 
         drop_menu();

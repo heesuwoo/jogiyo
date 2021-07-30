@@ -523,14 +523,42 @@ const business_hours_update = async function (
 const business_holiday = async function (userID, reg_item, tem_item) {
   try {
     // console.log("####reg_item", reg_item)
-    const query = `insert into holiday (userID, regulary, temporary) VALUES ('${userID}','${reg_item}', '${tem_item}')`;
+    const query = `SELECT * FROM holiday WHERE userID = '${userID}'`;
     //console.log(query);
     const result = await pool.query(query);
-    // console.log("성공");
-    return true;
+    const queryResult = result[0][0];
+    if(queryResult == undefined){
+      business_holiday_insert(userID, reg_item, tem_item);
+      return true;
+    }else{
+      business_holiday_update(userID, reg_item, tem_item);
+      return true;
+    }
   } catch (e) {
     console.log("Error in business_holiday\n", e);
     return false;
+  }
+};
+
+//매장 관리 - 휴무일 삽입
+const business_holiday_insert = async function (userID, reg_item, tem_item){
+  try{
+    const query = `insert into holiday (userID, regulary, temporary) VALUES ('${userID}','${reg_item}', '${tem_item}')`;
+    const result = await pool.query(query);
+    const queryResult = result[0][0];
+  }catch(e){
+    console.log("Error in business_holiday_insert\n", e);
+  }
+};
+
+//매장 관리 - 휴무일 업데이트
+const business_holiday_update = async function (userID, reg_item, tem_item){
+  try{
+    const query = `update holiday set regulary = '${reg_item}', temporary = '${tem_item}' where userID = '${userID}'`;
+    const result = await pool.query(query);
+    const queryResult = result[0][0];
+  }catch(e){
+    console.log("Error in business_holiday_update\n", e);
   }
 };
 
@@ -774,6 +802,8 @@ module.exports = {
 
   // 매장관리 - 휴무일 설정
   business_holiday, //휴무일 저장
+  business_holiday_insert,  //휴무일 삽입
+  business_holiday_update,  //휴무일 업데이트
   business_holiday_select,  //휴무일 조회
 
   // 매장관리 - 좌석배치도 변경
