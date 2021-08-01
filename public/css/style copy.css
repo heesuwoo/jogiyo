@@ -108,34 +108,42 @@ a:active {
 }
 
 /* main.pug css */
+.main_box {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 10px;
+  grid-template-areas: "table_seat pos";
+  align-content: stretch;
+  text-align: center;
+  /* border: 5px solid green; */
+}
 
-/*좌석 배치도 박스*/
 .box_border2 {
-  position: absolute;
-  left: 2%;
+  position: relative;
+  left: 1%;
   border: 5px solid gray;
   /* display: inline-block; */
   height: 90%;
-  width: 65%;
+  width: 130%;
   border-radius: 7px;
   text-align: center;
+  grid-area: "table_seat";
 }
 
-/*포스 박스*/
 .pos{
-  position: absolute;
-  left: 68%;
+  position: relative;
+  left: 32%;
   border: 5px solid red;
   height: 90%;
-  width: 30%;
+  width: 64%;
+  grid-area: "pos";
 }
 
-/*포스기 메뉴*/
 .content{
   border: solid 1px olivedrab;
   height: 85%;
   width: 100%;
-  padding-bottom: 3%;
 
   display: flex;
   flex-direction: row;  /*가로로 배치*/
@@ -143,27 +151,11 @@ a:active {
   justify-content: space-around;  /*콘텐츠 사이 간격*/
   align-content: flex-start;
   align-items: flex-start;
-  overflow:auto;  /*스크롤*/
 }
-
-/*결제버튼*/
-.pay{
-  border: solid 5px blueviolet;
-  padding-top: 5%;
-  margin-left: 15%;
-  margin-top: 5%;
-  height: 10%;
-  width: 70%;
-  text-align: center;
-
-  font-size: 32px;
-  font-weight: 700;
-}
-
-/*메뉴 추가*/
 .item{
   margin-top: 3%;
   border: solid 1px black;
   flex-basis: 30%;
   height: 25%;
+
 }
