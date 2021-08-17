@@ -15,7 +15,7 @@
         <script type="text/javascript" src="/js/drop_menu.js"></script>
         <script type="text/javascript" src="/js/main_script.js"></script>
     </head>
-    <body class="back">
+    <body class="back main_body">
         <nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
             <div class = "navbar-header">	<!-- 헤더(로고 영역) -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
@@ -54,7 +54,6 @@
         </div>
 
     script.
-
         const reqBody = {
                 cookie : getCookie("id")
         }
@@ -74,9 +73,8 @@
                 var menu_title = result.menu[i].title
                 menu_list.push(menu_title)
             }
-            menu(menu_list)
-            console.log("menu_list: ", menu_list)
-            
+            m_id = menu(menu_list) //메뉴 불러오기 메뉴 title 넘겨받음
+            console.log("menu_list: ", menu_list)///
         }
 
         xhr.open('POST', '/main')
