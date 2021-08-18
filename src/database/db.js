@@ -217,6 +217,59 @@ const window_select = async function (userID) {
   }
 };
 
+//메인페이지 - 테이블 별 주문 메뉴 조회하기
+const table_menu_select = async function (userID, table_num) {
+  order_list = [];
+  try {
+    const query = `SELECT * FROM table_menu WHERE userID = '${userID}' and table_num = '${table_num}'`;
+    const result = await pool.query(query);
+
+    for (var i = 0; i < result[0].length; i++) {
+      var menu_name = result[0][i].menu_name;
+      var menu_len = result[0][i].menu_len;
+      var menu_id = result[0][i].menu_id;
+      var order = { menu_name, menu_len, menu_id };
+
+      order_list.push(order);
+    }
+
+    return order_list;
+  } catch (e) {
+    console.log("Error in table_menu_select\n", e);
+    return false;
+  }
+};
+
+//메인페이지 - 테이블 별 주문 메뉴 삭제하기
+const table_menu_delete = async function (userID, table_num) {
+  try {
+    const query = `DELETE FROM table_menu WHERE userID = '${userID}' and table_num = '${table_num}'`;
+    // console.log(query)
+    const result = await pool.query(query);
+    return true;
+  } catch (e) {
+    console.log("Error in table_menu_delete\n", e);
+    return false;
+  }
+};
+//메인페이지 - 테이블 별 주문 메뉴 저장하기
+const table_menu_save = async function (userID, table_num, order_list) {
+  try {
+    for(i=0; i < order_list.length; i++){
+      var menu = order_list[i][0];
+      var menu_len = order_list[i][1];
+      var menu_id = order_list[i][2];
+      const query = `insert into table_menu(userID, table_num, menu_name, menu_len, menu_id) values('${userID}', '${table_num}', '${menu}', '${menu_len}', '${menu_id}');`;
+      const result = await pool.query(query);
+    }
+    // console.log("window_list: ", window_list);
+    return true;
+  } catch (e) {
+    console.log("Error in table_menu_save\n", e);
+    return false;
+  }
+};
+
 /* 3. 주문 접수*/
 
 //주문 접수 - 주문 목록 조회
@@ -782,6 +835,9 @@ module.exports = {
   // (메인페이지)
   table_select, //테이블 위치값 받아오기
   window_select, //창문 위치값 받아오기
+  table_menu_select,  //테이블 별 주문 메뉴 조회
+  table_menu_delete, //테이블 별 주문 메뉴 삭제
+  table_menu_save, //테이블 별 주문 메뉴 저장
 
   // 주문접수
   orders, //주문 목록 조회

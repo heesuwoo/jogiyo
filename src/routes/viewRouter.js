@@ -82,7 +82,58 @@ router.post("/main", async (req, res, next) => {
   res.json({ table: table, window: window, menu: select });
 });
 
-// 주문접수
+// 메인 페이지 포스기 테이블 메뉴 불러오기
+router.post("/pos_order_sele", async (req, res, next) => {
+  const { cookie, table_num} = req.body;
+  const userID = await db.cookieToID(cookie);
+
+  // console.log("order_list: ", order_list);
+  
+  var table_sele = await db.table_menu_select(userID, table_num);
+
+  if(table_sele != false){
+    res.json({ code: 0, order_list: order_list });
+  }else{
+    res.json({ code: -1, msg: "pos_order fail" });
+  }
+});
+
+// 메인 페이지 포스기 테이블 메뉴 저장
+router.post("/pos_order", async (req, res, next) => {
+  const { cookie, table_num, order_list } = req.body;
+  const userID = await db.cookieToID(cookie);
+
+  // console.log("order_list: ", order_list);
+  
+  var table_delete = await db.table_menu_delete(userID, table_num);
+
+  if(table_delete == true){
+    var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
+    if(table_save == true){
+      res.json({ code: 1, msg: "pos_order success" });
+    }else{
+      res.json({ code: -1, msg: "pos_order fail" });
+    }
+  }else{
+    res.json({ code: -1, msg: "pos_order fail" });
+  }
+});
+
+// 메인 페이지 포스기 결제
+router.post("/pay", async (req, res, next) => {
+  const { cookie, table_num} = req.body;
+  const userID = await db.cookieToID(cookie);
+  
+  var table_dele = await db.table_menu_delete(userID, table_num);
+
+  if(table_dele == true){
+    res.json({ code: 1, msg: "pay success" });
+  }else{
+    res.json({ code: -1, msg: "pay fail" });
+  }
+});
+
+// 주문접수,,
 router.get("/orders", (req, res) => {
   const { id } = req.query;
   // console.log("order 쿠키: ", id);
