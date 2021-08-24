@@ -189,9 +189,9 @@ function click(clicked_table){
             order_list_draw(table_num, order_list);
         }
 
-        xhr.open('POST', '/pos_order_sele')
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(JSON.stringify(reqBody))
+    xhr.open('POST', '/pos_order_sele')
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(JSON.stringify(reqBody))
 }
 
 //뒤로가기 버튼 클릭시
@@ -213,7 +213,7 @@ function save_table_order(){
         var save_menu_id = table_num + "_menu_" + i;
 
         order_list.push([save_menu_name, save_menu_len, save_menu_id]);
-        // console.log("afdsfa", save_menu_name)
+        console.log("save_menu_name: ", save_menu_name)
     }
     // console.log("order_list in js: ", order_list)
     //router로 전송
@@ -268,6 +268,7 @@ function pay(){
         const reqBody = {
             cookie : getCookie("id"),
             table_num : pay_button,
+            
         }
             
         const xhr = new XMLHttpRequest()

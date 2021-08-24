@@ -119,9 +119,10 @@ a:active {
   width: 65%;
   border-radius: 7px;
   text-align: center;
+  background-color: #bde4d7;
 }
 
-/*포스 박스*/
+/*포스 메뉴 박스*/
 .pos{
   position: absolute;
   left: 68%;
@@ -136,6 +137,7 @@ a:active {
   height: 85%;
   width: 100%;
   padding-bottom: 3%;
+  background-color: #b8f8fb;
 
   display: flex;
   flex-direction: row;  /*가로로 배치*/

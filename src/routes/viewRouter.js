@@ -124,6 +124,7 @@ router.post("/pay", async (req, res, next) => {
   const { cookie, table_num} = req.body;
   const userID = await db.cookieToID(cookie);
   
+  var table_save = await db.table_menu_save(userID, table_num, )
   var table_dele = await db.table_menu_delete(userID, table_num);
 
   if(table_dele == true){
