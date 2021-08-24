@@ -170,7 +170,7 @@ function click(clicked_table){
 
     // 뒤로가기 버튼 클릭 시
     back.onclick = function(table_num){
-        save_table_order()
+        save_table_order();
         body_container.removeChild(list_div)
         body_container.appendChild(container)
     }
@@ -194,7 +194,7 @@ function click(clicked_table){
     xhr.send(JSON.stringify(reqBody))
 }
 
-//뒤로가기 버튼 클릭시
+//뒤로가기 버튼 클릭시 - 추가 메뉴 저장
 function save_table_order(){
 
     var table_num = document.querySelector(".box_border2").id   //table_6
