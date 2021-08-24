@@ -244,7 +244,7 @@ const table_menu_select = async function (userID, table_num) {
 const table_menu_delete = async function (userID, table_num) {
   try {
     const query = `DELETE FROM table_menu WHERE userID = '${userID}' and table_num = '${table_num}'`;
-    console.log(query)
+    // console.log(query)
     const result = await pool.query(query);
     return true;
   } catch (e) {

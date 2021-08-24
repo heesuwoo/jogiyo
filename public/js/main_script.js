@@ -194,7 +194,7 @@ function click(clicked_table){
     xhr.send(JSON.stringify(reqBody))
 }
 
-//뒤로가기 버튼 클릭시 - 추가 메뉴 저장
+//뒤로가기 버튼 클릭시 - 메뉴 저장
 function save_table_order(){
 
     var table_num = document.querySelector(".box_border2").id   //table_6
@@ -213,9 +213,9 @@ function save_table_order(){
         var save_menu_id = table_num + "_menu_" + i;
 
         order_list.push([save_menu_name, save_menu_len, save_menu_id]);
-        console.log("save_menu_name: ", save_menu_name)
+        // console.log("save_menu_name: ", save_menu_name)
     }
-    // console.log("order_list in js: ", order_list)
+    console.log("save_table_orders: ")
     //router로 전송
     const reqBody = {
         cookie : getCookie("id"),
@@ -263,12 +263,29 @@ function pay(){
     
     if(pay_button !='box'){
 
-        save_table_order();
+        var table_num = document.querySelector(".box_border2").id   //table_6
+        var tbody_table = "#list_" + table_num;
+
+        var tbody_col = document.querySelector(tbody_table).rows.length;    //테이블 행 개수
+        
+        var order_list =[]
+
+        for(i=0; i < tbody_col; i++){
+            var list_menu_name = "#" + table_num + "_menu_" + i;
+            var list_menu_len = list_menu_name + "_count"
+            var save_menu_name = document.querySelector(list_menu_name).innerText //한 행의 메뉴 이름 불러옴
+            var save_menu_len = document.querySelector(list_menu_len).innerText   //한 행의 메뉴 개수 불러옴
+
+            var save_menu_id = table_num + "_menu_" + i;
+
+            order_list.push([save_menu_name, save_menu_len, save_menu_id]);
+            // console.log("save_menu_name: ", save_menu_name)
+        }
 
         const reqBody = {
             cookie : getCookie("id"),
             table_num : pay_button,
-            
+            order_list : order_list,
         }
             
         const xhr = new XMLHttpRequest()
@@ -288,6 +305,38 @@ function pay(){
     
 }
 
-function save_table_menu(){
+
+
+
+
+/*function pay(){
+
+    const pay_button = document.querySelector('.box_border2').id;
     
-}
+    if(pay_button !='box'){
+
+        save_table_order();
+
+
+        
+        const reqBody = {
+            cookie : getCookie("id"),
+            table_num : pay_button,
+        }
+            
+        const xhr = new XMLHttpRequest()
+        xhr.onload = () => {
+            const result = JSON.parse(xhr.responseText)
+            if(result.code == 1){
+                alert("결제 되었습니다.");
+                movePage('main')
+            }else{
+                alert("결제 error");
+            }
+        }
+        xhr.open('POST', '/pay')
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(JSON.stringify(reqBody))
+    }
+    
+}*/

@@ -121,20 +121,21 @@ router.post("/pos_order", async (req, res, next) => {
 
 // 메인 페이지 포스기 결제
 router.post("/pay", async (req, res, next) => {
-  const { cookie, table_num} = req.body;
+  const { cookie, table_num, order_list} = req.body;
   const userID = await db.cookieToID(cookie);
   
-  var table_save = await db.table_menu_save(userID, table_num, )
+
+  var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
   var table_dele = await db.table_menu_delete(userID, table_num);
 
-  if(table_dele == true){
+  if(table_save == true && table_dele == true){
     res.json({ code: 1, msg: "pay success" });
   }else{
     res.json({ code: -1, msg: "pay fail" });
   }
 });
 
-// 주문접수,,
+// 주문접수
 router.get("/orders", (req, res) => {
   const { id } = req.query;
   // console.log("order 쿠키: ", id);
