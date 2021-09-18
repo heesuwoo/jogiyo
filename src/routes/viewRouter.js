@@ -7,7 +7,7 @@ const router = express.Router(); // 라우터 분리
 
 const db = require("../database/db");
 
-// 로그인
+// 로그인!
 router.get("/login", function (req, res) {
   res.render("login");
 });
@@ -37,7 +37,7 @@ router.post("/logout", (req, res) => {
   res.send("success");
 });
 
-// 회원가입
+// 회원가입!
 router.get("/join", (req, res, next) => {
   res.render("join");
 });
@@ -56,7 +56,7 @@ router.post("/join", (req, res, next) => {
       });
     } else if (dbresult == -1) {
       res.json({ code: -1, msg: "duplicate" }); //code: -1; 중복되는 사항이 있음
-    } else {
+    } else {  //db.joincheck result = flase일때
       res.json({ code: 1, msg: "join_check error" }); //code: 1; db.joincheck 에러
     }
   });
@@ -65,24 +65,40 @@ router.post("/join", (req, res, next) => {
 // 메인
 router.get("/main", (req, res, next) => {
   // const { id } = req.query;
-
   res.render("main");
   // console.log("메인 세션: ", req.session.userID);
 });
 
+// 메인 - POST !
 router.post("/main", async (req, res, next) => {
   const { cookie } = req.body;
   const userID = await db.cookieToID(cookie);
-
+  // console.log("userID: ", userID )
   var table = await db.table_select(userID); //테이블 위치
   var window = await db.window_select(userID); //창문 위치
 
-  var select = await db.menu_select(userID); //menu
+  var pos_menu = await db.menu_select(userID); //해당 가게의 menu 
+  var select = await db.table_menu_select_main(userID); //가게에 등록된 menu 이름 + 개수 받아옴
+
+  var reser = await db.orders_reser(userID);
+  // console.log("reser: ", reser)
   // console.log(window);
-  res.json({ table: table, window: window, menu: select });
+  res.json({ table: table, window: window, pos_menu: pos_menu, main_table_menu: select, reserved: reser});
 });
 
-// 메인 페이지 포스기 테이블 메뉴 불러오기
+// 메인 - POST
+router.post("/main_reserved", async (req, res, next) => {
+  const { cookie, table_num, order } = req.body;
+  const userID = await db.cookieToID(cookie);
+
+  var save = await db.table_menu_save(userID, table_num, order); //예약석 메뉴 저장하기
+
+  console.log("result: ", save)
+  // console.log(window);
+  res.json({ code: 0, msg: "success!"});
+});
+
+// 메인 페이지 포스기 테이블 메뉴 불러오기!
 router.post("/pos_order_sele", async (req, res, next) => {
   const { cookie, table_num} = req.body;
   const userID = await db.cookieToID(cookie);
@@ -98,7 +114,7 @@ router.post("/pos_order_sele", async (req, res, next) => {
   }
 });
 
-// 메인 페이지 포스기 테이블 메뉴 저장
+// 메인 페이지 포스기 테이블 메뉴 저장!
 router.post("/pos_order", async (req, res, next) => {
   const { cookie, table_num, order_list } = req.body;
   const userID = await db.cookieToID(cookie);
@@ -119,7 +135,7 @@ router.post("/pos_order", async (req, res, next) => {
   }
 });
 
-// 메인 페이지 포스기 결제
+// 메인 페이지 포스기 결제!
 router.post("/pay", async (req, res, next) => {
   const { cookie, table_num, order_list} = req.body;
   const userID = await db.cookieToID(cookie);
@@ -127,7 +143,7 @@ router.post("/pay", async (req, res, next) => {
 
   var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
   var table_dele = await db.table_menu_delete(userID, table_num);
-
+  
   if(table_save == true && table_dele == true){
     res.json({ code: 1, msg: "pay success" });
   }else{
@@ -135,20 +151,20 @@ router.post("/pay", async (req, res, next) => {
   }
 });
 
-// 주문접수
+// 주문접수!
 router.get("/orders", (req, res) => {
   const { id } = req.query;
   // console.log("order 쿠키: ", id);
   db.cookieToID(id).then(function (result) {
     var userID = result; //coookie에서 userID가져옴
-    db.orders(userID).then(function (result) {
+    db.orders(userID,0).then(function (result) {
       // console.log(order_list);
       res.render("orders");
     });
   });
 });
 
-//주문 접수 목록 계속 조회 -> 나타내기
+//주문 접수 목록 계속 조회 -> 나타내기!
 router.get("/ordersData", (req, res) => {
   const { id, last } = req.query;
   // console.log("last:", last);
@@ -164,12 +180,13 @@ router.get("/ordersData", (req, res) => {
   // res.render({ arr1: [{ a: 1, b: 2 }, "abcd"] });
 });
 
-//주문 접수 수락 보내기
+//주문 접수 수락 보내기!
 router.post("/orders_submit", (req, res) => {
   const { cookie, submit_num } = req.body;
 
   db.cookieToID(cookie).then(function (id) {
     const userID = id;
+    
     db.orders_submit(userID, submit_num).then(function (submit_result) {
       if (submit_result == true) {
         res.json({ code: 1, message: "orders_submit success" });
@@ -181,13 +198,13 @@ router.post("/orders_submit", (req, res) => {
   // console.log(req.body);
 });
 
-//주문 접수 취소 보내기
-router.post("/orders_acc", (req, res) => {
+//주문 접수 취소 보내기!
+router.post("/order_cancel", (req, res) => {
   const { cookie, acc_num, reason_num } = req.body;
   // console.log("##", reason_num);
   db.cookieToID(cookie).then(function (id) {
     const userID = id;
-    db.orders_acc(userID, acc_num, reason_num).then(function (acc_result) {
+    db.order_cancel(userID, acc_num, reason_num).then(function (acc_result) {
       if (acc_result == true) {
         res.json({ code: 1, message: "orders_acc success" });
       } else {
@@ -198,7 +215,7 @@ router.post("/orders_acc", (req, res) => {
   // console.log(req.body);
 });
 
-//매장 관리 - 영업 시간, 휴무일 조회
+//매장 관리 - 영업 시간, 휴무일 조회!
 router.post("/business", async (req, res) => {
   const { cookie } = req.body;
   const userID = await db.cookieToID(cookie);
@@ -218,7 +235,7 @@ router.post("/business", async (req, res) => {
   }
 });
 
-// 매장관리 - 영업 임시 중지 - 남은 시간 조회
+// 매장관리 - 영업 임시 중지 - 남은 시간 조회!
 router.get("/management", (req, res, next) => {
   // console.log("차이: ", gap); //최종 차이(분 단위)
 
@@ -233,14 +250,15 @@ router.get("/management", (req, res, next) => {
         res.render("management", { remain: 0 });
       } else {
         const now = new Date();
-        const date = re_time.finishDate; //db에서 finishDate에 접근해서 날짜,시간 받아오기
+        const date = re_time.finish_date; //db에서 finishDate에 접근해서 날짜,시간 받아오기
         const finish = new Date(date); //db시간을 읽어오기위해 객체에 저장하기
         const finishMilli = finish.getTime(); //db저장값 밀리초로 받아오기
         const nowMili = now.getTime(); //현재 시간 밀리초로 받아오기
         const gapMilli = finishMilli - nowMili; //차이 계산
         const gapMinutes = gapMilli / (60 * 1000); //분으로 바꾸기
         const gap = Math.round(gapMinutes);
-
+        
+        // console.log("결과값", re_time);
         // console.log("분으로 바꾼 결과값", gap);
         res.render("management", { remain: gap });
       }
@@ -248,6 +266,7 @@ router.get("/management", (req, res, next) => {
   });
   // res.render("management", { remain: re_time });
 });
+
 router.post("/management", (req, res, next) => {
   const {
     cookie,
@@ -291,7 +310,7 @@ router.post("/management", (req, res, next) => {
   });
 });
 
-//매장 관리 - 영업 시간 설정
+//매장 관리 - 영업 시간 설정!
 router.post("/business_hours_set", (req, res, next) => {
   const {
     cookie,
@@ -338,7 +357,7 @@ router.post("/business_hours_set", (req, res, next) => {
   });
 });
 
-//매장 관리 - 휴무일 설정
+//매장 관리 - 휴무일 설정!
 router.post("/management_holiday", async (req, res) => {
   const { cookie, reg_item, tem_item } = req.body;
 
@@ -352,7 +371,7 @@ router.post("/management_holiday", async (req, res) => {
   }
 });
 
-// 좌석배치도
+// 좌석배치도!
 router.get("/seating", (req, res, next) => {
   res.render("seating");
 });
@@ -380,7 +399,8 @@ router.post("/seating", async (req, res, next) => {
     res.json({ code: 0, message: "seating_update success" });
   }
 });
-//좌석배치도 - 모두 삭제
+
+//좌석배치도 - 모두 삭제!
 router.post("/location_clear", async (req, res, next) => {
   const { cookie } = req.body;
 
@@ -396,7 +416,7 @@ router.post("/location_clear", async (req, res, next) => {
   }
 });
 
-//매장 관리 - 메뉴 설정- 사진 등록
+//매장 관리 - 메뉴 설정- 사진 등록 !
 router.get("/menusetting", (req, res) => {
   res.render("menusetting", { arr1: [{ a: 1, b: 2 }, "abcd"] });
 });
@@ -427,7 +447,7 @@ router.post("/menusetting", async (req, res) => {
   }
 });
 
-//매장 관리 - 메뉴 설정- 메뉴 조회
+//매장 관리 - 메뉴 설정- 메뉴 조회!
 router.post("/menusetting_select", (req, res) => {
   const { cookie } = req.body;
 
@@ -441,7 +461,7 @@ router.post("/menusetting_select", (req, res) => {
   });
 });
 
-//매장 관리 - 메뉴 설정- 메뉴 삭제
+//매장 관리 - 메뉴 설정- 메뉴 삭제!
 router.post("/menusetting_delete", async (req, res) => {
   const { cookie, title } = req.body;
   // console.log("router: ", title);
@@ -455,6 +475,84 @@ router.post("/menusetting_delete", async (req, res) => {
     }
   });
 });
+
+//매장 관리 - 매장 설정 
+// router.get("/restaurantsetting", (req, res) => {
+//   res.render("restaurantsetting");
+// });
+
+//매장 관리 - 매장 설정 
+// router.get("/restaurantsetting", (req, res) => {
+//   const { cookie } = req.body;
+
+//   db.cookieToID(cookie).then(function (result) {
+//     var userID = result; //coookie에서 userID가져옴
+//   });
+// });
+
+//매장 관리 - 매장 조회
+router.get("/restaurantsetting", (req, res) => {
+  res.render("restaurantsetting", { arr1: [{ a: 1, b: 2 }, "abcd"] });
+});
+
+router.post("/restaurantsetting", async (req, res) => {
+  const { cookie, img_base64, phone, address, category } = req.body;
+  // console.log(img_base64);
+  var img = img_base64.substring(22); //data:image/png;base64, 빼기
+
+  // var matches = img_base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+  
+  // console.log("#####", matches);
+  
+  const userID = await db.cookieToID(cookie);
+  
+  var restaurant_sumbit = await db.restaurant_sumbit(
+    userID,
+    img,
+    phone,
+    address,
+    category
+    );
+    
+    var restaurant_list = await db.restaurant_select(userID);
+    
+    if (restaurant_sumbit == true) {
+      res.json({ code: 1, restaurant: restaurant_list });
+    } else if(restaurant_sumbit == false && restaurant_list != null) {
+      res.json({ code: 0 });
+    }
+  });
+
+  //매장 관리 - 매장 설정- 매장 설정 조회
+  router.post("/restaurantsetting_select", (req, res) => {
+    const { cookie } = req.body;
+  
+    db.cookieToID(cookie).then(function (result) {
+      var userID = result; //coookie에서 userID가져옴
+  
+      db.restaurant_select(userID).then(function (select) {
+        // var a = select.menu[0].img.data.toString("base64");
+        res.json({ restaurant: select });
+        // console.log(select);
+      });
+    });
+  });
+
+
+//매장 관리 - 매장 관리
+// router.post("/restaurantsetting", async (req, res) => {
+//   const { cookie, title } = req.body;
+//   // console.log("router: ", title);
+//   const userID = await db.cookieToID(cookie);
+//   // const delete_check = db.menu_delete(userID, title);
+//   db.menu_delete(userID, title).then(function (delete_check) {
+//     if (delete_check == true) {
+//       res.json({ code: 1 });
+//     } else {
+//       res.json({ code: 0 });
+//     }
+//   });
+// });
 
 // router.get("/getTime", (req, res) => {
 //   db.testDate().then((finishDate) => {

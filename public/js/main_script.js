@@ -1,4 +1,4 @@
-//메뉴 불러오기 메뉴 title 넘겨받음
+//오른쪽 Pos에 메뉴 불러오기 메뉴 title 넘겨받음
 function menu(menu_list){
 
     const pos_position = document.querySelector(".content")
@@ -40,7 +40,7 @@ function menu(menu_list){
                 if(table_name != null && clicked_menu_id != null){
                     var td_add = document.createElement('tr')
                     // var i = 1;
-                    console.log(`table_name: ${table_name}  clicked_menu_id: ${clicked_menu_id}`)
+                    // console.log(`table_name: ${table_name}  clicked_menu_id: ${clicked_menu_id}`)
                     td_add.innerHTML = `<td id="${table_name}_${clicked_menu_id}">${clicked_menu}</td> <td id="${table_name}_${clicked_menu_id}_count">1</td><td><button onclick = x_menu('${table_name}_${clicked_menu_id}_count')>-</button></td>`
                     table_add_menu.appendChild(td_add);
                 }
@@ -199,23 +199,35 @@ function save_table_order(){
 
     var table_num = document.querySelector(".box_border2").id   //table_6
     var tbody_table = "#list_" + table_num;
-
-    var tbody_col = document.querySelector(tbody_table).rows.length;    //테이블 행 개수
     
+    var tbody_len = document.querySelector(tbody_table).rows.length;    //테이블 행 개수
+     
     var order_list =[]
 
-    for(i=0; i < tbody_col; i++){
-        var list_menu_name = "#" + table_num + "_menu_" + i;
-        var list_menu_len = list_menu_name + "_count"
-        var save_menu_name = document.querySelector(list_menu_name).innerText //한 행의 메뉴 이름 불러옴
-        var save_menu_len = document.querySelector(list_menu_len).innerText   //한 행의 메뉴 개수 불러옴
+    // for(i=0; i < tbody_len; i++){
+    //     var list_menu_name = "#" + table_num + "_menu_" + i;
+    //     var list_menu_len = list_menu_name + "_count"
+    //     var save_menu_name = document.querySelector(list_menu_name).innerText //한 행의 메뉴 이름 불러옴
+    //     var save_menu_len = document.querySelector(list_menu_len).innerText   //한 행의 메뉴 개수 불러옴
 
-        var save_menu_id = table_num + "_menu_" + i;
+    //     var save_menu_id = table_num + "_menu_" + i;
+
+
+    //     order_list.push([save_menu_name, save_menu_len, save_menu_id]);
+    //     // console.log("save_menu_name: ", save_menu_name)
+    // }
+
+    for(i=0; i< tbody_len; i++){
+        var save_menu_name = document.querySelector(tbody_table).rows[i].cells[0].innerText
+        var save_menu_len = document.querySelector(tbody_table).rows[i].cells[1].innerText
+
+        var save_menu_id = document.querySelector(tbody_table).rows[i].cells[0].id
 
         order_list.push([save_menu_name, save_menu_len, save_menu_id]);
-        // console.log("save_menu_name: ", save_menu_name)
     }
-    console.log("save_table_orders: ")
+
+    // console.log("save_table_orders: ",order_list)
+
     //router로 전송
     const reqBody = {
         cookie : getCookie("id"),
@@ -229,6 +241,7 @@ function save_table_order(){
         if(result.code != 1){
             alert("메뉴 저장 error");
         }
+        movePage('main')
     }
     xhr.open('POST', '/pos_order')
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -241,18 +254,22 @@ function order_list_draw(table_num, order_list){
     var table_list_name = "#list_" + table_num
     const table_add_menu = document.querySelector(table_list_name)
     
-    // console.log("afdf", order_list.length)
-    for(var j=0; j < order_list.length; j++){
-        var menu_name = order_list[j].menu_name
-        var menu_len = order_list[j].menu_len
-        var menu_id = order_list[j].menu_id
-
-        console.log(menu_name, menu_len, menu_id)
-
-        var td_add = document.createElement('tr')
-        td_add.innerHTML = `<td id="${menu_id}">${menu_name}</td> <td id="${menu_id}_count">${menu_len}</td><td><button onclick = x_menu('${menu_id}_count')>-</button></td>`
-        table_add_menu.appendChild(td_add);
+    // console.log("afdf", order_list)
+    if(order_list == undefined){
+    }else{
+        for(var j=0; j < order_list.length; j++){
+            var menu_name = order_list[j].menu_name
+            var menu_len = order_list[j].menu_len
+            var menu_id = order_list[j].menu_id
+    
+            console.log("order_list_draw: ",menu_name, menu_len, menu_id)
+    
+            var td_add = document.createElement('tr')
+            td_add.innerHTML = `<td id="${menu_id}">${menu_name}</td> <td id="${menu_id}_count">${menu_len}</td><td><button onclick = x_menu('${menu_id}_count')>-</button></td>`
+            table_add_menu.appendChild(td_add);
+        }
     }
+
     // td_add.innerHTML = `<td id="${table_num}_${clicked_menu_id}">${clicked_menu}</td> <td id="${table_name}_${clicked_menu_id}_count">1</td><td><button onclick = x_menu('${table_name}_${clicked_menu_id}_count')>-</button></td>`
     // table_add_menu.appendChild(td_add);
 }
@@ -266,20 +283,29 @@ function pay(){
         var table_num = document.querySelector(".box_border2").id   //table_6
         var tbody_table = "#list_" + table_num;
 
-        var tbody_col = document.querySelector(tbody_table).rows.length;    //테이블 행 개수
+        var tbody_len = document.querySelector(tbody_table).rows.length;    //테이블 행 개수
         
         var order_list =[]
 
-        for(i=0; i < tbody_col; i++){
-            var list_menu_name = "#" + table_num + "_menu_" + i;
-            var list_menu_len = list_menu_name + "_count"
-            var save_menu_name = document.querySelector(list_menu_name).innerText //한 행의 메뉴 이름 불러옴
-            var save_menu_len = document.querySelector(list_menu_len).innerText   //한 행의 메뉴 개수 불러옴
+        // for(i=0; i < tbody_len; i++){
+        //     var list_menu_name = "#" + table_num + "_menu_" + i;
+        //     var list_menu_len = list_menu_name + "_count"
+        //     var save_menu_name = document.querySelector(list_menu_name).innerText //한 행의 메뉴 이름 불러옴
+        //     var save_menu_len = document.querySelector(list_menu_len).innerText   //한 행의 메뉴 개수 불러옴
 
-            var save_menu_id = table_num + "_menu_" + i;
+        //     var save_menu_id = table_num + "_menu_" + i;
 
+        //     order_list.push([save_menu_name, save_menu_len, save_menu_id]);
+        //     // console.log("save_menu_name: ", save_menu_name)
+        // }
+
+        for(i=0; i< tbody_len; i++){
+            var save_menu_name = document.querySelector(tbody_table).rows[i].cells[0].innerText
+            var save_menu_len = document.querySelector(tbody_table).rows[i].cells[1].innerText
+    
+            var save_menu_id = document.querySelector(tbody_table).rows[i].cells[0].id
+    
             order_list.push([save_menu_name, save_menu_len, save_menu_id]);
-            // console.log("save_menu_name: ", save_menu_name)
         }
 
         const reqBody = {
@@ -305,38 +331,98 @@ function pay(){
     
 }
 
+function show(menu){
 
+    for(var i = 0; i < menu.length; i++){
+        // console.log("menu: " , menu)
 
-
-
-/*function pay(){
-
-    const pay_button = document.querySelector('.box_border2').id;
-    
-    if(pay_button !='box'){
-
-        save_table_order();
-
-
+        var table_num = menu[i][0];
+        var menu_name = menu[i][1];
+        var menu_len = menu[i][2];
+        var menu_id = menu[i][3];
         
-        const reqBody = {
-            cookie : getCookie("id"),
-            table_num : pay_button,
-        }
-            
-        const xhr = new XMLHttpRequest()
-        xhr.onload = () => {
-            const result = JSON.parse(xhr.responseText)
-            if(result.code == 1){
-                alert("결제 되었습니다.");
-                movePage('main')
-            }else{
-                alert("결제 error");
+
+        const container = document.querySelector(`#${table_num}`);
+        
+        var table_menu = document.createElement('div');
+        var m_id = 'menu_list_' + i;
+
+        table_menu.id = m_id;
+        
+        table_menu.innerHTML = `<p> ${menu_name} : ${menu_len} 개 </p>`;
+
+        container.appendChild(table_menu);
+        
+    }
+}
+
+function show_reserved(reserved){
+
+    order = []
+    //가게 메뉴 개수 구하다가 끝남!!!!!!!!!!!!!1
+    // console.log(document.getElementsByClassName('item'));  
+    
+    const item1 = document.querySelectorAll('.content')
+
+
+    console.log(item1); 
+    console.log(item1.children); 
+    console.log(item1[0].children); 
+
+    // var matches = element.getElementsByClassName('content');
+
+    // while (matches.length > 0) {
+    // matches.item(0).classList.add('hueframe');
+    // matches[0].classList.remove('colorbox');
+    // }
+
+    for(var i = 0; i < reserved.length; i++){
+        // console.log("reserved: " , reserved)
+
+        var table_num = reserved[i][0]; //테이블 번호
+        var menu_name = reserved[i][1]; //메뉴 이름
+        var menu_len = reserved[i][2];  //메뉴 개수
+
+        const pos_menu = document.querySelector(`.content`);
+        
+
+        for(var j=0; j<pos_menu.childNodes.length-1; j++){
+            var child = pos_menu.children[j].innerText
+
+            console.log("child: ", child)
+
+            if(menu_name == child){
+                var menu_id = table_num + "_" + pos_menu.children[j].id;
+                console.log("menu_id: ", menu_id)
             }
         }
-        xhr.open('POST', '/pay')
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(JSON.stringify(reqBody))
+
+        const container = document.querySelector(`#table_${table_num}`);
+
+        container.style.backgroundColor = "red";
+        // container.innerHTML = "<p>예약석</p>";
+
+        // var table_menu = document.createElement('div');
+        // var m_id = 'menu_list_' + i;
+
+        // table_menu.id = m_id;
+        
+        // table_menu.innerHTML = `<strong style="color:red">예약석</strong> <br> <p>${menu_name} : ${menu_len}개</p>`;
+
+        // container.appendChild(table_menu);
+        order.push([menu_name, menu_len, menu_id])
+
+        // console.log("df : ",order)
     }
-    
-}*/
+
+    const reqBody = {
+        cookie : getCookie("id"),
+        table_num : table_num,
+        order : order
+    }
+    // const xhr = new XMLHttpRequest()
+    // xhr.open('POST', '/main_reserved')
+    // xhr.setRequestHeader('Content-Type', 'application/json')
+    // xhr.send(JSON.stringify(reqBody))
+}
+

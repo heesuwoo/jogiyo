@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name = "viewport" content = "width=device-width", initial-scale = "1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
         <link rel="stylesheet" href="/css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
@@ -14,7 +15,7 @@
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/drop_menu.js"></script>
 
-        style.
+            style.
                 .container {
                 margin-top:3%;
                 padding-top:20px;
@@ -38,15 +39,15 @@
                 -webkit-transition-duration: 0.4s; /* Safari */
                 transition-duration: 0.4s;
                 }
-        
+    
     </head>
-    //- body(onload=`test(${JSON.stringify(arr1)})`)    //router.get("/menusetting"
+
     body
         <nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
             <div class = "navbar-header">	<!-- 헤더(로고 영역) -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
                     <span class = "icon-bar"></span>	<!-- 네비게이션 목록 작대기 -->
-                    <span class = "icon-bar"></span>	
+                    <span class = "icon-bar"></span>
                     <span class = "icon-bar"></span>
                 </button> 
                 <a class = "navbar-brand" href="main"> 조기요-사장님 사이트 </a> <!-- brand: 로고 -->
@@ -66,17 +67,17 @@
                     </li>
                 </ul>
             </div>
-        </nav>
-        
-    <h3>메뉴 설정</h3>
+        </nav>   
 
-    <div class="container">
+        <h3>매장 설정</h3>
+
+        <div class="container">
         <form name="f" method="post">
  
             <div class="col-sm-12 pt-3 center">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title"><i class="fas fa-square"></i> 메뉴 등록 </h4>
+                        <h4 class="card-title"><i class="fas fa-square"></i> 매장 정보 설정 </h4>
                         <p class="card-catagory"></p>
                     </div>
                     <div class="card-body">
@@ -88,24 +89,31 @@
                                     //- <td>
                                     //-     <input type="text" name="admin_id" class="form-control" placeholder="성함을 입력해주세요.">
                                     //- </td>
-                                    <td>메뉴 이름</td>
+                                    <td>매장 연락처</td>
                                     <td>
-                                        <input type="text" id="inputTitle" class="form-control" placeholder="메뉴 이름을 적어주세요.">
+                                        <input type="text" id="inputPhone" class="form-control" placeholder="연락 가능한 번호를 입력해주세요.">
                                     </td>                        
                                 </tr>
                                 <tr>
-                                    <td>매뉴 가격</td>
+                                    <td>매장 주소</td>
                                     <td>
-                                        <input type="text" id="inputPrice" class="form-control" placeholder="메뉴 가격을 적어주세요.">                                    
+                                        <input type="text" id="inputAddress" class="form-control" placeholder="상세 주소까지 입력해주세요.">                                    
                                     </td>
                                 </tr>    
-                                <tr>
-                                    <td>매뉴에 관한 설명</td>
+                                <tr>    
+                                    <td>매장 카테고리</td>
                                     <td>
-                                        <input type="text" id="inputText" class="form-control" placeholder="메뉴에 관한 설명을 적어주세요.">                                    
+                                        <div class = "dropdown">
+                                            <select name="category" aria-labelledby="category" class ="form-control category">
+                                                <option value="한식">한식</option>
+                                                <option value="중식">중식</option>
+                                                <option value="일식">일식</option>
+                                                <option value="양식">양식</option>
+                                                <option value="카페">카페</option>
+                                            </select>
+                                        </div>                              
                                     </td>
-                                </tr>    
-                                
+                                </tr>  
                                 </tbody>
                             </table>
                         </div>
@@ -115,14 +123,14 @@
                 <div class="pt-3"></div>
     
                 <div class="card">
-                    <h4 class="card-header"><i class="fas fa-square"></i> 메뉴 이미지 설정</h4>
+                    <h4 class="card-header"><i class="fas fa-square"></i> 매장 대표 이미지 설정</h4>
                     <div class="card-body">
                         <table class="table">
                             <tbody>
                                 <tr style="line-height:32px;">
                                     <td>PNG 이미지 첨부</td>
                                     <td>
-                                        <input type="file" id="inputFile" class="form-control text-right">
+                                        <input type="file" id="inputFile" class="form-control text-right" maxlength="3" size="3">
                                     </td>
                                 </tr>
                             </tbody>
@@ -134,41 +142,47 @@
             </form>
         
             <div class="text-center mt-3 btnst">
-                <button type="button" onclick="submitMenu()" class="btn btn-success">메뉴 등록</button>
+                <button type="button" onclick="restaurant_submit()" class="btn btn-success">매장 정보 등록</button>
             </div>
         </div>
+
+
         <div class="container">
             <div class="col-sm-12 pt-3 center">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title"><i class="fas fa-square"></i> 등록된 메뉴 정보 </h4>
+                        <h4 class="card-title"><i class="fas fa-square"></i> 등록된 매장 정보 </h4>
                         <p class="card-catagory"></p>
                     </div>
 
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table" style = "border-collapse: separate;">
-                                <thead>
+                                <tbody>
                                 <tr>
-                                    <td id="menu_td">
-                                    <h5>메뉴 사진</h5>
-                                    </td>
-                                    <td id="menu_td">
-                                        <h5>메뉴 이름</h5>
-                                    </td>
-                                    <td id="menu_td">
-                                        <h5>가격</h6>
-                                    </td>
-                                    <td id="menu_td">
-                                        <h5>설명</h5>
-                                    </td>
-                                    
-                                    <td id="menu_td">
-                                        <h5>삭제</h5>
-                                    </td>              
+                                    <td>매장 이미지</td>
+                                    <td id="img_insert">
+                                        
+                                    </td>                      
                                 </tr>
-                                </thead>
-                                <tbody id="menu_table">
+                                <tr>
+                                    <td>매장 연락처</td>
+                                    <td id="phone_insert">
+                                        
+                                    </td>                      
+                                </tr>
+                                <tr>
+                                    <td>매장 주소</td>
+                                    <td id="address_insert">
+                                        
+                                    </td>                      
+                                </tr>
+                                <tr>
+                                    <td>매장 카테고리</td>
+                                    <td id="category_insert">
+                                        
+                                    </td>                      
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -176,81 +190,80 @@
                 </div>
             </div>
         </div>
+            
 	
     script.
         
         drop_menu();
 
          const reqBody = {
-                cookie : getCookie("id")
+            cookie : getCookie("id")
         }
 
         const xhr = new XMLHttpRequest()
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText)
-            
-            var menu_list = result.menu
-            //- console.log(result)
-            list_show(menu_list);
+
+            var restaurant_list = result.restaurant
+            console.log(restaurant_list);
+            list_show(restaurant_list);
         }
 
-        xhr.open('POST', '/menusetting_select')
+        xhr.open('POST', '/restaurantsetting_select')
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send(JSON.stringify(reqBody))
 
-
-        //메뉴 리스트 보여줌
+        //매장 정보 리스트 보여줌
         function list_show(list){
             for(var i = 0; i<list.length; i++){
 
-                const table = document.querySelector("#menu_table");
-                var menu_item = document.createElement('tr')
+                const img_insert = document.querySelector("#img_insert");
+                const phone_insert = document.querySelector("#phone_insert");
+                const address_insert = document.querySelector("#address_insert");
+                const category_insert = document.querySelector("#category_insert");
 
                 var img = 'data:image/png;base64,'+ list[i].img
+                var restaurant_name = list[i].restaurant_name
+                var restaurant_address = list[i].restaurant_address
+                var restaurant_phone = list[i].restaurant_phone
+                var restaurant_theme = list[i].restaurant_theme
 
-                //- console.log(img)
-                var title = list[i].title
-                var price = list[i].price
-                var ex = list[i].ex
-                
-                var id = "item_" +i
-                menu_item.id = id;
+                //- console.log("restaurant_name: ", restaurant_name)
 
-                var inner1 = `<td id="menu_td"> <img src = "${img}" id="menu_img" /> </td>`
-                var inner2 = `<td id="tilte"> ${title} </td>`
-                var inner3 = `<td id="menu_td">${price} </td>`
-                var inner4 = `<td id="menu_td">${ex} </td>`
-                var inner5 = `<td> <button type="button" id="add" class="btn btn-danger form-control" onclick="delete_menu(this,'${title}')">제거 </button> </td>`
-                menu_item.innerHTML = inner1 + inner2 + inner3 + inner4 + inner5
 
-                table.appendChild(menu_item);
+                img_insert.innerHTML = `<img src = "${img}" id="menu_img" />`
+                phone_insert.innerHTML = `${restaurant_phone}`
+                address_insert.innerHTML = `${restaurant_address}`
+                category_insert.innerHTML = `${restaurant_theme}`
             }
         }
 
-        //메뉴 등록
-        function submitMenu() {
+        //매장 설정 db에 등록 (전송 버튼 클릭시)
+        function restaurant_submit() {
             const file = document.querySelector("#inputFile");
-            const title = document.querySelector("#inputTitle");
-            const price = document.querySelector("#inputPrice");
-            const ex = document.querySelector("#inputText");
+            const phone_input = document.querySelector("#inputPhone");
+            const address_input = document.querySelector("#inputAddress");
+            const category_dropdown = document.querySelector(".category");
+            const category_input = category_dropdown.selectedOptions[0];
 
             const reader = new FileReader();    //1
 
-            if(file != null && title != null && price != null && ex != null){
+            if(file != null && phone_input != null && address_input != null && category_input != null){
 
                 reader.onload = () => { //3
-                var strImg = reader.result;
-                var menu_title = title.value;
-                var menu_price = price.value;
-                var menu_ex = ex.value;
-                //- console.log("title.pug", strImg)
 
-                const payload = {
-                    cookie : getCookie("id"),
-                    img_base64: strImg,
-                    menu_title: menu_title,
-                    menu_price : menu_price,
-                    menu_ex: menu_ex
+                    var strImg = reader.result;
+                    var phone = phone_input.value;
+                    var address = address_input.value;
+                    var category = category_input.value;
+
+
+                    const payload = {
+                        cookie : getCookie("id"),
+                        img_base64: strImg,
+                        phone: phone,
+                        address : address,
+                        category: category
                 };
 
                 const xhr = new XMLHttpRequest();
@@ -260,14 +273,15 @@
                     if (result.code == 1) {
                     // 끝
                         //- console.log(result.menu);
-                        alert("메뉴가 등록되었습니다.")
-                        add_menu(strImg, menu_title,menu_price,menu_ex);
+                        alert("매장 정보가 등록되었습니다.")
+                        add_list(strImg,phone,address,category);
+
                     }else{
-                        alert("메뉴 등록 error")
+                        alert("매장 정보 등록 error")
                     }
                 };
 
-                xhr.open("POST", "/menusetting");
+                xhr.open("POST", "/restaurantsetting");
                 xhr.setRequestHeader('Content-Type', 'application/json')
                 xhr.send(JSON.stringify(payload));
             };
@@ -278,53 +292,23 @@
             }
         }
 
-        //- 메뉴 추가시 테이블에 보임
-        function add_menu(strImg, menu_title,menu_price,menu_ex){
+        //- 메뉴 추가 버튼 클릭시 등록된 매장 정보를 보여줌(새로고침 전)
+        function add_list(strImg,phone,address,category){
             
-            //- var img = 'data:image/png;base64,' + strImg
+            var img = strImg
             //- console.log(strImg)
-            var menu = document.querySelector("#menu_table");
-            var menu_insert = document.createElement('tr')
             
-            var inner1 = `<td id="menu_td"> <img src = "${strImg}" id="menu_img" /> </td>`
-            var inner2 = `<td id="tilte" > ${menu_title} </td>`
-            var inner3 = `<td id="menu_td">${menu_price} </td>`
-            var inner4 = `<td id="menu_td">${menu_ex} </td>`
-            var inner5 = `<td> <button type="button" id="add" class="btn btn-danger form-control" onclick="delete_menu(this, '${menu_title}' )">제거 </button> </td>`
-            menu_insert.innerHTML = inner1 + inner2 + inner3 + inner4 + inner5
-
-            menu.appendChild(menu_insert);
+            const img_insert = document.querySelector("#img_insert");
+            const phone_insert = document.querySelector("#phone_insert");
+            const address_insert = document.querySelector("#address_insert");
+            const category_insert = document.querySelector("#category_insert");
+            
+            img_insert.innerHTML = `<img src = "${img}" id="menu_img" />`
+            phone_insert.innerHTML = `${phone}`
+            address_insert.innerHTML = `${address}`
+            category_insert.innerHTML = `${category}`
         }
         
-        //- 메뉴 삭제시 테이블, db에서 사라짐
-        function delete_menu(td, title_item){
-            var menu = document.querySelector("#menu_table");
-            var tr = td.parentNode.parentNode
-            //- console.log(tr)
-
-            const reqBody = {
-                cookie : getCookie("id"),
-                title: title_item
-            }
-
-            const xhr = new XMLHttpRequest()
-
-            xhr.onload = () => {
-                const result = JSON.parse(xhr.responseText)
-
-                //- console.log("**", result.code);
-                
-                if(result.code == 1){
-                    menu.removeChild(tr)
-                    alert("메뉴가 삭제되었습니다.")
-                }else{
-                    alert("메뉴 삭제 오류")
-                }
-            }
-            xhr.open('POST', '/menusetting_delete')
-            xhr.setRequestHeader('Content-Type', 'application/json')
-            xhr.send(JSON.stringify(reqBody))
-        }
 
 </body>
 </html>

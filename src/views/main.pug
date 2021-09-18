@@ -59,22 +59,64 @@
         }
 
         const xhr = new XMLHttpRequest()
+
         xhr.onload = () => {
             const result = JSON.parse(xhr.responseText)
 
+            //- console.log("reserve_table: ", result.reserved)
+
             var table_list = result.table;
             var window_list = result.window;
+            var reserve_table = result.reserved;
+    
             var menu_list = []
-            //- console.log(menu_title)
+            var menu_count = []
+            var reserved = []
+            
+            //- console.log(result.main_table_menu)
+            
             table_draw(table_list);
             window_draw(window_list);
+            if(result.main_table_menu.length == undefined){
+                for(var i=0; i<result.pos_menu.length; i++ ){
+                    var menu_title = result.pos_menu[i].title
+                    menu_list.push(menu_title)
+                }
+            }else{
+                for(var i=0; i<result.pos_menu.length; i++){    //해당 가게의 메뉴 저장
+                    var menu_title = result.pos_menu[i].title
+                    menu_list.push(menu_title)
+                }
+                for(var j=0; j<result.main_table_menu.length; j++){
 
-             for(var i=0; i<result.menu.length; i++ ){
-                var menu_title = result.menu[i].title
-                menu_list.push(menu_title)
+                    var table_number = result.main_table_menu[j].table_num
+                    var table_menu_title = result.main_table_menu[j].menu_name
+                    var table_menu_count = result.main_table_menu[j].menu_len
+                    var table_menu_id = result.main_table_menu[j].menu_id
+                    
+
+                    menu_count.push([table_number, table_menu_title, table_menu_count, table_menu_id])
+                }
             }
-            m_id = menu(menu_list) //메뉴 불러오기 메뉴 title 넘겨받음
-            console.log("menu_list: ", menu_list)///
+
+            if(reserve_table != undefined){
+                for(var k=0; k<reserve_table.length; k++){
+                    
+                    var acc = reserve_table[k][5]
+                    //- console.log("acc: ", reserve_table)
+                    if(acc == 1){
+                        var seat = reserve_table[k][4]
+                        var menu_reserved = reserve_table[k][1]
+                        var menu_len = reserve_table[k][2]
+                        reserved.push([seat, menu_reserved, menu_len])
+                    }
+                }
+            }
+            //- console.log("menu_list: ", menu_list)
+            console.log("menu_count: ",menu_count)
+            show(menu_count)
+            show_reserved(reserved)
+            menu(menu_list) //오른쪽 Pos에 메뉴 불러오기 메뉴 title 넘겨받음
         }
 
         xhr.open('POST', '/main')

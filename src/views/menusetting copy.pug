@@ -13,32 +13,6 @@
         <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/drop_menu.js"></script>
-
-        style.
-                .container {
-                margin-top:3%;
-                padding-top:20px;
-                border: solid 2px black;
-                background: none repeat scroll 0 0 #ffffff;
-                border-radius: 80px; /*메뉴 테두리 */
-                color: #444444;
-                box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.14);
-                }
-                .btnst{
-                    padding: 5% 5% 5% 5%;
-                }
-                .center{
-                    position:relative;
-                    left: 10%;
-                    right: 10%;
-                    text-align: center;
-                }
-                .button {
-                cursor: pointer;
-                -webkit-transition-duration: 0.4s; /* Safari */
-                transition-duration: 0.4s;
-                }
-        
     </head>
     //- body(onload=`test(${JSON.stringify(arr1)})`)    //router.get("/menusetting"
     body
@@ -69,113 +43,46 @@
         </nav>
         
     <h3>메뉴 설정</h3>
+    <h4>메뉴</h4>
 
-    <div class="container">
-        <form name="f" method="post">
- 
-            <div class="col-sm-12 pt-3 center">
-                <div class="card">
-                    <div class="card-header card-header-primary">
-                        <h4 class="card-title"><i class="fas fa-square"></i> 메뉴 등록 </h4>
-                        <p class="card-catagory"></p>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table" style = "border-collapse: separate;">
-                                <tbody>
-                                <tr>
-                                    //- <td>대표자 성함</td>
-                                    //- <td>
-                                    //-     <input type="text" name="admin_id" class="form-control" placeholder="성함을 입력해주세요.">
-                                    //- </td>
-                                    <td>메뉴 이름</td>
-                                    <td>
-                                        <input type="text" id="inputTitle" class="form-control" placeholder="메뉴 이름을 적어주세요.">
-                                    </td>                        
-                                </tr>
-                                <tr>
-                                    <td>매뉴 가격</td>
-                                    <td>
-                                        <input type="text" id="inputPrice" class="form-control" placeholder="메뉴 가격을 적어주세요.">                                    
-                                    </td>
-                                </tr>    
-                                <tr>
-                                    <td>매뉴에 관한 설명</td>
-                                    <td>
-                                        <input type="text" id="inputText" class="form-control" placeholder="메뉴에 관한 설명을 적어주세요.">                                    
-                                    </td>
-                                </tr>    
-                                
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
     
-                <div class="pt-3"></div>
-    
-                <div class="card">
-                    <h4 class="card-header"><i class="fas fa-square"></i> 메뉴 이미지 설정</h4>
-                    <div class="card-body">
-                        <table class="table">
-                            <tbody>
-                                <tr style="line-height:32px;">
-                                    <td>PNG 이미지 첨부</td>
-                                    <td>
-                                        <input type="file" id="inputFile" class="form-control text-right">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-    
-            </div>
-            </form>
-        
-            <div class="text-center mt-3 btnst">
-                <button type="button" onclick="submitMenu()" class="btn btn-success">메뉴 등록</button>
-            </div>
-        </div>
-        <div class="container">
-            <div class="col-sm-12 pt-3 center">
-                <div class="card">
-                    <div class="card-header card-header-primary">
-                        <h4 class="card-title"><i class="fas fa-square"></i> 등록된 메뉴 정보 </h4>
-                        <p class="card-catagory"></p>
-                    </div>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table" style = "border-collapse: separate;">
-                                <thead>
-                                <tr>
-                                    <td id="menu_td">
-                                    <h5>메뉴 사진</h5>
-                                    </td>
-                                    <td id="menu_td">
-                                        <h5>메뉴 이름</h5>
-                                    </td>
-                                    <td id="menu_td">
-                                        <h5>가격</h6>
-                                    </td>
-                                    <td id="menu_td">
-                                        <h5>설명</h5>
-                                    </td>
-                                    
-                                    <td id="menu_td">
-                                        <h5>삭제</h5>
-                                    </td>              
-                                </tr>
-                                </thead>
-                                <tbody id="menu_table">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>         
-                </div>
-            </div>
-        </div>
+
+
+    <img id="menuSample" src="" />
+
+    <input type="file" id="inputFile"/>
+    <input type="text" id="inputTitle" placeholder="메뉴 이름을 적어주세요." />
+    <input type="text" id="inputPrice" placeholder="메뉴 가격을 적어주세요." />
+    <input type="text" id="inputText" placeholder="메뉴에 관한 설명을 적어주세요." />
+
+    <button onclick="submitMenu()">메뉴 등록</button>
+    
+    <table data-toggle="table" class="table table-striped table-responsive" data-height="299">
+        <thead>
+            <tr> <!-- 1번째 줄 -->
+                <td id="menu_td">
+                    <h5>메뉴 사진</h5>
+                </td>
+                <td id="menu_td">
+                    <h5>메뉴 이름</h5>
+                </td>
+                <td id="menu_td">
+                    <h5>가격</h6>
+                </td>
+                <td id="menu_td">
+                    <h5>설명</h5>
+                </td>
+                
+                <td id="menu_td">
+                    <h5>삭제</h5>
+                </td>
+            </tr>
+        </thead>
+        <tbody id="menu_table">
+        </tbody>
+    </table>
+	
 	
     script.
         

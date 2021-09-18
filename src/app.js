@@ -56,7 +56,7 @@ app.use("/", require("./routes/viewRouter.js"));
 
 app.use((req, res, next) => {
   //404 처리 부분
-  res.status(404).send("일치하는 주소가 없습니다.");
+  res.status(404).send("일치하는 주소가 없습니다. as");
 });
 
 app.use((err, req, res, next) => {

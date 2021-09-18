@@ -90,10 +90,10 @@ body
 					if (!arrList.length) return;
 
 					try {
-					var len = arrList.length-1
-					
-					lastOrder = arrList[arrList.length-1][0]	//주문목록의 마지막 접수번호
-					console.log("lastOrder: ", lastOrder)
+						var len = arrList.length-1
+						
+						lastOrder = arrList[arrList.length-1][0]	//주문목록의 마지막 접수번호
+						console.log("lastOrder: ", lastOrder)
 
 					if(lastOrder < lastOrder_2){
 						lastOrder = lastOrder_2
@@ -110,16 +110,17 @@ body
 						var add = document.createElement('tr');
 						var num = arrList[i][0] //접수번호
 						var menu = arrList[i][1] //메뉴
-						var per = arrList[i][2] //예약 인원
-						var table_num = arrList[i][3] //테이블 번호
-						var acceCan = arrList[i][4] //접수or취소
+						var menu_len = arrList[i][2] //메뉴 개수
+						var per = arrList[i][3] //예약 인원
+						var table_num = arrList[i][4] //테이블 번호
+						var acceCan = arrList[i][5] //접수or취소
 
 
 						var btn_id = 'order_btn' + a;
 						var add_id = 'id' + a;
 						add.id = 'id'+ a;
 						var add_html1 = `<td>${num}</td>`
-						var add_html2 = `<td>${menu}</td>`
+						var add_html2 = `<td>${menu} : ${menu_len}개</td>`
 						var add_html3 = `<td>${per}</td>`
 						var add_html4 = `<td>${table_num}</td>`
 						var add_html5 = `<td>`
@@ -193,7 +194,7 @@ body
 					alert("주문 취소에 오류가 생겼습니다.")
 				}
 			}
-			xhr.open('post','/orders_acc')
+			xhr.open('post','/order_cancel')
 			xhr.setRequestHeader('Content-Type', 'application/json')
 			xhr.send(JSON.stringify(reqBody))
 		}
@@ -210,7 +211,6 @@ body
 
 		//접수 수락 버튼 클릭시 - 데이터 전송
 		function submit(clicked_id, target){
-			//- console.log(target.parentNode)
 
 			const reqBody = {
 				cookie : getCookie("id"),

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name = "viewport" content = "width=device-width", initial-scale = "1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
+        <link rel="stylesheet" href="/css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+        <link rel="stylesheet" href="/css/jquery-ui.min.css" />
+        <link rel="stylesheet" href="/css/style.css" />
+
+        <title>조기요 - 사장님 사이트</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/drop_menu.js"></script>
+
+            style.
+                .container {
+                padding-top:20px;
+                }
+                .button {
+                cursor: pointer;
+                -webkit-transition-duration: 0.4s; /* Safari */
+                transition-duration: 0.4s;
+                }
+                a:link {
+                color : black;
+                text-decoration: none;
+                }
+                a:visited {
+                color : black;
+                text-decoration: none;
+                }
+                a:hover {
+                color : black;
+                text-decoration: none;
+                }
+                a:active {
+                color : black;
+                text-decoration: none;
+                }
+    </head>
+    //- body(onload=`test(${JSON.stringify(arr1)})`)    //router.get("/menusetting"
+    body
+        <nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
+            <div class = "navbar-header">	<!-- 헤더(로고 영역) -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
+                    <span class = "icon-bar"></span>	<!-- 네비게이션 목록 작대기 -->
+                    <span class = "icon-bar"></span>
+                    <span class = "icon-bar"></span>
+                </button> 
+                <a class = "navbar-brand" href="main"> 조기요-사장님 사이트 </a> <!-- brand: 로고 -->
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class ="nav navbar-nav">	<!-- 리스트 -->
+                    <li><a href="javascript:movePage('main')">메인 페이지</a></li>
+                    <li><a href="javascript:movePage('orders')">주문접수</a></li>
+                    <li class="active"><a href="javascript:movePage('management')">매장관리</a></li>	<!-- ## -->
+                </ul>
+                <ul class ="nav navbar-nav navbar-right">	<!-- 오른쪽 리스트 -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 접속하기 <span class="caret"></span></a>
+                        <ul class= "dropdown-menu">
+                            //- 로그인 여부 확인 후 드롭다운
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>   
+
+        <div class="row">
+            <div calss ="col-sm-6 col-sm-offset-3">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr class="success">
+                            <th colspan="3"><h1>매장 상세 정보를 입력해주세요.</h1></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h2>매장의 대표 이미지를 첨부해주세요.</h2>
+                            </td>
+                            <td colspan="3">
+                                <input type="file" id="inputFile" />
+                            </td>
+                        </tr>        
+                        <tr>
+                            <td>
+                                <h2>매장 전화번호를 입력해주세요.</h2>
+                            </td>    
+                            <td colspan="3">
+                                <input type="text" id="inputPhone" placeholder="010-0000-0000" />
+                            </td>    
+                        </tr>        
+                        <tr>
+                            <td>
+                                <h2>매장 주소를 입력해주세요.</h2>
+                            </td>    
+                            <td colspan="3">
+                                <input type="text" id="inputAddress" placeholder="00도 00시 00-00" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h2>매장 카테고리를 선택해주세요.</h2>
+                            </td>    
+                            <td colspan="3">
+                                <div class = "dropdown">
+                                    <select name="category" aria-labelledby="category" class ="form-control category">
+                                        <option value="한식">한식</option>
+                                        <option value="중식">중식</option>
+                                        <option value="일식">일식</option>
+                                        <option value="양식">양식</option>
+                                        <option value="카페">카페</option>
+                                    </select>
+                                </div>
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="success">
+                            <th colspan="3"><button onclick="restaurant_submit()">매장 정보 등록</button></th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <table>
+                    <tbody id="menu_table">
+
+                    
+                    </tbody>
+                </table>    
+            </div>
+        <div>
+
+        <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card1">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">설정된 임시 중지 시간</h3>
+                                <div class="table-responsive">
+                                    <table class = "table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-center"> 남은 시간 </td>
+                                        </tr>
+                                        <tr>
+                                            <td id='remainTd' class="text-center"> #{remain}분</td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+	
+    script.
+        
+        drop_menu();
+
+         const reqBody = {
+            cookie : getCookie("id")
+        }
+
+        const xhr = new XMLHttpRequest()
+        xhr.onload = () => {
+            const result = JSON.parse(xhr.responseText)
+
+            var restaurant_list = result.restaurant
+            list_show(restaurant_list);
+        }
+
+        xhr.open('POST', '/restaurantsetting_select')
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(JSON.stringify(reqBody))
+
+        //매장 정보 리스트 보여줌
+        function list_show(list){
+            for(var i = 0; i<list.length; i++){
+
+                const menu = document.querySelector("#menu_table");
+                var menu_item = document.createElement('tr')
+
+                var img = list[i].img
+                var restaurant_name = list[i].restaurant_name
+                var restaurant_address = list[i].restaurant_address
+                var restaurant_phone = list[i].restaurant_phone
+                var restaurant_theme = list[i].restaurant_theme
+ 
+                //- var id = "item_" +i
+                //- menu_item.id = id;
+
+                var inner1 = `<td><img src = "${img}" id="menu_img" /> </td>`
+                var inner2 = `<td> ${name} <td>`
+                var inner3 = `<td> ${address} </td>`
+                var inner4 = `<td> ${phone} </td>`
+                var inner5 = `<td> ${category} </td>`
+                menu_insert.innerHTML = inner1 + inner2 + inner3 + inner4 + inner5;
+
+                menu.appendChild(menu_item);
+            }
+        }
+
+        //매장 설정 등록 (전송 버튼 클릭시)
+        function restaurant_submit() {
+            const file = document.querySelector("#inputFile");
+            const phone_input = document.querySelector("#inputPhone");
+            const address_input = document.querySelector("#inputAddress");
+            const category_dropdown = document.querySelector(".category");
+            const category_input = category_dropdown.selectedOptions[0];
+
+            const reader = new FileReader();    //1
+
+            if(file != null && phone_input != null && address_input != null && category_input != null){
+
+                reader.onload = () => { //3
+
+                    var strImg = reader.result;
+                    var phone = phone_input.value;
+                    var address = address_input.value;
+                    var category = category_input.value;
+
+
+                    const payload = {
+                        cookie : getCookie("id"),
+                        img_base64: strImg,
+                        phone: phone,
+                        address : address,
+                        category: category
+                };
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.onload = () => {    //4
+                    const result = JSON.parse(xhr.responseText)
+                    if (result.code == 1) {
+                    // 끝
+                        //- console.log(result.menu);
+                        alert("매장 정보가 등록되었습니다.")
+                        add_list(strImg,phone,address,category);
+
+                    }else{
+                        alert("매장 정보 등록 error")
+                    }
+                };
+
+                xhr.open("POST", "/restaurantsetting");
+                xhr.setRequestHeader('Content-Type', 'application/json')
+                xhr.send(JSON.stringify(payload));
+            };
+
+                reader.readAsDataURL(file.files[0]);   //2
+            } else{
+                alert("사진 첨부와 빈칸을 모두 입력해주세요.")
+            }
+        }
+
+        //- 메뉴 추가시 테이블에 보임
+        function add_list(strImg,phone,address,category){
+            
+            var img = strImg
+            //- console.log(strImg)
+            var menu = document.querySelector("#menu_table");
+            var menu_insert = document.createElement('tr')
+            
+            var inner1 = `<td><img src = "${img}" id="menu_img" /> </td>`
+            var inner2 = `<td> ${name} <td>`
+            var inner3 = `<td> ${address} </td>`
+            var inner4 = `<td> ${phone} </td>`
+            var inner5 = `<td> ${category} </td>`
+            menu_insert.innerHTML = inner1 + inner2 + inner3 + inner4 + inner5;
+
+            menu.appendChild(menu_insert);
+        }
+        
+
+</body>
+</html>
