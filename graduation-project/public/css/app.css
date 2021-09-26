@@ -1,0 +1,16 @@
+@font-face {
+    font-family: "font1";
+    font-display: fallback;
+    src: url("../css/public/fonts/SLEIGothicTTF.ttf") format("truetype"), 
+         url("../css/public/fonts/SLEIGothic.woff") format("woff"), 
+         url("../css/public/fonts/SLEIGothic.eot?iefix") format("embedded-opentype");
+
+    /* 사용할 폰트의 기본 스타일 */
+    /* font-weight: 400; */
+    /* font-style: normal; */
+  }
+
+/* @font-face {
+    font-family: "tvn";
+    src: url("public\fonts\tvN Enjoystories Bold.ttf");
+  } */

@@ -301,47 +301,6 @@ const table_menu_select_main = async function (userID) {
   }
 };
 
-// 메인페이지 - 사용중인 테이블 확인하기
-const using_table = async function (userID) {
-  using_table_list = []
-  try {
-    var restaurant_id = await select_restaurant_id(userID);
-    const query = `select distinct table_id from table_menu WHERE restaurant_id = '${restaurant_id}';`;
-    const result = await pool.query(query);
-
-    for (var i = 0; i < result[0].length; i++) {
-      var table_num = result[0][i].table_id;
-      using_table_num = table_num.split('_')[1];
-      using_table_list.push(using_table_num)
-    }
-    console.log("using_table: ", using_table_list)
-
-    using_table_insert(restaurant_id, using_table_list)
-
-    return 1;
-  } catch (e) {
-    console.log("Error in using_table\n", e);
-    return false;
-  }
-};
-
-const using_table_insert = async function (restaurant_id, using_table_list) {
-  try {
-    
-    for (var i = 0; i < using_table_list.length; i++) {
-
-      const query = `update table_location set table_count = '1' WHERE restaurant_id = '${restaurant_id}' and table_id = '${using_table_list[i]}';`
-      const result = await pool.query(query);
-      // console.log("using_table_insert query: ", query)
-    }
-    
-    return 1;
-  } catch (e) {
-    console.log("Error in using_table_insert\n", e);
-    return false;
-  }
-};
-
 //메인페이지 - 테이블 별 주문 메뉴 조회하기
 const table_menu_select = async function (userID, table_num) {
   order_list = [];
@@ -366,23 +325,22 @@ const table_menu_select = async function (userID, table_num) {
   }
 };
 
-//메인페이지 - 테이블 별 주문 메뉴 삭제하기 - order_list 접수됐는지 조회/ 접수됐으면(order_status == 1 이면) 주문목록에 보이지 않게
-const accept_select = async function (userID, table_num) {
+//메인페이지 - 테이블 별 주문 메뉴 삭제하기 - order_list 접수됐는지 조회
+const accept_select = async function (restaurant_id, table_num) {
   try {
-    var restaurant_id = await select_restaurant_id(userID);
     var number = table_num.split('_')
     var seat_number = number[1];
-    const query = `select order_status from order_list where restaurant_id = '${restaurant_id}' and seat_number = '${seat_number}'`;
+    const query = `select order_status from order_list where restaurant_id =  '${restaurant_id}' and seat_number = '${seat_number}'`;
     // console.log(query)
     const result = await pool.query(query);
-
+    // console.log(result[0][0].order_status)
     if(result[0][0].order_status == 1){
-      accept_delete(restaurant_id, seat_number)
+      // accept_delete(restaurant_id, seat_number)
     }
 
     return true;
   } catch (e) {
-    console.log("Error in accept_select\n", e);
+    console.log("Error in table_menu_delete\n", e);
     return false;
   }
 };
@@ -390,12 +348,12 @@ const accept_select = async function (userID, table_num) {
 //메인페이지 - 테이블 별 주문 메뉴 삭제하기 - order_list 접수된 항목 삭제
 const accept_delete = async function (restaurant_id, seat_number) {
   try {
-    const query = `update order_list set order_status = '5' where restaurant_id = '${restaurant_id}' and seat_number = '${seat_number}'`;
+    const query = `update order_list set order_status = '5' where restaurant_id =  '${restaurant_id}' and seat_number = '${seat_number}'`;
     // console.log(query)
     const result = await pool.query(query);
     return true;
   } catch (e) {
-    console.log("Error in accept_delete\n", e);
+    console.log("Error in table_menu_delete\n", e);
     return false;
   }
 };
@@ -407,6 +365,7 @@ const table_menu_delete = async function (userID, table_num) {
     const query = `DELETE FROM table_menu WHERE restaurant_id = '${restaurant_id}' and table_id = '${table_num}'`;
     // console.log(query)
     const result = await pool.query(query);
+    accept_select(restaurant_id, table_num);
 
     return true;
   } catch (e) {
@@ -414,24 +373,6 @@ const table_menu_delete = async function (userID, table_num) {
     return false;
   }
 };
-
-//not_using_table 메인페이지 - table_location에 결제된 테이블을 빈 테이블로 바꾸주기
-const not_using_table = async function (userID, table_num) {
-  try {
-
-    var restaurant_id = await select_restaurant_id(userID);
-    not_using_table_num = table_num.split('_')[1];
-    const query = `update table_location set table_count = '0' WHERE restaurant_id = '${restaurant_id}' and table_id = '${not_using_table_num}';`
-    const result = await pool.query(query);
-    console.log("not_using_table query: ", query)
-    
-    return 1;
-  } catch (e) {
-    console.log("Error in not_using_table\n", e);
-    return false;
-  }
-};
-
 //메인페이지 - 테이블 별 주문 메뉴 저장하기
 const table_menu_save = async function (userID, table_num, order_list) {
   try {
@@ -545,35 +486,25 @@ const orders_submit = async function (userID, submit_num) {
 //주문 접수 - 접수 수락 후 테이블별 메뉴로 전송
 const orders_to_table_menu = async function (restaurant_id, submit_num) {
   try {
-    menu_name_list = []
-    menu_count_list = []
     var menu = await order_num_to_menu(restaurant_id, submit_num);
-    // console.log("orders_to_table_menu: ", menu[1]);
-    var table_id = "table_" + menu[1];  //완료
-    
-    for(var i=0; i<menu[0].length; i++){
-      // console.log("i: ",i)
-      var menu_name = menu[0][i][0];
-      var menu_count = menu[0][i][1];
+    // console.log("orders_to_table_menu: ", menu);
+    for(var i=0; i<menu.length; i++){
+      console.log("afsads:",menu[i][0])
       
-      menu_name_list.push(menu_name)
-      menu_count_list.push(menu_count)
     }
-    
-    var menu_select = await menu_id_search(restaurant_id, menu_name_list); // 결과값: [메뉴이름, 아이디, 가격] 리스트 형태
-    // console.log("menu_select: ", menu_select)
+    var menu_name = menu[0];
+    var menu_count = menu[1];
+    var table_id = "table_" + menu[2];
 
-    for(var j=0; j<menu_select.length; j++){
-      var menu_name = menu_select[j][0]
-      var menu_id = table_id + "_menu_" + menu_select[j][1] + "@"+ menu_select[j][2];
+    var menu_select = await menu_id_search(restaurant_id, menu_name); //완료
 
-      const query = `insert into table_menu(restaurant_id, table_id, menu_name, menu_count, menu_id) values 
-                    (${restaurant_id},'${table_id}','${menu_name}',${menu_count_list[j]},'${menu_id}');`;
-      // console.log(query);
-      const result = await pool.query(query);
-      // console.log("orders_submit: ", result);
-    }
-    
+    var menu_id = "table_" + menu[2] + "_menu_" + menu_select[1];
+    // console.log(menu_select)
+
+    const query = `insert into table_menu(restaurant_id, table_id, menu_name, menu_count, menu_id) values (${restaurant_id},'${table_id}','${menu_name}',${menu_count},'${menu_id}');`;
+    // console.log(query);
+    const result = await pool.query(query);
+    // console.log("orders_submit: ", result[0][0]);
     return true;
   } catch (e) {
     console.log("Error in orders_to_table_menu\n", e);
@@ -581,31 +512,53 @@ const orders_to_table_menu = async function (restaurant_id, submit_num) {
   }
 };
 
+// //주문 접수 - 접수 수락 후 테이블별 메뉴로 전송
+// const orders_to_table_menu = async function (restaurant_id, submit_num) {
+//   try {
+//     var menu = await order_num_to_menu(restaurant_id, submit_num);
+//     // console.log("orders_to_table_menu: ", menu);
+//     for(var i=0; i<menu.length; i++){
+//       console.log("afsads:",menu[i][0])
+
+//     }
+//     var menu_name = menu[0];
+//     var menu_count = menu[1];
+//     var table_id = "table_" + menu[2];
+
+//     var menu_select = await menu_id_search(restaurant_id, menu_name);
+
+//     var menu_id = "table_" + menu[2] + "_menu_" + menu_select[1];
+//     // console.log(menu_select)
+
+//     const query = `insert into table_menu(restaurant_id, table_id, menu_name, menu_count, menu_id) values (${restaurant_id},'${table_id}','${menu_name}',${menu_count},'${menu_id}');`;
+//     // console.log(query);
+//     const result = await pool.query(query);
+//     // console.log("orders_submit: ", result[0][0]);
+//     return true;
+//   } catch (e) {
+//     console.log("Error in orders_to_table_menu\n", e);
+//     return false;
+//   }
+// };
+
 //주문 번호 -> 메뉴 이름, 개수, 테이블 번호 찾기
 const order_num_to_menu = async function (restaurant_id, submit_num) {
   try {
     list = []
-    menu_name_count_list = []
     const query = `select * from order_list where restaurant_id = ${restaurant_id} and order_num = ${submit_num};`;
     // console.log(query);
     const result = await pool.query(query);
     // console.log("orders_submit: ", result[0][0].menu_name);
-    var menu_name_sum = result[0][0].menu_name.split(',')
-    var menu_count_sum = result[0][0].menu_count.split(',')
-    // console.log("menu_name_sum:", menu_name_sum)
+    // var menu_sum = result[0][0].menu_name.split(',')
 
-    for(var i=0; i<menu_name_sum.length; i++){
-      var menu = menu_name_sum[i]; //메뉴 이름
-      var menu_len = menu_count_sum[i]; //메뉴 개수
-      menu_name_count_list.push([menu,menu_len])
-    }
-    
+    var menu = result[0][0].menu_name; //메뉴 이름
+    var menu_len = result[0][0].menu_count; //메뉴 개수
     var seatNum = result[0][0].seat_number; //테이블 번호
-
-    // list.push(menu_name_count_list, seatNum);
+    
+    list.push(menu, menu_len, seatNum);
     // console.log("order_num_to_menu: ",list)
 
-    return [menu_name_count_list, seatNum];
+    return list;
   } catch (e) {
     console.log("Error in order_num_to_menu\n", e);
     return false;
@@ -613,27 +566,54 @@ const order_num_to_menu = async function (restaurant_id, submit_num) {
 };
 
 //메뉴 이름 -> 메뉴 아이디 찾기
-const menu_id_search = async function (restaurant_id, menu_name_list) {
+const menu_id_search = async function (restaurant_id, menu_name) {
   try {
-    // menu_name_list = []
+    menu_name_list = []
     list = []
-    // console.log("menu_name_list: ", menu_name_list);
+    console.log("menu_name: ", menu_name);
+    var menu_list = menu_name.split(',');
     
-    for(var i=0; i < menu_name_list.length; i++){
-      const query = `select menu_name, menu_id, menu_price from menu where restaurant_id = ${restaurant_id} and menu_name = '${menu_name_list[i]}';`;
-      // console.log("query: ", query)
+    for(var i=0; i < menu_list.length; i++){
+      console.log("for시작")
+      const query = `select menu_name, menu_id from menu where restaurant_id = ${restaurant_id} and menu_name = '${menu_list[i]}';`;
+      console.log("query: ", query)
+      // console.log("result: ", result)
       const result = await pool.query(query);
       var menu_id = result[0][0];
-      list.push([menu_id.menu_name, menu_id.menu_id, menu_id.menu_price]);
+      list.push([menu_id.menu_name, menu_id.menu_id]);
     }
     
-    // console.log("list: ", list[0]);
+    console.log("list: ", list[0]);
     return list;
   } catch (e) {
     console.log("Error in menu_id_search\n", e);
     return false;
   }
 };
+// const menu_id_search = async function (restaurant_id, menu_name) {
+//   try {
+//     menu_name_list = []
+//     list = []
+//     console.log("menu_name: ", menu_name);
+//     var menu_list = split(',');
+    
+//     for(var i=0; i < menu_list.length; i++){
+//       const query = `select * from menu where restaurant_id = ${restaurant_id} and menu_name = '${menu_list[i]}';`;
+//       menu_name_list.push()
+//     }
+//     // console.log(query);
+//     const result = await pool.query(query);
+
+//     var menu_id = result[0][0];
+//     // console.log("menu_id_search: ",menu_id)
+//     list.push(menu_id.menu_name, menu_id.menu_id)
+//     // console.log("menu_id_search: ",list)
+//     return list;
+//   } catch (e) {
+//     console.log("Error in menu_id_search\n", e);
+//     return false;
+//   }
+// };
 
 
 //주문 접수 - 접수 취소 업데이트
@@ -1020,7 +1000,7 @@ const table_insert = async function (userID, table_save) {
     for (var i = 0; i < table_save.length; i++) {
       var x = table_save[i][0];
       var y = table_save[i][1];
-      const query = `insert into table_location(restaurant_id, x, y, table_count) values('${restaurant_id}','${x}','${y}', 0)`;
+      const query = `insert into table_location(restaurant_id, x, y) values('${restaurant_id}','${x}','${y}')`;
       // console.log("테이블 ", i, "번째", query);
       const result = await pool.query(query);
       // const queryResult = result[0][0];
@@ -1209,9 +1189,8 @@ const restaurant_select = async function (userID) {
     const query = `select restaurant_img, restaurant_name, restaurant_address, restaurant_phone, restaurant_theme from restaurant where restaurant_id = '${restaurant_id}'`;
     // console.log("###", query);
     const result = await pool.query(query);
-    // console.log("result: ", result[0][0]);
 
-    if(result[0][0] == undefined){ //가게 정보가 없으면
+    if(result[0][0].length == 0){ //가게 정보가 없으면
       return 1;
     }else{
       for (var i = 0; i < result[0].length; i++) {
@@ -1233,6 +1212,42 @@ const restaurant_select = async function (userID) {
     return false;
   }
 };
+// const restaurant_select = async function (userID) {
+//   restaurant_list = [];
+//   try {
+//     var restaurant_id = await select_restaurant_id(userID);
+//     var restaurant_name = await restaurant_idTorestaurant_name(restaurant_id);
+//     const query = `select * from restaurant where restaurant_id = '${restaurant_id}'`;
+//     // console.log("###", query);
+//     const result = await pool.query(query);
+
+//     const queryResult = result[0][0];
+
+//     if (queryResult == undefined) {
+//       return 1;
+
+//     } else{
+
+//       for (var i = 0; i < result[0].length; i++) {
+//         const buffer = Buffer.from(result[0][i].restaurant_img, "base64");
+//         var img = buffer.toString();
+//         var restaurant_name = result[0][i].restaurant_name;
+//         var restaurant_address = result[0][i].restaurant_address;
+//         var restaurant_phone = result[0][i].restaurant_phone;
+//         var restaurant_theme = result[0][i].restaurant_theme;
+  
+//         var restaurant_select = { img, restaurant_name, restaurant_address, restaurant_phone, restaurant_theme };
+//         restaurant_list.push(restaurant_select);
+//       }
+//       return menu_list;
+//     }
+
+
+//   } catch (e) {
+//     console.log("Error in restaurant_sumbit\n", e);
+//     return false;
+//   }
+// };
 
 //매장 관리 - 매장 설정 - 업데이트
 const restaurant_update = async function (restaurant_id,address,phone,category,img) {
@@ -1265,11 +1280,8 @@ module.exports = {
   table_select, //테이블 위치값 받아오기
   window_select, //창문 위치값 받아오기
   table_menu_select_main, //테이블 별 주문 메뉴 나타내기
-  using_table,  // 메인페이지 - 사용중인 테이블 확인하기
   table_menu_select,  //테이블 별 주문 메뉴 조회
-  accept_select,  //메인페이지 - 테이블 별 주문 메뉴 삭제하기 - order_list 접수됐는지 조회
   table_menu_delete, //테이블 별 주문 메뉴 삭제
-  not_using_table,  // 메인페이지 - table_location에 결제된 테이블을 빈 테이블로 바꾸주기
   table_menu_save, //테이블 별 주문 메뉴 저장
   orders_reser, //예약석 조회
 

@@ -7,15 +7,43 @@
         <link rel="stylesheet" href="/css/jquery-ui.min.css" />
         <link rel="stylesheet" href="/css/style.css" />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sunflower:wght@500&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
         <title>조기요 - 사장님 사이트</title>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
         <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/drop_menu.js"></script>
-
+        
+        style.
+            .navbar-brand{
+                font-family: 'Do Hyeon', sans-serif;
+                font-size: 25px;
+            }
+            nav{
+                font-family: 'Do Hyeon', sans-serif;
+                font-size: 18px;
+            }
+            .head_title{
+                font-family: 'Sunflower', sans-serif;
+                font-size: 30px;
+            }
+            body{
+                font-family: 'Gowun Dodum', sans-serif;
+            }
     </head>
-    <body class="back">
+    <body class="back" style = "overflow:scroll">
         <nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
             <div class = "navbar-header">	<!-- 헤더(로고 영역) -->
                 <button type="button" class="navbar-toggle collapsed" data-toggle = "collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded = "false">	<!-- 버튼 -->
@@ -42,19 +70,19 @@
             </div>
         </nav>
         
-    <h3 class="">좌석 배치도 수정</h3>
+    <h3 class="head_title"> ▶ 좌석 배치도 수정</h3>
     <input type="button" value="테이블 추가" id="add_table_id" class ="btn btn-primary btn-lg table_add" onclick = "make_table()" >
     <input type="button" value="창문 추가" id="add_window_id" class ="btn btn-primary btn-lg window_add" onclick ="make_window()">
-    <input type="button" value="저장" id="add_window_id" class ="btn btn-primary btn-lg save_button" onclick ="save()">
-    <input type="button" value="모두 삭제" id="add_window_id" class ="btn btn-primary btn-lg all_dele_button" onclick ="all_dele()">
+    <input type="button" value="저장" id="add_window_id" class ="btn btn-lg save_button btn-success" onclick ="save()">
+    <input type="button" value="모두 삭제" id="add_window_id" class ="btn btn-danger btn-lg all_dele_button" onclick ="all_dele()">
     
     <div class="box_border" id="box"> </div>
 
     script.
         const container = document.querySelector('#box');
 
-        var t = 0;
-        var w = 0;
+        var t = 1;
+        var w = 1;
         var tables = []
         var windows = []
         var window_save = []
@@ -78,8 +106,9 @@
             table.style.top = '12%';
             table.style.width="10%";
             table.style.height="14%";
-            table.style.backgroundColor="#f2cfa5";
-            table.style.border="1px solid black";
+            table.style.backgroundColor="#E4C7B7";
+            table.style.border="3px solid #B7928B";
+            table.style.borderRadius = "3px";
             tables = tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
             
             //좌석 번호 입력하는 폼과 저장버튼
@@ -110,10 +139,11 @@
             window.style.position="absolute";
             window.style.left = '113%';
             window.style.top = '12%';
-            window.style.width="5%";
-            window.style.height="5%";
-            window.style.backgroundColor="#fdfa87";
-            window.style.border="1px solid black";
+            window.style.width="7%";
+            window.style.height="7%";
+            window.style.backgroundColor="#C6E7F8";
+            window.style.borderRadius = "3px";
+            window.style.border="3px solid #92AABB";
             windows = windows.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
             //좌석 번호 입력하는 폼과 저장버튼
             window.innerHTML =

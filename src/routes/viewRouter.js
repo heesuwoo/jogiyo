@@ -79,10 +79,12 @@ router.post("/main", async (req, res, next) => {
 
   var pos_menu = await db.menu_select(userID); //해당 가게의 menu 
   var select = await db.table_menu_select_main(userID); //가게에 등록된 menu 이름 + 개수 받아옴
-
   var reser = await db.orders_reser(userID);
-  // console.log("reser: ", reser)
+  var table_count = await db.using_table(userID);
+
+  // console.log("table_count: ", table_count)
   // console.log(window);
+
   res.json({ table: table, window: window, pos_menu: pos_menu, main_table_menu: select, reserved: reser});
 });
 
@@ -143,7 +145,9 @@ router.post("/pay", async (req, res, next) => {
 
   var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
   var table_dele = await db.table_menu_delete(userID, table_num);
-  
+  await db.not_using_table(userID, table_num);
+  var reserve = await db.accept_select(userID, table_num);
+
   if(table_save == true && table_dele == true){
     res.json({ code: 1, msg: "pay success" });
   }else{

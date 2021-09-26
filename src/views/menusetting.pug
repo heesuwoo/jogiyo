@@ -7,6 +7,18 @@
         <link rel="stylesheet" href="/css/jquery-ui.min.css" />
         <link rel="stylesheet" href="/css/style.css" />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sunflower:wght@500&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
         <title>조기요 - 사장님 사이트</title>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
@@ -15,14 +27,34 @@
         <script type="text/javascript" src="/js/drop_menu.js"></script>
 
         style.
+
+                .navbar-brand{
+                    font-family: 'Do Hyeon', sans-serif;
+                    font-size: 25px;
+                }
+                nav{
+                    font-family: 'Do Hyeon', sans-serif;
+                    font-size: 18px;
+                }
+
+                .head_title{
+                    font-family: 'Sunflower', sans-serif;
+                    font-size: 30px;
+                }
+
+                body{
+                    font-family: 'Gowun Dodum', sans-serif;
+                }
+
+
                 .container {
-                margin-top:3%;
-                padding-top:20px;
-                border: solid 2px black;
-                background: none repeat scroll 0 0 #ffffff;
-                border-radius: 80px; /*메뉴 테두리 */
-                color: #444444;
-                box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.14);
+                    margin-top:3%;
+                    padding-top:20px;
+                    border: solid 2px black;
+                    background: none repeat scroll 0 0 #ffffff;
+                    border-radius: 80px; /*메뉴 테두리 */
+                    color: #444444;
+                    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.14);
                 }
                 .btnst{
                     padding: 5% 5% 5% 5%;
@@ -34,9 +66,9 @@
                     text-align: center;
                 }
                 .button {
-                cursor: pointer;
-                -webkit-transition-duration: 0.4s; /* Safari */
-                transition-duration: 0.4s;
+                    cursor: pointer;
+                    -webkit-transition-duration: 0.4s; /* Safari */
+                    transition-duration: 0.4s;
                 }
         
     </head>
@@ -68,7 +100,7 @@
             </div>
         </nav>
         
-    <h3>메뉴 설정</h3>
+    <h3 class="head_title"> ▶ 메뉴 설정</h3>
 
     <div class="container">
         <form name="f" method="post">
@@ -115,10 +147,13 @@
                 <div class="pt-3"></div>
     
                 <div class="card">
-                    <h4 class="card-header"><i class="fas fa-square"></i> 메뉴 이미지 설정</h4>
+                    <h4 class="card-header"><i class="fas fa-square"></i> 메뉴 이미지 등록</h4>
                     <div class="card-body">
                         <table class="table">
                             <tbody>
+                                <tr style="line-height:32px;">
+                                    <td colspan="2" style = "font-weight: bolder;"><span style = "background-color: #f9d423;">★반드시 PNG 이미지로 첨부해주세요★</span></td>
+                                </tr>
                                 <tr style="line-height:32px;">
                                     <td>PNG 이미지 첨부</td>
                                     <td>
@@ -287,7 +322,7 @@
             var menu_insert = document.createElement('tr')
             
             var inner1 = `<td id="menu_td"> <img src = "${strImg}" id="menu_img" /> </td>`
-            var inner2 = `<td id="tilte" > ${menu_title} </td>`
+            var inner2 = `<td id="tilte"> ${menu_title} </td>`
             var inner3 = `<td id="menu_td">${menu_price} </td>`
             var inner4 = `<td id="menu_td">${menu_ex} </td>`
             var inner5 = `<td> <button type="button" id="add" class="btn btn-danger form-control" onclick="delete_menu(this, '${menu_title}' )">제거 </button> </td>`

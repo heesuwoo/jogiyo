@@ -5,9 +5,49 @@
 <meta name="viewport" content="width=device-width" initial-scale="1">	<!-- 반응형 웹에 사용하는 메타탭(부트스트랩) -->
 <link rel="stylesheet" href="/css/bootstrap.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
 <link rel="stylesheet" href="/css/modal.css"> <!-- 스타일시트 참조, 부트스트랩 참조 -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sunflower:wght@500&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
 <script type="text/javascript" src="/js/drop_menu.js"></script>
 <script type="text/javascript" src="/js/management_js.js"></script>
 
+style.
+	.navbar-brand{
+		font-family: 'Do Hyeon', sans-serif;
+		font-size: 25px;
+	}
+	nav{
+		font-family: 'Do Hyeon', sans-serif;
+		font-size: 18px;
+	}
+	.row{
+		font-family: 'Sunflower', sans-serif;
+	}
+	.lead{
+		font-family: 'Sunflower', sans-serif;
+		font-size: 30px;
+		color: #5e5e5f;
+	}
+	.show_info{
+		font-family: 'Sunflower', sans-serif;
+		font-weight: lighter;
+		font-size: 20px;
+	}
+	.show_de{
+		font-family: 'Gowun Batang', serif;
+	}
+
+	
 
 //- <script src="../js/bootstrap.min.js"></script>
 //- <script src="/js/jquery-3.6.0.min.js"></script>
@@ -95,7 +135,6 @@
 							
 							<input type="submit" class="btn btn-warning btn-lg margin-top" style ="width:49%;" value="저장">
 							<input type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:49%;" value="취소">
-						
 						</form>
 					</div>
 			</div>
@@ -153,23 +192,20 @@
 											<option value="23">23</option>
 											<option value="24">24</option>
 										</select>
-									
 								</div>
 								| 시
 							</td>
 								
 							<td style="text-align: center;">
 								<div class = "dropdown">
-						
-										<select name="mfms" aria-labelledby="MFMS" class ="form-control mfms">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-							
+									<select name="mfms" aria-labelledby="MFMS" class ="form-control mfms">
+										<option value="00">00</option>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
 								</div>
 								| 분
 							</td>
@@ -178,50 +214,46 @@
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="mfhf" aria-labelledby="MFHF" class ="form-control mfhf">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-										</select>
-									
+									<select name="mfhf" aria-labelledby="MFHF" class ="form-control mfhf">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+									</select>
 								</div>
 								| 시
 							</td>
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="mfmf" aria-labelledby="MFMF" class ="form-control mfmf">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-									
+									<select name="mfmf" aria-labelledby="MFMF" class ="form-control mfmf">
+										<option value="00">00</option>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
 								</div>
 								| 분
 							</td>
@@ -235,50 +267,46 @@
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="shs" aria-labelledby="SHS" class ="form-control shs">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-										</select>
-									
+									<select name="shs" aria-labelledby="SHS" class ="form-control shs">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+									</select>
 								</div>
 								| 시
 							</td>
 								
 							<td style="text-align: center;">
 								<div class = "dropdown">
-								
-										<select name="sms" aria-labelledby="SMS" class ="form-control sms">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-									
+									<select name="sms" aria-labelledby="SMS" class ="form-control sms">
+										<option value="00">00</option>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
 								</div>
 								| 분
 							</td>
@@ -287,34 +315,32 @@
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
-								
-										<select name="shf" aria-labelledby="SHF" class ="form-control shf">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-										</select>
-								
+									<select name="shf" aria-labelledby="SHF" class ="form-control shf">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+									</select>
 								</div>
 								| 시
 							</td>
@@ -322,16 +348,14 @@
 												
 							<td style="text-align: center;">
 								<div class = "dropdown">
-							
-										<select name="smf" aria-labelledby="SMF" class ="form-control smf">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-									
+									<select name="smf" aria-labelledby="SMF" class ="form-control smf">
+										<option value="00">00</option>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
 								</div>
 								| 분
 							</td>
@@ -345,50 +369,46 @@
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="suhs" aria-labelledby="SuHS" class ="form-control suhs">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-										</select>
-									
+									<select name="suhs" aria-labelledby="SuHS" class ="form-control suhs">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+									</select>
 								</div>
 								| 시
 							</td>
 										
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="sums" aria-labelledby="SuMS" class ="form-control sums">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-									
+									<select name="sums" aria-labelledby="SuMS" class ="form-control sums">
+										<option value="00">00</option>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
 								</div>
 								| 분
 							</td>
@@ -397,34 +417,32 @@
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="suhf" aria-labelledby="SuHF" class ="form-control suhf">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-											<option value="11">11</option>
-											<option value="12">12</option>
-											<option value="13">13</option>
-											<option value="14">14</option>
-											<option value="15">15</option>
-											<option value="16">16</option>
-											<option value="17">17</option>
-											<option value="18">18</option>
-											<option value="19">19</option>
-											<option value="20">20</option>
-											<option value="21">21</option>
-											<option value="22">22</option>
-											<option value="23">23</option>
-											<option value="24">24</option>
-										</select>
-									
+									<select name="suhf" aria-labelledby="SuHF" class ="form-control suhf">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+									</select>
 								</div>
 								| 시
 							</td>
@@ -432,16 +450,14 @@
 												
 							<td style="text-align: center;">
 								<div class = "dropdown">
-									
-										<select name="sumf" aria-labelledby="SuMF" class ="form-control sumf">
-											<option value="00">00</option>
-											<option value="10">10</option>
-											<option value="20">20</option>
-											<option value="30">30</option>
-											<option value="40">40</option>
-											<option value="50">50</option>
-										</select>
-									
+									<select name="sumf" aria-labelledby="SuMF" class ="form-control sumf">
+										<option value="00">00</option>
+										<option value="10">10</option>
+										<option value="20">20</option>
+										<option value="30">30</option>
+										<option value="40">40</option>
+										<option value="50">50</option>
+									</select>
 								</div>
 								| 분
 							</td>
@@ -450,13 +466,11 @@
 						</tr>
 					
 					</table>
-				</div>					   
-				</div>	
-					<input type="submit" class="btn btn-warning btn-lg margin-top" style ="width:60%;" value="저장">
-					<input type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:62%;" value="취소">
-				</form>
-				</div>
-			</div>	<!--modal-body -->
+				</div>	<!--row justify-content-center-->				   
+			</div>	<!--modal-body-->
+				<input type="submit" class="btn btn-warning btn-lg margin-top" style ="width:60%;" value="저장">
+				<input type="button" class="btn btn-warning btn-lg margin-top" data-dismiss="modal" style ="width:62%;" value="취소">
+			</form>
 			</div>	<!--modal-content -->
 			</div>	<!--modal-dialog -->
 		</div>	<!--modal-fade-->
@@ -748,13 +762,13 @@
 						<div class="main">
 							<h3 class="name">설정된 임시 중지 시간</h3>
 							<div class="table-responsive">
-								<table class = "table">
+								<table class = "table show_info">
 								<tbody>
 									<tr>
 										<td class="text-center"> 남은 시간 </td>
 									</tr>
 									<tr>
-										<td id='remainTd' class="text-center"> #{remain}분</td>
+										<td id='remainTd' class="text-center show_de"> #{remain}분</td>
 									</tr>
 								</tbody>
 								</table>
@@ -771,19 +785,19 @@
 						<div class="main">
 							<h3 class="name">설정된 영업 시간</h3>
 							<div class="table-responsive">
-								<table class = "table">
+								<table class = "table show_info">
 								<tbody id = "table_body">
 									<tr>
 										<td> 월~금 </td>
-										<td id = "M_to_F"> </td>
+										<td id = "M_to_F" class = "show_de"> </td>
 									</tr>	
 									<tr>
 										<td> 토 </td>
-										<td id = "Sat"> </td>
+										<td id = "Sat" class = "show_de"> </td>
 									</tr>	
 									<tr>
 										<td> 일 </td>
-										<td id="Sun"> </td>
+										<td id="Sun" class = "show_de"> </td>
 									</tr>
 								</tbody>
 								</table>
@@ -800,15 +814,15 @@
 						<div class="main">
 							<h3 class="name">설정된 휴무일</h3>
 							<div class="table-responsive">
-								<table class = "table">
+								<table class = "table show_info">
 								<tbody id= "holiday_table">
 									<tr>
 										<td> 정기 휴무 </td>
-										<td id = "reg_show"></td>
+										<td id = "reg_show" class = "show_de"></td>
 									</tr>	
 									<tr>
 										<td> 임시 휴무 </td>
-										<td id = "tem_show"></td>
+										<td id = "tem_show" class = "show_de"></td>
 									</tr>
 								</tbody>
 								</table>

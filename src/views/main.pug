@@ -7,6 +7,14 @@
         <link rel="stylesheet" href="/css/jquery-ui.min.css" />
         <link rel="stylesheet" href="/css/style.css" />
 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
         <title>조기요 - 사장님 사이트</title>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
@@ -14,6 +22,21 @@
         <script type="text/javascript" src="/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/js/drop_menu.js"></script>
         <script type="text/javascript" src="/js/main_script.js"></script>
+            
+            style.
+                .navbar-brand{
+                    font-family: 'Do Hyeon', sans-serif;
+                    font-size: 25px;
+                }
+                nav{
+                    font-family: 'Do Hyeon', sans-serif;
+                    font-size: 18px;
+                }
+                body{
+                    font-family: 'Do Hyeon', sans-serif;
+                }
+                
+
     </head>
     <body class="back main_body">
         <nav class ="navbar navbar-default">	<!-- 내비게이션 구현 -->
@@ -50,7 +73,7 @@
         <div class="pos">
             <div class="content">
             </div>
-            <div class="pay" onclick = "pay()">결제</div>
+            <div class="pay" style="font-family: 'Gowun Batang', serif;" onclick = "pay()">결제</div>
         </div>
 
     script.
@@ -73,19 +96,25 @@
             var menu_count = []
             var reserved = []
             
-            //- console.log(result.main_table_menu)
+            //- console.log("result.pos_menu: ",result.pos_menu)
             
             table_draw(table_list);
             window_draw(window_list);
+
             if(result.main_table_menu.length == undefined){
                 for(var i=0; i<result.pos_menu.length; i++ ){
                     var menu_title = result.pos_menu[i].title
-                    menu_list.push(menu_title)
+                    var menu_id = result.pos_menu[i].id
+                    
+                    menu_list.push([menu_title, menu_id])
                 }
             }else{
                 for(var i=0; i<result.pos_menu.length; i++){    //해당 가게의 메뉴 저장
                     var menu_title = result.pos_menu[i].title
-                    menu_list.push(menu_title)
+                    var menu_id = result.pos_menu[i].id
+                    var menu_price = result.pos_menu[i].price
+
+                    menu_list.push([menu_title, menu_id, menu_price])
                 }
                 for(var j=0; j<result.main_table_menu.length; j++){
 
@@ -93,7 +122,6 @@
                     var table_menu_title = result.main_table_menu[j].menu_name
                     var table_menu_count = result.main_table_menu[j].menu_len
                     var table_menu_id = result.main_table_menu[j].menu_id
-                    
 
                     menu_count.push([table_number, table_menu_title, table_menu_count, table_menu_id])
                 }
@@ -112,8 +140,8 @@
                     }
                 }
             }
-            //- console.log("menu_list: ", menu_list)
-            console.log("menu_count: ",menu_count)
+            console.log("menu_list: ", menu_list)
+            //- console.log("menu_count: ", menu_count)
             show(menu_count)
             show_reserved(reserved)
             menu(menu_list) //오른쪽 Pos에 메뉴 불러오기 메뉴 title 넘겨받음
