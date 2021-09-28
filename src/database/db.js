@@ -1250,6 +1250,36 @@ const restaurant_update = async function (restaurant_id,address,phone,category,i
   }
 };
 
+const token_select = async function (order_num) {
+  try {
+    var user_id = await user_select(order_num)
+    const query = `select token from token where user_id = '${user_id}'`;
+    // console.log("###", query);
+    const result = await pool.query(query);
+    const token = result[0][0].token;
+    // console.log("token: ", token);
+    return token;
+  } catch (e) {
+    console.log("Error in token_select\n", e);
+    return false;
+  }
+};
+
+const user_select = async function (order_num) {
+  try {
+    
+    const query = `select user_id from order_list where order_num = '${order_num}'`;
+    // console.log("###", query);
+    const result = await pool.query(query);
+    const queryResult = result[0][0].user_id;
+    // console.log("user_select: ", queryResult);
+    return queryResult;
+  } catch (e) {
+    console.log("Error in user_select\n", e);
+    return false;
+  }
+};
+
 module.exports = {
   // (세션, 로그인, 회원가입)
   session_select, //세션 조희
@@ -1316,4 +1346,5 @@ module.exports = {
   restaurant_sumbit,  //매장 관리 - 메장 설정 - 수정/등록
   restaurant_select,  //매장 관리 - 메장 설정 - 조회
   restaurant_update,  //매장 관리 - 메장 설정 - 업데이트
+  token_select, //user_id를 통해 토큰값 찾기
 };

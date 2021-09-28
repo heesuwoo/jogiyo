@@ -64,7 +64,7 @@ function menu(menu_list){
                     td_add.innerHTML = `<td id="${table_name}_${clicked_menu_id}">${clicked_menu}</td>
                                         <td id="${table_name}_${clicked_menu_id}_count">1</td>
                                         <td id="${table_name}_price_${clicked_menu_id}">${price}</td>
-                                        <td><button class="btn btn_primary btn_lg" onclick = x_menu('${table_name}_${clicked_menu_id}_count')>-</button></td>`
+                                        <td><button class="btn btn-primary btn-lg" onclick = x_menu('${table_name}_${clicked_menu_id}_count')>-</button></td>`
                     table_add_menu.appendChild(td_add);
 
                     for(var i=0; i<document.querySelector('.table').rows.length-1; i++){
@@ -341,7 +341,7 @@ function order_list_draw(table_num, order_list){
             td_add.innerHTML = `<td id="${menu_id}">${menu_name}</td>
                                 <td id="${menu_id}_count">${menu_len}</td>
                                 <td id="${price_id}">${price}</td>
-                                <td><button class = "btn btn-primary btn-lg"onclick = x_menu('${menu_id}_count')>-</button></td>`
+                                <td><button class = "btn btn-primary btn-lg" onclick = x_menu('${menu_id}_count')>-</button></td>`
             table_add_menu.appendChild(td_add);
 
             sum += price
@@ -349,7 +349,7 @@ function order_list_draw(table_num, order_list){
         sum_h2.innerHTML = sum
     }
 
-    // td_add.innerHTML = `<td id="${table_num}_${clicked_menu_id}">${clicked_menu}</td> <td id="${table_name}_${clicked_menu_id}_count">1</td><td><button onclick = x_menu('${table_name}_${clicked_menu_id}_count')>-</button></td>`
+    // td_add.innerHTML = `<td id="${table_num}_${clicked_menu_id}">${clicked_menu}</td> <td id="${table_name}_${clicked_menu_id}_count">1</td><td><button class = "btn btn-primary btn-lg" onclick = x_menu('${table_name}_${clicked_menu_id}_count')>-</button></td>`
     // table_add_menu.appendChild(td_add);
 }
 

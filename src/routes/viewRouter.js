@@ -3,6 +3,10 @@ const express = require("express");
 const path = require("path");
 const { features } = require("process");
 
+/* firebase */
+const admin = require('firebase-admin');
+
+/**/
 const router = express.Router(); // 라우터 분리
 
 const db = require("../database/db");
@@ -185,38 +189,82 @@ router.get("/ordersData", (req, res) => {
 });
 
 //주문 접수 수락 보내기!
-router.post("/orders_submit", (req, res) => {
+router.post("/orders_submit", async (req, res) => {
   const { cookie, submit_num } = req.body;
 
-  db.cookieToID(cookie).then(function (id) {
-    const userID = id;
-    
-    db.orders_submit(userID, submit_num).then(function (submit_result) {
-      if (submit_result == true) {
-        res.json({ code: 1, message: "orders_submit success" });
-      } else {
-        res.json({ code: 0, message: "orders_submit fail" });
-      }
-    });
-  });
-  // console.log(req.body);
+  const userID = await db.cookieToID(cookie);
+  const submit_result = await db.orders_submit(userID, submit_num);
+
+  if (submit_result == true) {
+
+    res.json({ code: 1, message: "orders_submit success" });
+    var target_token = await db.token_select(submit_num);
+    console.log('target_token: ',target_token)
+    let message = {
+      data: {
+        title: "고객님의 주문이 접수되었습니다!",
+      },
+
+      notification: {
+        title: "조기요!",
+        body:"주문이 접수되었습니다! 15분안에 와주세요!"
+      },
+      token: target_token,
+    }
+
+    admin
+    .messaging()
+    .send(message)
+    .then(function (response) {
+      console.log('Successfully sent message: : ', response)
+    })
+    .catch(function (err) {
+      console.log('Error Sending message!!! : ', err)
+    })
+
+  } else {
+    res.json({ code: 0, message: "orders_submit fail" });
+  }
+
 });
 
 //주문 접수 취소 보내기!
-router.post("/order_cancel", (req, res) => {
-  const { cookie, acc_num, reason_num } = req.body;
-  // console.log("##", reason_num);
-  db.cookieToID(cookie).then(function (id) {
-    const userID = id;
-    db.order_cancel(userID, acc_num, reason_num).then(function (acc_result) {
-      if (acc_result == true) {
-        res.json({ code: 1, message: "orders_acc success" });
-      } else {
-        res.json({ code: 0, message: "orders_acc fail" });
-      }
-    });
-  });
-  // console.log(req.body);
+router.post("/order_cancel", async (req, res) => {
+  const { cookie, acc_num, reason_num, reason } = req.body;
+  const userID = await db.cookieToID(cookie);
+  const acc_result = await db.order_cancel(userID, acc_num, reason_num);
+  
+  if (acc_result == true) {
+    res.json({ code: 1, message: "orders_acc success" });
+    
+    var target_token = await db.token_select(acc_num);
+
+    let message = {
+      data: {
+        title: "조기요! 접수 취소",
+        body: `${reason} 으로 인해 주문이 취소되었습니다.`,
+      },
+
+      notification: {
+        title:"조기요! 접수 취소",
+        body: `${reason} 으로 인해 주문이 취소되었습니다.`
+      },
+      token: target_token,
+    }
+
+    admin
+      .messaging()
+      .send(message)
+      .then(function (response) {
+        console.log('Successfully sent message: : ', response)
+      })
+      .catch(function (err) {
+        console.log('Error Sending message!!! : ', err)
+      })
+
+  } else {
+    res.json({ code: 0, message: "orders_acc fail" });
+  }
 });
 
 //매장 관리 - 영업 시간, 휴무일 조회!
@@ -480,20 +528,6 @@ router.post("/menusetting_delete", async (req, res) => {
   });
 });
 
-//매장 관리 - 매장 설정 
-// router.get("/restaurantsetting", (req, res) => {
-//   res.render("restaurantsetting");
-// });
-
-//매장 관리 - 매장 설정 
-// router.get("/restaurantsetting", (req, res) => {
-//   const { cookie } = req.body;
-
-//   db.cookieToID(cookie).then(function (result) {
-//     var userID = result; //coookie에서 userID가져옴
-//   });
-// });
-
 //매장 관리 - 매장 조회
 router.get("/restaurantsetting", (req, res) => {
   res.render("restaurantsetting", { arr1: [{ a: 1, b: 2 }, "abcd"] });
@@ -543,49 +577,85 @@ router.post("/restaurantsetting", async (req, res) => {
   });
 
 
-//매장 관리 - 매장 관리
-// router.post("/restaurantsetting", async (req, res) => {
-//   const { cookie, title } = req.body;
-//   // console.log("router: ", title);
-//   const userID = await db.cookieToID(cookie);
-//   // const delete_check = db.menu_delete(userID, title);
-//   db.menu_delete(userID, title).then(function (delete_check) {
-//     if (delete_check == true) {
-//       res.json({ code: 1 });
-//     } else {
-//       res.json({ code: 0 });
-//     }
-//   });
-// });
 
-// router.get("/getTime", (req, res) => {
-//   db.testDate().then((finishDate) => {
-//     console.log(typeof finishDate, finishDate[0].finishDate);
-//     const date = finishDate[0].finishDate;
+  router.post('/push_send', function (req, res, next) {
+    let target_token =
+    'f50b0FXMTXarx2tI6jDZtn:APA91bHnYz5_yyKs-p4me-RIJvmi8PPyRcP05xtE-Mu1fI_eHETzRiF2nHCCPIyau5R9zo0ffGU24eArn-22jvawGxULDMfPyAAEwjVL1MvukJBDj3revVIM4ooivcCI3oVw9EROO_m6'
+    //target_token은 푸시 메시지를 받을 디바이스의 토큰값입니다
+  
+    let message = {
+      data: {
+        title: '테스트 데이터 발송',
+        body: '데이터가 잘 가나요?',
+        style: '굳굳',
+      },
 
-//     // console.log(Object.keys(date));
+      notification: {
+        "title":"Portugal vs. Denmark",
+        "body":"great match!"
+      },
+      token: target_token,
+    }
+  
+    admin
+      .messaging()
+      .send(message)
+      .then(function (response) {
+        console.log('Successfully sent message: : ', response)
+      })
+      .catch(function (err) {
+        console.log('Error Sending message!!! : ', err)
+      })
+  })
 
-//     const now = new Date();
-//     const finish = new Date(date);
-//     const finishMilli = finish.getTime();
-//     const nowMili = now.getTime();
-//     const gapMilli = finishMilli - nowMili;
 
-//     const gapMinutes = gapMilli / (60 * 1000);
-//     console.log(gapMinutes);
-//   });
-// });
+  // function push(sucess, reason){
 
-//매장 관리 - 메뉴 설정- 사진 등록
-// router.get("/setImg", (req, res) => {
-//   res.render("imgTest");
-// });
-// router.post("/setImg", (req, res) => {
-//   const { text, img } = req.body;
+  //   let target_token =
+  //     'dRqJWMyRRAWhGVg2AY2MDd:APA91bHa8zMSb3wszP-WqWPNT1pTQ1-j18laI_lyVLB_Cp8lKNn0Q4eNMqw9W2sW-7qVKHifNBOas9zZdiNa0ytf7AzG82u4faW79USiF1v_pLe-uQ-SYBK64PeY4YiRreRiaPTwAD7Z'
+  //   //target_token은 푸시 메시지를 받을 디바이스의 토큰값입니다
 
-//   console.log(req.body);
+  //   console.log("sucess: ", sucess, "reason: ", reason)
 
-//   res.send("success");
-// });
+  //   if(sucess == 1){  //접수 성공
+
+  //     let message = {
+  //       data: {
+  //         title: `${success}`,
+  //       },
+  
+  //       notification: {
+  //         title: "조기요!",
+  //         body:"고객님의 주문이 접수되었습니다!"
+  //       },
+  //       token: target_token,
+  //     }
+  //   } else{ //접수 취소
+
+  //     let message = {
+  //       data: {
+  //         title: `${success}`,
+  //         body: `${reason}`,
+  //       },
+  
+  //       notification: {
+  //         title:"조기요! 접수 취소",
+  //         body: reason
+  //       },
+  //       token: target_token,
+  //     }
+  //   }
+  
+  //   admin
+  //     .messaging()
+  //     .send(message)
+  //     .then(function (response) {
+  //       console.log('Successfully sent message: : ', response)
+  //     })
+  //     .catch(function (err) {
+  //       console.log('Error Sending message!!! : ', err)
+  //     })
+  // }
+
 
 module.exports = router; // 모듈로 만드는 부분

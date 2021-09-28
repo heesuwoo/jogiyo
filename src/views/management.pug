@@ -47,6 +47,10 @@ style.
 		font-family: 'Gowun Batang', serif;
 	}
 
+	.card-color {
+		background-color: #E6EDCE;
+		border: 3px solid black;
+	}
 	
 
 //- <script src="../js/bootstrap.min.js"></script>
@@ -109,7 +113,7 @@ style.
 
 	//- <!-- 카드: 영업 임시 중지 -->
 	<div class="col-md-6 border">
-		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#stop">
+		<div class="card card-color card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#stop">
 			<div class="card-body">
 				<p class="lead">영업 임시 중지</p>
 			</div>
@@ -144,7 +148,7 @@ style.
   	
 	//- <!--카드: 영업 시간 설정-->
 	<div class="col-md-6 border">
-		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hour">
+		<div class="card card-color card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hour">
 			<div class="card-body">
 				<p class="lead">영업 시간 설정</p>
 			</div>
@@ -160,10 +164,10 @@ style.
 			<form method="POST" class="btn btn-secondary dropdown-toggle" onsubmit="business_hours_setting(event)">
 			<div class="modal-body">
 				<div class="row justify-content-center">
-					<table data-toggle = "table" class="table table-striped table-responsive" style="text-align: center; margin-left: 10%; margin-right: 10%; border: 1px solid #dddddd">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
+					<table data-toggle = "table" class="table table-responsive" style="background: #E6EDCE; text-align: center; margin-left: 10%; margin-right: 10%; border: 2px solid black;">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
 					
-						<tr>	<!-- 테이블의 하나의 행(한 줄) -->
-							<td style="text-align: center;">월~금</td>
+						<tr style="border: 2px solid black;">	<!-- 테이블의 하나의 행(한 줄) -->
+							<td style="text-align: center; border: 2px solid black;">월~금</td>
 							<td style="text-align: center;">
 								<div class = "dropdown">
 										<select name="mfhs" aria-labelledby="MFHS" class ="form-control mfhs">
@@ -262,8 +266,8 @@ style.
 						</tr>
 											
 											
-						<tr>	<!-- 테이블의 하나의 행(한 줄) -->
-							<td style="text-align: center;">토</td>
+						<tr style="border: 2px solid black;">	<!-- 테이블의 하나의 행(한 줄) -->
+							<td style="text-align: center; border: 2px solid black;">토</td>
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
@@ -364,8 +368,8 @@ style.
 						</tr>
 						
 											
-						<tr>	<!-- 테이블의 하나의 행(한 줄) -->
-							<td style="text-align: center;">일</td>
+						<tr style="border: 2px solid black;">	<!-- 테이블의 하나의 행(한 줄) -->
+							<td style="text-align: center; border: 2px solid black;">일</td>
 														
 							<td style="text-align: center;">
 								<div class = "dropdown">
@@ -478,7 +482,7 @@ style.
   		
 	//-<!-- 카드: 휴무일 설정 -->
 	<div class="col-md-6 border">
-		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#holiday">
+		<div class="card card-color card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#holiday">
 			<div class="card-body">
 				<p class="lead">휴무일 설정</p>
 			</div>
@@ -495,9 +499,9 @@ style.
 			<form method="POST" class="btn btn-secondary dropdown-toggle" onsubmit="holiday_setting(event)">
 			<div class="modal-body card" style="text-align: center;">
 				<div class="row">
-					<table data-toggle="table" class="table table-striped table-responsive" style="margin-left: 10%; margin-right: 10%; border: 1px solid #dddddd" data-height="299">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
-						<tr>	<!-- 테이블의 1번째줄 -->
-							<td rowspan="3" style="text-align: center;">정기 휴무</td>
+					<table data-toggle="table" class="table table-responsive" style="background: #E6EDCE; margin-left: 10%; margin-right: 10%; border: 2px solid black" data-height="299">	<!-- 홀수짝수 항목의 색이 변경되어 나옴 -->
+						<tr style= "border: 2px solid black;">	<!-- 테이블의 1번째줄 -->
+							<td rowspan="3" style="text-align: center; border: 2px solid black">정기 휴무</td>
 							<td style="text-align: center;">매주</td>
 							<td style="text-align: center;">
 								<div class = "dropdown">
@@ -538,7 +542,7 @@ style.
 							</td>
 						</tr>	<!-- 1번째줄 끝-->
 											
-						<tr> <!-- 2번째줄 -->
+						<tr style= "border: 2px solid black;"> <!-- 2번째줄 -->
 												
 							<td style="text-align: center;">매월</td>
 							<td colspan="2" style="text-align: center;">
@@ -587,7 +591,7 @@ style.
 							</td>
 						</tr>	<!-- 2번째줄 끝-->
 											
-						<tr>	<!-- 3번째줄 -->
+						<tr style= "border: 2px solid black;">	<!-- 3번째줄 -->
 							<td style="text-align: center;">매년</td>
 							<td style="text-align: center;">
 								<div class = "dropdown">
@@ -660,8 +664,8 @@ style.
 						</tr>	<!-- 3번째 줄 끝-->
 											
 											
-						<tr>	<!-- 4번째 줄 -->
-							<td rowspan="2" style="text-align: center;">임시 휴무</td>
+						<tr style= "border: 2px solid black;">	<!-- 4번째 줄 -->
+							<td rowspan="2" style="text-align: center; border: 2px solid black">임시 휴무</td>
 												
 							<td style="text-align: center;">
 								<input type="text" placeholder="년" id="tem_year_start" class="form-control text-uppercase">
@@ -682,7 +686,7 @@ style.
 											
 											
 												
-						<tr>	<!-- 5번째 줄 -->
+						<tr style= "border: 2px solid black;">	<!-- 5번째 줄 -->
 							<td style="text-align: center;">~</td>
 												
 							<td style="text-align: center;">
@@ -725,7 +729,7 @@ style.
 
 	//- <!-- 카드: 좌석 배치도 변경-->
 	<div class="col-md-6 border">
-		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#seat" onclick="movePage('seating');">
+		<div class="card card-color card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#seat" onclick="movePage('seating');">
 			<div class="card-body">
 				<p class="lead">좌석 배치도 변경</p>
 			</div>
@@ -734,7 +738,7 @@ style.
   	
 	//- <!-- 카드: 메뉴 설정-->
 	<div class="col-md-6 border">
-		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" onclick="movePage('menusetting');">
+		<div class="card card-color card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" onclick="movePage('menusetting');">
 			<div class="card-body">
 				<p class="lead">메뉴 설정</p>
 			</div>
@@ -743,7 +747,7 @@ style.
 
 	//- <!-- 카드: 메뉴 설정-->
 	<div class="col-md-6 border">
-		<div class="card card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" onclick="movePage('restaurantsetting');">
+		<div class="card card-color card-default button button2" class="btn btn-danger btn-sm" data-toggle="modal" onclick="movePage('restaurantsetting');">
 			<div class="card-body">
 				<p class="lead">매장 설정</p>
 			</div>
@@ -757,7 +761,7 @@ style.
 	<div class="row">
 		<div class="col-sm-10 col-sm-offset-1">
 			<div class="col-md-4 col-sm-6">
-				<div class="card1">
+				<div class="card1" style="background-color: #FFFFF3; border: 2px outset black;">
 					<div class="content">
 						<div class="main">
 							<h3 class="name">설정된 임시 중지 시간</h3>
@@ -772,15 +776,13 @@ style.
 									</tr>
 								</tbody>
 								</table>
-							//- <p class="text-center">"Lamborghini Mercy <br>Your chick she so thirsty <br>I'm in that two seat Lambo"</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			//- <!--<div class="col-sm-1"></div> -->
 			<div class="col-md-4 col-sm-6">
-				<div class="card1">
+				<div class="card1" style="background-color: #FFFFF3; border: 2px outset black;">
 					<div class="content">
 						<div class="main">
 							<h3 class="name">설정된 영업 시간</h3>
@@ -801,15 +803,13 @@ style.
 									</tr>
 								</tbody>
 								</table>
-							//- <p class="text-center">"Lamborghini Mercy <br>Your chick she so thirsty <br>I'm in that two seat Lambo"</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			//- <!--<div class="col-sm-1"></div> -->
 			<div class="col-md-4 col-sm-6">
-				<div class="card1">
+				<div class="card1" style="background-color: #FFFFF3; border: 2px outset black;">
 					<div class="content">
 						<div class="main">
 							<h3 class="name">설정된 휴무일</h3>
