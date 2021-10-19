@@ -66,6 +66,17 @@ a:active {
   top: 10%;
   left: 75%;
 }
+.exit_add {
+  position: absolute;
+  top: 40%;
+  left: 75%;
+}
+.toilet_add {
+  position: absolute;
+  top: 40%;
+  left: 90%;
+}
+
 .css_test img {
   cursor: move;
   width: 100px;

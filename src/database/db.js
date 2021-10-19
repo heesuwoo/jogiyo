@@ -126,6 +126,7 @@ const login = async function (userID, userPassword) {
       queryResult.user_password == userPassword
     ) {
       var user_session = session_select(userID);
+      login_state(userID);
       return user_session; //로그인 성공 - 사용자의 세션값을 router.post("/login")으로 넘겨줌
     } else {
       console.log("비밀번호 불일치");
@@ -133,6 +134,42 @@ const login = async function (userID, userPassword) {
     }
   } catch (e) {
     console.log("Error in login\n", e);
+    return false;
+  }
+};
+
+//로그인 시 로그인 상태 전송
+const login_state = async function (user_id) {
+  try {
+    //user_id -> restaurant_id
+    const restaurant_id = await select_restaurant_id(user_id);
+    const query = `update restaurant set login_state = '1' where restaurant_id = '${restaurant_id}'`;
+    console.log("login_state: ",query);
+    const result = await pool.query(query);
+    
+    return 0;
+  } catch (e) {
+    console.log("Error in login_state\n", e);
+    return false;
+  }
+};
+
+//로그아웃 시 로그인 상태 전송
+const logout_state = async function (cookie) {
+  try {
+    //cookie -> restaurant_id
+    //cookie -> user_id
+    const user_id = await cookieToID(cookie);
+    //user_id -> restaurant_id
+    const restaurant_id = await select_restaurant_id(user_id);
+
+    const query = `update restaurant set login_state = '0' where restaurant_id = '${restaurant_id}'`;
+    console.log("logout_state: ",query);
+    const result = await pool.query(query);
+    
+    return 0;
+  } catch (e) {
+    console.log("Error in logout_state\n", e);
     return false;
   }
 };
@@ -201,7 +238,7 @@ const join = async function (
 };
 
 //아이디 -> restaurant_id 검색
-const select_restaurant_id = async function (userID, userPassword) {
+const select_restaurant_id = async function (userID) {
   try {
     const query = `SELECT * FROM user_web WHERE user_id = '${userID}'`;
     //console.log(query);
@@ -237,10 +274,11 @@ const table_select = async function (userID) {
     const result = await pool.query(query);
 
     for (var i = 0; i < result[0].length; i++) {
+      var id = result[0][i].id;
       var x = result[0][i].x;
       var y = result[0][i].y;
 
-      var pot = { x, y };
+      var pot = { id, x, y };
       table_list.push(pot);
     }
     return table_list;
@@ -271,6 +309,56 @@ const window_select = async function (userID) {
     return window_list;
   } catch (e) {
     console.log("Error in window_location\n", e);
+    return false;
+  }
+};
+
+//메인페이지 - 출입문 위치값 받아오기
+const exit_select = async function (userID) {
+  exit_list = [];
+  try {
+    var restaurant_id = await select_restaurant_id(userID);
+    const query = `SELECT x,y FROM exit_location WHERE restaurant_id = '${restaurant_id}'`;
+    //console.log(query);
+    const result = await pool.query(query);
+
+    for (var i = 0; i < result[0].length; i++) {
+      var x = result[0][i].x;
+      var y = result[0][i].y;
+      // console.log("x: ", x);
+      var pot = { x, y };
+      // console.log("exit: ", exit);
+      exit_list.push(pot);
+    }
+    // console.log("exit_list: ", exit_list);
+    return exit_list;
+  } catch (e) {
+    console.log("Error in exit_location\n", e);
+    return false;
+  }
+};
+
+//메인페이지 - 출입문 위치값 받아오기
+const toilet_select = async function (userID) {
+  toilet_list = [];
+  try {
+    var restaurant_id = await select_restaurant_id(userID);
+    const query = `SELECT x,y FROM toilet_location WHERE restaurant_id = '${restaurant_id}'`;
+    //console.log(query);
+    const result = await pool.query(query);
+
+    for (var i = 0; i < result[0].length; i++) {
+      var x = result[0][i].x;
+      var y = result[0][i].y;
+      // console.log("x: ", x);
+      var pot = { x, y };
+      // console.log("toilet: ", toilet);
+      toilet_list.push(pot);
+    }
+    // console.log("toilet_list: ", toilet_list);
+    return toilet_list;
+  } catch (e) {
+    console.log("Error in toilet_location\n", e);
     return false;
   }
 };
@@ -325,6 +413,7 @@ const using_table = async function (userID) {
   }
 };
 
+//사용중인 테이블 사용중이라고 데이터 전송
 const using_table_insert = async function (restaurant_id, using_table_list) {
   try {
     
@@ -332,12 +421,68 @@ const using_table_insert = async function (restaurant_id, using_table_list) {
 
       const query = `update table_location set table_count = '1' WHERE restaurant_id = '${restaurant_id}' and table_id = '${using_table_list[i]}';`
       const result = await pool.query(query);
-      // console.log("using_table_insert query: ", query)
+      console.log("using_table_insert query: ", query)
     }
     
     return 1;
   } catch (e) {
     console.log("Error in using_table_insert\n", e);
+    return false;
+  }
+};
+
+//테이블 예약 금지
+const no_reserve = async function (userID, table_num) {
+  try {
+    var restaurant_id = await select_restaurant_id(userID);
+    var no_table_num = table_num.split('_')[1];
+
+    const query = `update table_location set table_count = '3' WHERE restaurant_id = '${restaurant_id}' and table_id = '${no_table_num}';`
+    const result = await pool.query(query);
+    console.log("no_reserve query: ", query)
+    return 1;
+  } catch (e) {
+    console.log("Error in no_reserve\n", e);
+    return false;
+  }
+};
+
+// 테이블 예약 금지 풀기
+const yes_reserve = async function (userID, table_num) {
+  try {
+    var restaurant_id = await select_restaurant_id(userID);
+    var no_table_num = table_num.split('_')[1];
+
+    const query = `update table_location set table_count = '0' WHERE restaurant_id = '${restaurant_id}' and table_id = '${no_table_num}';`
+    console.log("yes_reserve query: ", query)
+    const result = await pool.query(query);
+    return 1;
+  } catch (e) {
+    console.log("Error in yes_reserve\n", e);
+    return false;
+  }
+};
+
+// 예약 금지된 테이블 조회 
+const select_no_reserve = async function (userID) {
+  try {
+    list = []
+    var restaurant_id = await select_restaurant_id(userID);
+
+    const query = `select table_id from table_location WHERE restaurant_id = '${restaurant_id}' and table_count = '3';`
+    const result = await pool.query(query);
+    // console.log("no_reserve query: ", query)
+
+    for (var i = 0; i < result[0].length; i++) {
+      var table_id = result[0][i].table_id;
+      var li = { table_id };
+
+      list.push(li);
+    }
+
+    return list;
+  } catch (e) {
+    console.log("Error in select_no_reserve\n", e);
     return false;
   }
 };
@@ -378,6 +523,8 @@ const accept_select = async function (userID, table_num) {
 
     if(result[0][0].order_status == 1){
       accept_delete(restaurant_id, seat_number)
+    }else{
+      
     }
 
     return true;
@@ -1018,9 +1165,11 @@ const table_insert = async function (userID, table_save) {
     var restaurant_id = await select_restaurant_id(userID);
     // console.log("table_insert에서 table_save값:", table_save);
     for (var i = 0; i < table_save.length; i++) {
-      var x = table_save[i][0];
-      var y = table_save[i][1];
-      const query = `insert into table_location(restaurant_id, x, y, table_count) values('${restaurant_id}','${x}','${y}', 0)`;
+
+      var id = table_save[i][0];
+      var x = table_save[i][1];
+      var y = table_save[i][2];
+      const query = `insert into table_location(restaurant_id, table_id, x, y, table_count) values('${restaurant_id}',${id},'${x}','${y}', 0)`;
       // console.log("테이블 ", i, "번째", query);
       const result = await pool.query(query);
       // const queryResult = result[0][0];
@@ -1076,6 +1225,92 @@ const window_insert = async function (userID, window_save) {
   }
 };
 
+//매장관리 - 좌석 배치도 변경 - 출입문 조회
+const exit_location = async function (userID) {
+  // const window_location = async function (userID, window_save) {
+    try {
+      var restaurant_id = await select_restaurant_id(userID);
+      const query = `SELECT * FROM exit_location WHERE restaurant_id = '${restaurant_id}'`;
+      //console.log(query);
+      const result = await pool.query(query);
+      const queryResult = result[0][0];
+  
+      if (queryResult == undefined) {
+        //해당 가게의 데이터가 없다면
+        return true;
+      } else {
+        //해당가게의 데이터가 이미 있으면
+        return 0;
+      }
+    } catch (e) {
+      console.log("Error in exit_location\n", e);
+      return false;
+    }
+  };
+  
+  //매장관리 - 좌석 배치도 변경 - 출입문 삽입
+  const exit_insert = async function (userID, exit_save) {
+    try {
+      var restaurant_id = await select_restaurant_id(userID);
+      // console.log("exit_insert에서 exit_save값:", exit_save);
+      for (var i = 0; i < exit_save.length; i++) {
+        var x = exit_save[i][0];
+        var y = exit_save[i][1];
+        const query = `insert into exit_location(restaurant_id, x, y) values('${restaurant_id}','${x}','${y}')`;
+        // console.log("창문 ", i, "번째", query);
+        const result = await pool.query(query);
+        // const queryResult = result[0][0];
+      }
+      return true;
+    } catch (e) {
+      console.log("Error in exit_insert\n", e);
+      return false;
+    }
+  };
+
+  //매장관리 - 좌석 배치도 변경 - 화장실 조회
+const toilet_location = async function (userID) {
+  // const window_location = async function (userID, window_save) {
+    try {
+      var restaurant_id = await select_restaurant_id(userID);
+      const query = `SELECT * FROM toilet_location WHERE restaurant_id = '${restaurant_id}'`;
+      //console.log(query);
+      const result = await pool.query(query);
+      const queryResult = result[0][0];
+  
+      if (queryResult == undefined) {
+        //해당 가게의 데이터가 없다면
+        return true;
+      } else {
+        //해당가게의 데이터가 이미 있으면
+        return 0;
+      }
+    } catch (e) {
+      console.log("Error in toilet_location\n", e);
+      return false;
+    }
+  };
+  
+  //매장관리 - 좌석 배치도 변경 - 화장실 삽입
+  const toilet_insert = async function (userID, toilet_save) {
+    try {
+      var restaurant_id = await select_restaurant_id(userID);
+      // console.log("toilet_insert에서 toilet_save값:", toilet_save);
+      for (var i = 0; i < toilet_save.length; i++) {
+        var x = toilet_save[i][0];
+        var y = toilet_save[i][1];
+        const query = `insert into toilet_location(restaurant_id, x, y) values('${restaurant_id}','${x}','${y}')`;
+        // console.log("창문 ", i, "번째", query);
+        const result = await pool.query(query);
+        // const queryResult = result[0][0];
+      }
+      return true;
+    } catch (e) {
+      console.log("Error in toilet_insert\n", e);
+      return false;
+    }
+  };
+
 //매장관리 - 좌석 배치도 변경 - 좌석 배치도 삭제 -table
 const table_clear = async function (userID) {
   try {
@@ -1104,6 +1339,38 @@ const window_clear = async function (userID) {
     return true;
   } catch (e) {
     console.log("Error in window_clear\n", e);
+    return false;
+  }
+};
+
+//매장관리 - 좌석 배치도 변경 - 좌석 배치도 삭제 -exit
+const exit_clear = async function (userID) {
+  try {
+    var restaurant_id = await select_restaurant_id(userID);
+    const query = `delete from exit_location where restaurant_id = '${restaurant_id}'`;
+    // console.log(query);
+    const result = await pool.query(query);
+    const queryResult = result[0][0];
+    // console.log("delete: ", queryResult);
+    return true;
+  } catch (e) {
+    console.log("Error in exit_clear\n", e);
+    return false;
+  }
+};
+
+//매장관리 - 좌석 배치도 변경 - 좌석 배치도 삭제 -toilet
+const toilet_clear = async function (userID) {
+  try {
+    var restaurant_id = await select_restaurant_id(userID);
+    const query = `delete from toilet_location where restaurant_id = '${restaurant_id}'`;
+    // console.log(query);
+    const result = await pool.query(query);
+    const queryResult = result[0][0];
+    // console.log("delete: ", queryResult);
+    return true;
+  } catch (e) {
+    console.log("Error in toilet_clear\n", e);
     return false;
   }
 };
@@ -1182,8 +1449,11 @@ const restaurant_sumbit = async function (userID, img, phone, address, category)
 
     if(restaurant_sel == 1){ //해당 가게 정보가 없으면
       // console.log("restaurant_sel == else")
-      const query = `insert into restaurant(restaurant_id, restaurant_name, restaurant_address, restaurant_phone, restaurant_theme, restaurant_img) 
-      values ('${restaurant_id}','${restaurant_name}','${address}','${phone}','${category}','${img}' )`;
+      const query = `insert into restaurant(restaurant_id, restaurant_name, restaurant_address, restaurant_phone, restaurant_theme, restaurant_img, login_state) 
+      values ('${restaurant_id}','${restaurant_name}','${address}','${phone}','${category}','${img}','1' )`;
+      // console.log(query);
+      
+
       const result = await pool.query(query);
       
     }else{  //가게 정보가 있으면 삽입
@@ -1238,7 +1508,9 @@ const restaurant_select = async function (userID) {
 const restaurant_update = async function (restaurant_id,address,phone,category,img) {
   try {
     
-    const query = `update restaurant set restaurant_address = '${address}', restaurant_phone = '${phone}', restaurant_theme = '${category}', restaurant_img = '${img}' where restaurant_id = '${restaurant_id}'`;
+    const query = `update restaurant set restaurant_address = '${address}', restaurant_phone = '${phone}', 
+    restaurant_theme = '${category}', restaurant_img = '${img}', login_state = '1'
+    where restaurant_id = '${restaurant_id}' `;
     // console.log("###", query);
     const result = await pool.query(query);
     // const queryResult = result[0][0];
@@ -1288,14 +1560,20 @@ module.exports = {
   cookieToID, //쿠키 -> 사용자 아이디
   restaurant_idTorestaurant_name, //restaurant_id -> restaurant_name 검색
   login, //로그인
+  logout_state, //로그아웃 시, 상태 전송
   join, //회원가입
   join_check, //회원가입 (중복 체크)
   select_restaurant_id, //사용자 아이디 -> restaurant_id
   // (메인페이지)
   table_select, //테이블 위치값 받아오기
   window_select, //창문 위치값 받아오기
+  exit_select,  //출입문 위치값 받아오기
+  toilet_select,  //출입문 위치값 받아오기
   table_menu_select_main, //테이블 별 주문 메뉴 나타내기
   using_table,  // 메인페이지 - 사용중인 테이블 확인하기
+  no_reserve,  //테이블 예약 금지
+  yes_reserve, //테이블 예약 금지 풀기
+  select_no_reserve, //예약 금지된 테이블 조회 
   table_menu_select,  //테이블 별 주문 메뉴 조회
   accept_select,  //메인페이지 - 테이블 별 주문 메뉴 삭제하기 - order_list 접수됐는지 조회
   table_menu_delete, //테이블 별 주문 메뉴 삭제
@@ -1336,6 +1614,14 @@ module.exports = {
   window_location, //창문 조회
   window_insert, //창문 삽입
   window_clear, //창문 삭제
+
+  exit_location,  //출입문 조회
+  exit_insert,  //출입문 삽입
+  exit_clear,  //출입문 삭제
+
+  toilet_location,  //화장실 조회
+  toilet_insert,  //화장실 삽입
+  toilet_clear,  //화장실 삭제
 
   // 매장관리 - 메뉴설정
   menu_add, //메뉴 추가

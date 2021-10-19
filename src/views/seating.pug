@@ -73,9 +73,14 @@
     <h3 class="head_title"> ▶ 좌석 배치도 수정</h3>
     <input type="button" value="테이블 추가" id="add_table_id" class ="btn btn-primary btn-lg table_add" onclick = "make_table()" >
     <input type="button" value="창문 추가" id="add_window_id" class ="btn btn-primary btn-lg window_add" onclick ="make_window()">
+    
+    <input type="button" value="출입구 추가" id="add_exit_id" class ="btn btn-primary btn-lg exit_add" onclick ="make_exit()">    
+    <input type="button" value="화장실 추가" id="add_toilet_id" class ="btn btn-primary btn-lg toilet_add" onclick ="make_toilet()">    
+
     <input type="button" value="저장" id="add_window_id" class ="btn btn-lg save_button btn-success" onclick ="save()">
     <input type="button" value="모두 삭제" id="add_window_id" class ="btn btn-danger btn-lg all_dele_button" onclick ="all_dele()">
     
+
     <div class="box_border" id="box"> </div>
 
     script.
@@ -83,10 +88,18 @@
 
         var t = 1;
         var w = 1;
+        var e = 1;
+        var to = 1;
+
         var tables = []
         var windows = []
+        var exits = []
+        var toilets = []
+
         var window_save = []
         var table_save = []
+        var exit_save = []
+        var toilet_save = []
 
         //- 테이블 생성
         function make_table(){
@@ -102,7 +115,7 @@
             tables.push(t_id);  //tables 배열에 저장
             table.id = t_id;
             table.style.position="absolute";
-            table.style.left = '137%';
+            table.style.left = '139%';
             table.style.top = '12%';
             table.style.width="10%";
             table.style.height="14%";
@@ -137,7 +150,7 @@
             windows.push(w_id);
             window.id = w_id;
             window.style.position="absolute";
-            window.style.left = '113%';
+            window.style.left = '116%';
             window.style.top = '12%';
             window.style.width="7%";
             window.style.height="7%";
@@ -156,6 +169,76 @@
             $(window).draggable({containment : '#box', cursor: "move"});
             w++;
             //- console.log("window배열", windows);
+        }
+
+        // 출입문 추가
+        function make_exit(){
+            var exit = document.createElement('div');
+            var e_id = 'exit_' + e;
+            for(var i = 0; i < exits.length; i++) {
+                if(exits[i] === e_id)  {
+                    //- console.log("tables ", i, ":", tables[i], "t_id: ", t_id);
+                    e++;
+                    var e_id = 'exit_' + e;
+                }
+            }
+            exits.push(e_id);  //tables 배열에 저장
+            exit.id = e_id;
+            exit.style.position="absolute";
+            exit.style.left = '117%';
+            exit.style.top = '50%';
+            exit.style.width="6%";
+            exit.style.height="6%";
+            exit.style.backgroundColor="#e60000";
+            exit.style.border="3px solid #7a0000";
+            exit.style.borderRadius = "3px";
+            exits = exits.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            
+            //좌석 번호 입력하는 폼과 저장버튼
+            exit.innerHTML =
+                `<form action ='' accept-charset='utf-8' name='exit_num' method='get'> <input type='button' value='X' onclick='dele_exit("${e_id}")'> <p style = "color:white;"> 출입문 </p>`;
+            //- document.body.appendChild(table);
+            container.appendChild(exit);  //container에 table를 속하게 만들기(자식 요소로 만듦)
+
+            //console.log("sort: ", tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));}));
+            
+            $(exit).draggable({containment : '#box', cursor: "move"});
+            e++;
+        }
+
+        // 화장실 추가
+        function make_toilet(){
+            var toilet = document.createElement('div');
+            var to_id = 'toilet_' + to;
+            for(var i = 0; i < toilets.length; i++) {
+                if(toilets[i] === to_id)  {
+                    //- console.log("tables ", i, ":", tables[i], "t_id: ", t_id);
+                    to++;
+                    var to_id = 'toilet_' + to;
+                }
+            }
+            toilets.push(to_id);  //tables 배열에 저장
+            toilet.id = to_id;
+            toilet.style.position="absolute";
+            toilet.style.left = '141%';
+            toilet.style.top = '50%';
+            toilet.style.width="6%";
+            toilet.style.height="6%";
+            toilet.style.backgroundColor="#24e5ff";
+            toilet.style.border="3px solid #0094a8";
+            toilet.style.borderRadius = "3px";
+            toilets = toilets.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            
+            //좌석 번호 입력하는 폼과 저장버튼
+            toilet.innerHTML =
+                `<form action ='' accept-charset='utf-8' name='toilet_num' method='get'> <input type='button' value='X' onclick='dele_toilet("${to_id}")'> <p> 화장실 </p>`;
+            //- document.body.appendChild(table);
+            container.appendChild(toilet);  //container에 table를 속하게 만들기(자식 요소로 만듦)
+
+            //console.log("sort: ", tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));}));
+            
+            $(toilet).draggable({containment : '#box', cursor: "move"});
+            to++;
         }
 
         //- 테이블 삭제
@@ -200,6 +283,46 @@
             }
         }
 
+        //- 출입문 삭제
+        function dele_exit(e_id){
+            //- console.log("삭제:", e_id);
+            
+            var e_target = document.querySelector('#'+e_id);   //문자열로 받아온 eid에 해당하는 객체를 받아옴.
+            container.removeChild(e_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+
+            //제거시 id를 하나씩 빼줘야함.
+            for(var i = 0; i < exits.length; i++) {
+                exits = exits.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+                if(exits[i] === e_id)  {
+                    exits.splice(i, 1);
+                    e = --i;
+                    if(e < 0){
+                        e = 0;
+                    }
+                }   //배열에서 해당 요소 삭제
+            }
+        }
+
+        //- 출입문 삭제
+        function dele_toilet(to_id){
+            //- console.log("삭제:", e_id);
+            
+            var to_target = document.querySelector('#'+to_id);   //문자열로 받아온 eid에 해당하는 객체를 받아옴.
+            container.removeChild(to_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+
+            //제거시 id를 하나씩 빼줘야함.
+            for(var k = 0; k < toilets.length; k++) {
+                toilets = toilets.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+                if(toilets[k] === to_id)  {
+                    toilets.splice(k, 1);
+                    to = --k;
+                    if(to < 0){
+                        to = 0;
+                    }
+                }   //배열에서 해당 요소 삭제
+            }
+        }
+
         //- 저장
         function save() {
             
@@ -208,6 +331,8 @@
             
             window_save = []
             table_save = []
+            exit_save = []
+            toilet_save = []
 
             const containerWidth = container.clientWidth //컨테이너 박스의 x좌표를 가져옴
             const containerHeight = container.clientHeight //컨테이너 박스의 y좌표를 가져옴
@@ -218,7 +343,13 @@
             const doms_table = tables.map(t => {
                 return document.querySelector('#'+ t)
             })
-            
+            const doms_exit = exits.map(e => {
+                return document.querySelector('#'+ e)
+            })
+            const doms_toilet = toilets.map(to => {
+                return document.querySelector('#'+ to)
+            })
+
             for(var i = 0; i < windows.length; i++){
                 const win = doms_window[i] //win의 정보를 가져옴
                 window_save.push([win.offsetLeft/containerWidth, win.offsetTop/containerHeight])
@@ -226,14 +357,26 @@
 
             for(var j = 0; j < tables.length; j++){
                 const tab = doms_table[j] //tab의 정보를 가져옴
-                table_save.push([tab.offsetLeft/containerWidth, tab.offsetTop/containerHeight])
+                table_save.push([(j+1),tab.offsetLeft/containerWidth, tab.offsetTop/containerHeight])
+            }
+            
+            for(var k = 0; k < exits.length; k++){
+                const exi = doms_exit[k] //exi의 정보를 가져옴
+                exit_save.push([exi.offsetLeft/containerWidth, exi.offsetTop/containerHeight])
+            }
+
+            for(var t = 0; t < toilets.length; t++){
+                const to = doms_toilet[t] //exi의 정보를 가져옴
+                toilet_save.push([to.offsetLeft/containerWidth, to.offsetTop/containerHeight])
             }
             
             //router로 전송
             const reqBody = {
                 cookie : getCookie("id"),
                 window_save : window_save,
-                table_save: table_save
+                table_save: table_save,
+                exit_save : exit_save,
+                toilet_save : toilet_save,
                 }
                 
             const xhr = new XMLHttpRequest()
@@ -264,6 +407,8 @@
 
             windows = windows.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
             tables = tables.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            exits = exits.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
+            toilets = exits.sort(function(a,b){ return (Number(a.match(/(\d+)/g)[0]) - Number((b.match(/(\d+)/g)[0])));});
 
             //- console.log("모두 삭제 전 정렬 window: ", windows);
             //- console.log("모두 삭제 전 정렬 table: ", tables);
@@ -282,12 +427,37 @@
                     container.removeChild(t_target);  //부모요소(container)에서  자식요소(target)를 제거함.
                 }
             }
+            
+            for(var k = 0; k <= exits.length; k++){
+                var e_target = document.querySelector('#exit_' + k);   //문자열로 받아온 wid에 해당하는 객체를 받아옴.
+                if(e_target != null){
+                    console.log(e_target.id)
+                    container.removeChild(e_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+                }
+            }
+
+            for(var t = 0; t <= toilets.length; t++){
+                var to_target = document.querySelector('#toilet_' + t);   //문자열로 받아온 wid에 해당하는 객체를 받아옴.
+                if(to_target != null){
+                    console.log(to_target.id)
+                    container.removeChild(to_target);  //부모요소(container)에서  자식요소(target)를 제거함.
+                }
+            }
+
             w=0;
             t=0;
+            e=0;
+            to=0;
+
             window_save.splice(0,windows.length);
             table_save.splice(0,tables.length);
+            exit_save.splice(0,exits.length);
+            toilet_save.splice(0,toilets.length);
+
             windows.splice(0,windows.length);
             tables.splice(0,tables.length);
+            exits.splice(0,exits.length);
+            toilets.splice(0,toilets.length);
 
             //router로 전송
             const reqBody = {

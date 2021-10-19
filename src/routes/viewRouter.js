@@ -10,6 +10,7 @@ const admin = require('firebase-admin');
 const router = express.Router(); // 라우터 분리
 
 const db = require("../database/db");
+const { Cookie } = require("express-session");
 
 // 로그인!
 router.get("/login", function (req, res) {
@@ -30,15 +31,22 @@ router.post("/login", (req, res, next) => {
       res.json({ code: 1, msg: "discord password" }); //패스워드 틀림
     } else {
       const session = login_check; //로그인한 사용자의 세션 값
-      // console.log("로그인 세션: ", session);
+      console.log("로그인 세션: ", session);
+      
       res.json({ code: 0, msg: "success", session }); //세션값
+
     }
   });
 });
 
 // 로그아웃
-router.post("/logout", (req, res) => {
+router.post("/logout", async (req, res,next) => {
+  const { cookie } = req.body;
+
+  console.log("logout cookie: ", cookie);
+  const result = await db.logout_state(cookie);
   res.send("success");
+
 });
 
 // 회원가입!
@@ -80,16 +88,18 @@ router.post("/main", async (req, res, next) => {
   // console.log("userID: ", userID )
   var table = await db.table_select(userID); //테이블 위치
   var window = await db.window_select(userID); //창문 위치
+  var exit = await db.exit_select(userID); //창문 위치
+  var toilet = await db.toilet_select(userID); //창문 위치
 
   var pos_menu = await db.menu_select(userID); //해당 가게의 menu 
   var select = await db.table_menu_select_main(userID); //가게에 등록된 menu 이름 + 개수 받아옴
   var reser = await db.orders_reser(userID);
-  var table_count = await db.using_table(userID);
-
+  db.using_table(userID);
+  var no_reserve = await db.select_no_reserve(userID);
   // console.log("table_count: ", table_count)
   // console.log(window);
 
-  res.json({ table: table, window: window, pos_menu: pos_menu, main_table_menu: select, reserved: reser});
+  res.json({ table: table, window: window, exit: exit, toilet: toilet, pos_menu: pos_menu, main_table_menu: select, reserved: reser, no_reserve: no_reserve});
 });
 
 // 메인 - POST
@@ -128,9 +138,30 @@ router.post("/pos_order", async (req, res, next) => {
   // console.log("order_list: ", order_list);
   
   var table_delete = await db.table_menu_delete(userID, table_num);
+  // db.using_table_insert(userID, table_num);
+  if(table_delete == true){
+    var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
+    if(table_save == true){
+      res.json({ code: 1, msg: "pos_order success" });
+    }else{
+      res.json({ code: -1, msg: "pos_order fail" });
+    }
+  }else{
+    res.json({ code: -1, msg: "pos_order fail" });
+  }
+});
+
+// 메인 페이지 테이블 예약금지!
+router.post("/pos_order_no", async (req, res, next) => {
+  const { cookie, table_num, order_list } = req.body;
+  const userID = await db.cookieToID(cookie);
+  
+  var table_delete = await db.table_menu_delete(userID, table_num);
 
   if(table_delete == true){
     var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
+    db.no_reserve(userID, table_num);
+
     if(table_save == true){
       res.json({ code: 1, msg: "pos_order success" });
     }else{
@@ -150,7 +181,9 @@ router.post("/pay", async (req, res, next) => {
   var table_save = await db.table_menu_save(userID,table_num,order_list); //테이블 별 주문 메뉴 저장
   var table_dele = await db.table_menu_delete(userID, table_num);
   await db.not_using_table(userID, table_num);
-  var reserve = await db.accept_select(userID, table_num);
+  db.accept_select(userID, table_num);
+  db.yes_reserve(userID, table_num);
+
 
   if(table_save == true && table_dele == true){
     res.json({ code: 1, msg: "pay success" });
@@ -428,26 +461,37 @@ router.get("/seating", (req, res, next) => {
   res.render("seating");
 });
 router.post("/seating", async (req, res, next) => {
-  const { cookie, window_save, table_save } = req.body;
+  const { cookie, window_save, table_save, exit_save, toilet_save} = req.body;
   // console.log("window_save", window_save.length);
   // db에서 확인
   const userID = await db.cookieToID(cookie);
 
   const already_table = await db.table_location(userID);
   const already_window = await db.window_location(userID);
+  const already_exit = await db.exit_location(userID);
+  const already_toilet = await db.toilet_location(userID);
 
-  if (already_table == true && already_window == true) {
+  if (already_table == true && already_window == true && already_exit == true && already_toilet == true) {
     // 처음 저장
     console.log(already_table, already_window);
     await db.table_insert(userID, table_save);
     await db.window_insert(userID, window_save);
+    await db.exit_insert(userID, exit_save);
+    await db.toilet_insert(userID, toilet_save);
+    
     res.json({ code: 1, message: "seating_save success" });
   } else {
     // 이미 있는 경우
     await db.table_clear(userID);
     await db.window_clear(userID);
+    await db.exit_clear(userID);
+    await db.toilet_clear(userID);
+
     await db.table_insert(userID, table_save);
     await db.window_insert(userID, window_save);
+    await db.exit_insert(userID, exit_save);
+    await db.toilet_insert(userID, toilet_save);
+
     res.json({ code: 0, message: "seating_update success" });
   }
 });
@@ -460,8 +504,10 @@ router.post("/location_clear", async (req, res, next) => {
 
   var table_clear = await db.table_clear(userID);
   var window_clear = await db.window_clear(userID);
+  var exit_clear = await db.exit_clear(userID);
+  var toilet_clear = await db.toilet_clear(userID);
 
-  if (table_clear == true && window_clear == true) {
+  if (table_clear == true && window_clear == true && exit_clear == true && toilet_clear == true) {
     res.json({ code: 1, message: "location_delete success" });
   } else {
     res.json({ code: 0, message: "location_delete error" });

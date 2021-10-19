@@ -90,16 +90,30 @@
 
             var table_list = result.table;
             var window_list = result.window;
+            var exit_list = result.exit;
+            var toilet_list = result.toilet;
+
             var reserve_table = result.reserved;
     
             var menu_list = []
             var menu_count = []
             var reserved = []
+            var no_reserved = []
             
             //- console.log("result.pos_menu: ",result.pos_menu)
             
             table_draw(table_list);
             window_draw(window_list);
+            exit_draw(exit_list);
+            toilet_draw(toilet_list);
+
+            if(result.no_reserve.length != undefined){
+                for(var i=0; i<result.no_reserve.length; i++ ){
+                    var table = result.no_reserve[i].table_id
+                    
+                    no_reserved.push([table])
+                }
+            }
 
             if(result.main_table_menu.length == undefined){
                 for(var i=0; i<result.pos_menu.length; i++ ){
@@ -143,7 +157,8 @@
             console.log("menu_list: ", menu_list)
             //- console.log("menu_count: ", menu_count)
             show(menu_count)
-            show_reserved(reserved)
+            show_reserved(reserved) //예약석 빨간색으로 표시
+            show_no_reserved(no_reserved)   //예약불가능한 곳 초록색으로 표시
             menu(menu_list) //오른쪽 Pos에 메뉴 불러오기 메뉴 title 넘겨받음
         }
 

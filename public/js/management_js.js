@@ -215,7 +215,7 @@ function everyWeek() {
     var week_id = "add_holiday_day" + week; //add_holiday에 넣어줄 동적 아이디 생성
 
     add_holiday.id = week_id; //add_holiday에 넣어줄 동적 아이디 부여
-    add_holiday.innerHTML = `<input type='button' value='X' onclick='remove("${week_id}")' /> <p id="reg_p" style="float:left;" >매주 ${s_week}주 ${s_day}요일</p>`;
+    add_holiday.innerHTML = `<input type='button' value='X' onclick='remove("${week_id}")' /> <p id="reg_p" style="float:left;" > ${s_week}주 ${s_day}요일</p>`;
     // console.log(reg_in);
     reg_in.appendChild(add_holiday); //정기휴무 div칸에 선택한 옵션들 추가
     week++;

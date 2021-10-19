@@ -40,10 +40,13 @@ var getCookie = function () {
 
 //- 로그아웃 시 쿠키 삭제 및 페이지 스테이 방지
 var deleteCookie = function (name) {
+  const reqBody = {
+    cookie : getCookie("id")
+  }
+
   document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
   history.replaceState(null, "", "/main"); //메인페이지 이동
 
-  // alert("로그아웃 되었습니다.");
   const xhr = new XMLHttpRequest();
 
   // 세션만 지워달라
@@ -55,7 +58,10 @@ var deleteCookie = function (name) {
 
   xhr.open("POST", "/logout");
   xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.send();
+  xhr.send(JSON.stringify(reqBody));
+
+  document.cookie = name + "=; expires=Thu, 01 Jan 1999 00:00:10 GMT;";
+  history.replaceState(null, "", "/main"); //메인페이지 이동
 };
 
 //네비게이션 바에서 페이지 이동

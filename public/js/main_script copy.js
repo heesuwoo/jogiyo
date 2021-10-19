@@ -310,7 +310,7 @@ function click(clicked_table){
     
     var back = document.createElement('button');
     back.className = `btn btn-danger btn-sm`;
-    back.innerHTML = `<p style="font-size: 17px;">이전</p>`;
+    back.innerHTML = `<p style="font-size: 15px;">이전</p>`;
     back.style.position = "absolute";
     back.style.left = '0%';
     back.style.top = '0%';
@@ -322,52 +322,14 @@ function click(clicked_table){
     body_container.removeChild(container)
     body_container.appendChild(list_div)
 
-    var notice = document.createElement('p');
-    notice.innerHTML = `**좌석 금지를 풀고싶으면 결제 버튼을 눌러주세요!`;
-    notice.style.position = "absolute";
-    notice.style.backgroundColor = 'yellow';
-    notice.style.left = '62%';
-    notice.style.top = '0%';
-    notice.style.width = '25%';
-    notice.style.height = '5%';
-    notice.style.fontSize = '20px';
-    list_div.appendChild(notice)
-
-    var back_notice = document.createElement('p');
-    back_notice.innerHTML = `**메뉴 추가나 삭제 후 반드시 이전버튼을 눌러주세요!`;
-    back_notice.style.position = "absolute";
-    back_notice.style.color = 'red';
-    back_notice.style.backgroundColor = 'yellow';
-    // back_notice.style.paddingBottom = '2%';
-    back_notice.style.left = '7%';
-    back_notice.style.top = '0%';
-    back_notice.style.width = '25%';
-    back_notice.style.height = '5%';
-    back_notice.style.fontSize = '20px';
-    list_div.appendChild(back_notice)
-
-    // 예약금지 버튼
-    var ban = document.createElement('button');
-    ban.className = `btn btn-danger btn-sm`;
-    ban.innerHTML = `<p style="font-size: 17px;">좌석 예약 금지</p>`;
-    ban.style.position = "absolute";
-    ban.style.left = '90%';
-    ban.style.top = '0%';
-    ban.style.width = '10%';
-    ban.style.height = '5%';
-    list_div.appendChild(ban)
-
+    // const pay_button = document.querySelector('.pay');
+    // pay_button.innerText = "결제";
 
     // 뒤로가기 버튼 클릭 시
     back.onclick = function(table_num){
         save_table_order();
         body_container.removeChild(list_div)
         body_container.appendChild(container)
-    }
-
-    // 예약금지 버튼 클릭 시
-    ban.onclick = function(){
-        no_reserve();
     }
 
     const reqBody = {
@@ -428,47 +390,6 @@ function save_table_order(){
         movePage('main')
     }
     xhr.open('POST', '/pos_order')
-    xhr.setRequestHeader('Content-Type', 'application/json')
-    xhr.send(JSON.stringify(reqBody))
-}
-
-//예약금지 버튼 클릭시
-function no_reserve(){
-
-    var table_num = document.querySelector(".box_border2").id   //table_6
-    var tbody_table = "#list_" + table_num;
-    
-    var tbody_len = document.querySelector(tbody_table).rows.length;    //테이블 행 개수
-     
-    var order_list =[]
-
-    for(i=0; i< tbody_len; i++){
-        var save_menu_name = document.querySelector(tbody_table).rows[i].cells[0].innerText
-        var save_menu_len = document.querySelector(tbody_table).rows[i].cells[1].innerText
-
-        var save_menu_id = document.querySelector(tbody_table).rows[i].cells[0].id
-
-        order_list.push([save_menu_name, save_menu_len, save_menu_id]);
-    }
-
-    // console.log("save_table_orders: ",order_list)
-
-    //router로 전송
-    const reqBody = {
-        cookie : getCookie("id"),
-        table_num : table_num,
-        order_list : order_list,
-    }
-        
-    const xhr = new XMLHttpRequest()
-    xhr.onload = () => {
-        const result = JSON.parse(xhr.responseText)
-        if(result.code != 1){
-            alert("예약 금지 error");
-        }
-        movePage('main')
-    }
-    xhr.open('POST', '/pos_order_no')
     xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.send(JSON.stringify(reqBody))
 }
@@ -643,25 +564,5 @@ function show_reserved(reserved){
 
         container.style.backgroundColor = "red";
         order.push([menu_name, menu_len, menu_id])
-    }
-}
-
-//예약 중지 좌석 번호 표시
-function show_no_reserved(no_reserved){
-
-    console.log("no_reserve: " , no_reserve)
-    
-    const item1 = document.querySelectorAll('.content')
-
-    for(var i = 0; i < no_reserved.length; i++){
-
-        var table_num = no_reserved[i][0]; //테이블 번호
-
-        const pos_menu = document.querySelector(`.content`);
-        
-
-        const container = document.querySelector(`#table_${table_num}`);
-
-        container.style.backgroundColor = "green";
     }
 }
