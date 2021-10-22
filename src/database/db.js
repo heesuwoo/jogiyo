@@ -251,7 +251,7 @@ const join = async function (
   try {
     var r_id = await select_r_id() + 1;
     console.log("회원가입 r_id: ", r_id);
-    const query = `INSERT INTO USER_WEB (restaurant_id, user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${r_id}','${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
+    const query = `INSERT INTO user_web (restaurant_id, user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${r_id}','${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
     console.log(query);
 
     const result = await pool.query(query);
