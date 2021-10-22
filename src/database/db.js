@@ -218,7 +218,7 @@ const join_check = async function (userID, userEmail, r_name) {
 // r_id 증가 
 const select_r_id = async function () {
   try {
-    const query = `select max(restaurant_id) from user_web`;
+    const query = `select max(restaurant_id)as max from user_web`;
 
     const result = await pool.query(query);
     
@@ -229,7 +229,7 @@ const select_r_id = async function () {
     if(queryResult == undefined){
       var r_id = 0;
     } else{
-      var r_id = queryResult.max(restaurant_id);
+      var r_id = queryResult.max;
       console.log("r_id : ",r_id);
       
     }
