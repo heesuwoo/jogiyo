@@ -216,29 +216,29 @@ const join_check = async function (userID, userEmail, r_name) {
 };
 
 // r_id 증가 
-const select_r_id = async function () {
-  try {
-    const query = `select max(restaurant_id)as max from user_web`;
+// const select_r_id = async function () {
+//   try {
+//     const query = `select max(restaurant_id)as max from user_web`;
 
-    const result = await pool.query(query);
+//     const result = await pool.query(query);
     
-    const queryResult = result[0][0];
+//     const queryResult = result[0][0];
 
-    console.log("최대값:",queryResult);
+//     console.log("최대값:",queryResult);
     
-    if(queryResult == undefined){
-      var r_id = 0;
-    } else{
-      var r_id = queryResult.max;
-      console.log("r_id : ",r_id);
+//     if(queryResult == undefined){
+//       var r_id = 0;
+//     } else{
+//       var r_id = queryResult.max;
+//       console.log("r_id : ",r_id);
       
-    }
-    return r_id
-  } catch (e) {
-    console.log("Error in select_r_id\n", e);
-    return false;
-  }
-};
+//     }
+//     return r_id
+//   } catch (e) {
+//     console.log("Error in select_r_id\n", e);
+//     return false;
+//   }
+// };
 
 //회원가입 (db에 정보 추가)
 const join = async function (
@@ -249,9 +249,10 @@ const join = async function (
   r_name
 ) {
   try {
-    var r_id = await select_r_id() + 1;
-    console.log("회원가입 r_id: ", r_id);
-    const query = `INSERT INTO user_web (restaurant_id, user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${r_id}','${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
+    // var r_id = await select_r_id() + 1;
+    // console.log("회원가입 r_id: ", r_id);
+    // const query = `INSERT INTO user_web (restaurant_id, user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${r_id}','${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
+    const query = `INSERT INTO user_web (user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
     console.log(query);
 
     const result = await pool.query(query);
