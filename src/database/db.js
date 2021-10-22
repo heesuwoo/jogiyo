@@ -225,11 +225,13 @@ const select_r_id = async function () {
     const queryResult = result[0][0];
 
     console.log("최대값:",queryResult);
-
+    
     if(queryResult == undefined){
       var r_id = 0;
     } else{
       var r_id = queryResult.max(restaurant_id);
+      console.log("r_id : ",r_id);
+      
     }
     return r_id
   } catch (e) {
@@ -248,6 +250,7 @@ const join = async function (
 ) {
   try {
     var r_id = select_r_id() + 1;
+    console.log("회원가입 r_id: ", r_id);
     const query = `INSERT INTO USER_WEB (user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${r_id}','${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
     console.log(query);
 
