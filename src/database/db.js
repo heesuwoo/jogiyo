@@ -249,7 +249,7 @@ const join = async function (
   r_name
 ) {
   try {
-    var r_id = select_r_id() + 1;
+    var r_id = await select_r_id() + 1;
     console.log("회원가입 r_id: ", r_id);
     const query = `INSERT INTO USER_WEB (user_id, user_password, user_name, user_email, restaurant_name)VALUES ('${r_id}','${userID}', '${userPassword}', '${userName}', '${userEmail}', '${r_name}')`;
     console.log(query);
