@@ -14,7 +14,7 @@ module.exports = mysql.createPool({
   // database: "project",
   // port: "3306",
 
-  user: "jogiyo",
+  user: "root",
   host: "34.64.161.151",
   password: "1234",
   database: "project",
