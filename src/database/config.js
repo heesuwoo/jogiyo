@@ -1,5 +1,5 @@
-// const mysql = require("mysql2/promise");
-const mysql = require("mysql/promise");
+const mysql = require("mysql2/promise");
+// const mysql = require("mysql");
 
 module.exports = mysql.createPool({
   // user: process.env.DB_UNAME,
@@ -15,7 +15,7 @@ module.exports = mysql.createPool({
   // database: "project",
   // port: "3306",
 
-  user: "root",
+  user: "jogiyo",
   host: "34.64.161.151",
   password: "1234",
   database: "project",
